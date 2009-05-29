@@ -3,53 +3,70 @@
 <chapter id="motivation">
   <title>Why Meteor?</title>
   
-  <para>Small businesses are notoriously underserved by the software industry because 
+  <para>
+  Small businesses are notoriously underserved by the software industry because 
   developing high-quality, full-featured software is very expensive due to the 
   large amount of labor required and the high cost of the engineers required to 
   create, maintain, and customize software. 
   Companies that produce software systems usually target large companies 
-  that can afford the high price of installign and maintaining a sophisticated 
-  software system. 
+  that can afford the high price of software systems. 
   Software systems for small businesses are often low-quality, 
   slimmed down and incomplete because that's really all that small businesses can 
-  afford to pay for.</para>
-  
-  <para>Meteor was conceived with the goal of making it possible to 
+  afford to pay for.
+  Meteor was conceived with the goal of making it possible to 
   profitably create software for small businesses by assembling high-quality, 
   full-featured, customized software systems from modules available from many 
   vendors. 
+  </para>
+  <para>
   Meteor is designed to benefit the developers of software modules by  
   decreasing the cost to create a module and by increasing the revenue that 
   can be generated from a module by making it possible to reuse modules in 
-  many systems.  
+  more systems.</para><para>
   Meteor is designed to benefit the small businesses that 
   buy software systems by reducing the cost of buying and maintaining a 
-  system and by increasing the quality and available features of systems.</para>
-  
-  <para>In order to meet the above business goals, the Meteor 
-  framework is designed with the following features:
+  system and by increasing the quality and available features of systems.
+  </para>
+<section>
+  	<title>Design goals</title>
+  <para>
+  In order to meet the above business goals, the Meteor 
+  framework is designed with the following design goals:
   <itemizedlist>
   	<listitem><para>All functionality is packaged into modules that are assembled into software systems.</para></listitem>
-  	<listitem><para>A global metadata repository makes it possible for a module to implement software aspects like logging, persistence and UI.</para></listitem>
+  	<listitem><para>A global metadata repository makes it possible for a module to implement entire software aspects like logging, persistence and UI.</para></listitem>
+  	<listitem><para>All functionality may be customized without requiring vendors to build customization hooks into their modules.</para></listitem>
   	<listitem><para>Customizations and extensions are packaged into modules and may be dynamically added or removed from a system without technical assistance.</para></listitem>
   	<listitem><para>All modules in a system may be dynamically updated without technical assistance.</para></listitem>
   	<listitem><para>Meteor itself implements many aspects out of the box, like user authentication and authorization, data storage, and user interface.</para></listitem>
   </itemizedlist>
   The details of how to create modules for Meteor-based systems is left to the rest of this manual. 
   However, it is important to understand that Meteor was designed to meet the above business goals. 
+  </para>
+</section>  
+
+<section>
+  	<title>Comparison to other frameworks</title>
+  <para>
   Many frameworks are created with only the goal of making software development 
-  easier and less expensive, but they don't address software reuse, maintenance, or customization 
-  thus making software prohibitively expensive to maintain and customize. 
+  easier and less expensive, but they don't address software reuse, maintenance, or customization issues 
+  thus making software prohibitively expensive to maintain and customize.
+  </para>
+  <para>
   Some existing frameworks even try to make software reuse and customization 
   easier but don't support dynamic modularization, thus making software prohibitively expensive by requiring 
   engineers to apply updates, customizations, and extensions.
+  </para>
+  <para>
   And some frameworks support modules but don't support packaging customizations in modules or 
   don't allow modules to be dynamically added or removed, again making any software prohibitively 
   expensive by requiring engineers to apply updates, customizations, and extensions.
-  But Meteor is designed to bring it all together: high development productivity, modular software reuse, 
-  and dynamic system updates, customizations, and extensions.  All the ingrediants neccessary 
-  to make money creating software for small businesses. 
   </para>
+  <para>
+  Meteor is designed to bring it all together: high development productivity, modular software reuse, 
+  and dynamic system updates, customizations, and extensions that don't require technical assistance.  
+  </para>
+</section>  
   
    
 </chapter>
