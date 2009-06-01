@@ -1,0 +1,7 @@
+@prefix resource: 	<meteor:com.googlecode.meteorframework.Resource.>.
+@prefix test: 		<meteor:com.googlecode.meteorframework.test.>.
+
+test:CustomerFromManifest a	test:Customer; 
+	resource:description 	"A Customer defined in a Meteor manifest". 
+
+

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.pde.ui.JunitLaunchConfig">
+<booleanAttribute key="append.args" value="true"/>
+<stringAttribute key="application" value="org.eclipse.pde.junit.runtime.coretestapplication"/>
+<booleanAttribute key="askclear" value="false"/>
+<booleanAttribute key="automaticAdd" value="false"/>
+<booleanAttribute key="automaticValidate" value="true"/>
+<stringAttribute key="bootstrap" value=""/>
+<stringAttribute key="checked" value="[NONE]"/>
+<booleanAttribute key="clearConfig" value="true"/>
+<booleanAttribute key="clearws" value="true"/>
+<booleanAttribute key="clearwslog" value="false"/>
+<stringAttribute key="configLocation" value="${workspace_loc}/.metadata/.plugins/org.eclipse.pde.core/pde-junit"/>
+<booleanAttribute key="default" value="false"/>
+<stringAttribute key="deselected_workspace_plugins" value="net.sf.plugins.library.sesame,com.googlecode.meteorframework.library.log4j,net.meteor.library.javax.annotation,com.googlecode.meteorframework.storage.test,com.googlecode.meteorframework.storage.triplestore,net.sf.playhaus.tests,net.sf.plugins.gwt.user,com.googlecode.meteorframework.library.h2,com.googlecode.meteorframework.library.dbcp,com.googlecode.meteorframework.library.javax.transaction,com.googlecode.meteorframework.library.apache.commons,com.googlecode.meteorframework.storage,com.googlecode.meteorframework.library.commons.pool,com.googlecode.meteorframework.library.dom4j,net.sf.playhaus,org.h2.core"/>
+<booleanAttribute key="includeOptional" value="false"/>
+<stringAttribute key="location" value="${workspace_loc}/../junit-workspace"/>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+<listEntry value="/com.googlecode.meteorframework.test/src/net/sf/meteor/test/BootstrapTests.java"/>
+</listAttribute>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+<listEntry value="1"/>
+</listAttribute>
+<booleanAttribute key="org.eclipse.debug.core.appendEnvironmentVariables" value="true"/>
+<booleanAttribute key="org.eclipse.debug.ui.ATTR_LAUNCH_IN_BACKGROUND" value="false"/>
+<stringAttribute key="org.eclipse.jdt.junit.CONTAINER" value=""/>
+<booleanAttribute key="org.eclipse.jdt.junit.KEEPRUNNING_ATTR" value="false"/>
+<stringAttribute key="org.eclipse.jdt.junit.TESTNAME" value=""/>
+<stringAttribute key="org.eclipse.jdt.junit.TEST_KIND" value="org.eclipse.jdt.junit.loader.junit3"/>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.googlecode.meteorframework.test.BootstrapTests"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-os ${target.os} -ws ${target.ws} -arch ${target.arch} -nl ${target.nl}"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="com.googlecode.meteorframework.test"/>
+<stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.pde.ui.workbenchClasspathProvider"/>
+<stringAttribute key="pde.version" value="3.3"/>
+<stringAttribute key="product" value="org.eclipse.platform.ide"/>
+<stringAttribute key="selected_target_plugins" value="org.eclipse.core.net,org.eclipse.core.resources,com.ibm.icu,org.eclipse.jface.databinding,org.eclipse.equinox.security.win32.x86,org.eclipse.core.runtime,org.eclipse.core.contenttype,org.eclipse.core.commands,org.eclipse.jdt.compiler.apt,org.eclipse.ant.core,org.eclipse.core.databinding,org.eclipse.jdt.apt.core,org.eclipse.core.resources.compatibility,org.eclipse.pde.build,org.eclipse.text,org.eclipse.equinox.registry,org.eclipse.ui.ide,org.eclipse.team.core,org.eclipse.jface,org.eclipse.ui,org.eclipse.jface.text,org.eclipse.equinox.security,org.eclipse.core.resources.win32.x86,org.eclipse.core.filesystem.win32.x86,org.eclipse.update.configurator,org.eclipse.update.core.win32,org.eclipse.swt.win32.win32.x86,org.eclipse.core.runtime.compatibility.registry,org.eclipse.pde.core,org.eclipse.core.jobs,org.eclipse.core.filesystem,org.eclipse.core.filebuffers,org.apache.ant,org.eclipse.equinox.common,org.eclipse.osgi,org.eclipse.jdt.compiler.tool,org.eclipse.equinox.preferences,org.junit,org.eclipse.jdt.debug,org.eclipse.help,org.eclipse.ui.win32,org.eclipse.swt,org.eclipse.core.expressions,org.eclipse.jdt.core,org.eclipse.debug.core,org.eclipse.core.net.win32.x86,org.eclipse.ui.workbench,org.eclipse.core.variables,org.eclipse.update.core,org.eclipse.equinox.app,org.eclipse.jdt.launching"/>
+<stringAttribute key="selected_workspace_plugins" value="com.googlecode.meteorframework.test,com.googlecode.java_parser_tools,com.googlecode.meteorframework.library.cglib,com.googlecode.meteorframework.utils,com.googlecode.meteorframework.core"/>
+<booleanAttribute key="show_selected_only" value="false"/>
+<booleanAttribute key="tracing" value="false"/>
+<booleanAttribute key="useDefaultConfig" value="true"/>
+<booleanAttribute key="useDefaultConfigArea" value="false"/>
+<booleanAttribute key="useProduct" value="false"/>
+</launchConfiguration>
