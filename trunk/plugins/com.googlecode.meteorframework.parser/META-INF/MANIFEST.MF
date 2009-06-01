@@ -10,4 +10,4 @@ Export-Package: com.googlecode.meteorframework.parser,
  com.googlecode.meteorframework.parser.node,
  com.googlecode.meteorframework.parser.util,
  com.googlecode.meteorframework.parser.matcher.contrib
-Bundle-ClassPath: java-parser-tools.jar
+Bundle-ClassPath: .
