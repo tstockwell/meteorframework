@@ -30,3 +30,4 @@ Export-Package: com.googlecode.meteorframework,
  com.googlecode.meteorframework.query,
  com.googlecode.meteorframework.query.jpa,
  com.googlecode.meteorframework.utils
+Bundle-ClassPath: .
