@@ -9,15 +9,15 @@ import static com.googlecode.meteorframework.utils.TurtleGrammar.SUBJECT;
 import static com.googlecode.meteorframework.utils.TurtleGrammar.TRIPLES;
 import static com.googlecode.meteorframework.utils.TurtleGrammar.URIREF;
 import static com.googlecode.meteorframework.utils.TurtleGrammar.VERB;
-import info.reflectionsofmind.parser.Grammar;
-import info.reflectionsofmind.parser.MatchResults;
-import info.reflectionsofmind.parser.matcher.Matcher;
-import info.reflectionsofmind.parser.matcher.Matchers;
-import info.reflectionsofmind.parser.node.AbstractNode;
-import info.reflectionsofmind.parser.node.Navigation;
 
 import java.util.List;
 
+import com.googlecode.meteorframework.parser.Grammar;
+import com.googlecode.meteorframework.parser.MatchResults;
+import com.googlecode.meteorframework.parser.matcher.Matcher;
+import com.googlecode.meteorframework.parser.matcher.Matchers;
+import com.googlecode.meteorframework.parser.node.AbstractNode;
+import com.googlecode.meteorframework.parser.node.Navigation;
 import com.googlecode.meteorframework.utils.TurtleGrammar;
 
 import junit.framework.Assert;

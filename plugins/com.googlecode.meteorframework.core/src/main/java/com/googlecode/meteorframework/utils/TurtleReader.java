@@ -8,10 +8,6 @@ import static com.googlecode.meteorframework.utils.TurtleGrammar.SUBJECT;
 import static com.googlecode.meteorframework.utils.TurtleGrammar.TRIPLES;
 import static com.googlecode.meteorframework.utils.TurtleGrammar.URIREF;
 import static com.googlecode.meteorframework.utils.TurtleGrammar.VERB;
-import info.reflectionsofmind.parser.MatchResults;
-import info.reflectionsofmind.parser.node.AbstractNode;
-import info.reflectionsofmind.parser.node.Navigation;
-import info.reflectionsofmind.util.Files;
 
 import java.io.IOException;
 import java.net.URL;
@@ -24,6 +20,10 @@ import com.googlecode.meteorframework.Property;
 import com.googlecode.meteorframework.Resource;
 import com.googlecode.meteorframework.Scope;
 import com.googlecode.meteorframework.Type;
+import com.googlecode.meteorframework.parser.MatchResults;
+import com.googlecode.meteorframework.parser.node.AbstractNode;
+import com.googlecode.meteorframework.parser.node.Navigation;
+import com.googlecode.meteorframework.parser.util.Files;
 
 
 /**
