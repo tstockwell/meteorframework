@@ -4,14 +4,14 @@
   <title>Introduction to the Meteor Framework</title>
   
   <para>The chapter is an introduction to how Meteor implements its <link linkend="design_goals">design goals</link>.
-  To reiterate, the Meteor framework is designed with the following design goals:
+  To reiterate, the Meteor framework has four main design goals which were adopted 
+  in order to meet its business goal of making it possible to profitably develop 
+  system software for small businesses:
   <itemizedlist>
-  	<listitem><para>All functionality is packaged into modules that are assembled into software systems.</para></listitem>
-  	<listitem><para>A global metadata repository makes it possible for a module to implement entire software aspects like logging, persistence and UI.</para></listitem>
-  	<listitem><para>All functionality may be customized without requiring vendors to build customization hooks into their modules.</para></listitem>
-  	<listitem><para>Customizations and extensions are packaged into modules and may be dynamically added or removed from a system without technical assistance.</para></listitem>
-  	<listitem><para>All modules in a system may be dynamically updated without technical assistance.</para></listitem>
-  	<listitem><para>Meteor itself implements many aspects out of the box, like user authentication and authorization, data storage, and user interface.</para></listitem>
+  	<listitem><para>Dynamic, modular system assembly.</para></listitem>
+  	<listitem><para>Model-driven system functionality.</para></listitem>
+  	<listitem><para>Unanticipated customation, or customization without hooks.</para></listitem>
+  	<listitem><para>Provide the most common system functionality out-of-the-box.</para></listitem>
   </itemizedlist>
   </para>
   
@@ -19,7 +19,8 @@
   <section>
   	<title>Java</title>
   	<para>
-  	Meteor uses Java as the underlying runtime platform.  Nuff said.  
+  	Meteor uses Java as the underlying runtime platform. 
+  	The Java community provides a wealth of open source libraries that Meteor reuses. 
   	In the future it is highly probable that Meteor will support the development 
   	of Meteor modules in other languages that run on the Java Virtual Machine 
   	but for now all Meteor modules are developed with Java.      
@@ -27,7 +28,7 @@
   </section>
   
   <section>
-  	<title>Modularity = OSGi Bundles</title>
+  	<title>Dynamic, modular system assembly = OSGi Bundles</title>
   	<para>
   	Meteor's first design goal is to make it possible to assemble a software 
   	system from modules.  Instead of defining its own concept of what a module is 
@@ -53,7 +54,7 @@
   </section>
   
   <section>
-  	<title>Metadata = RDF (Resource Description Format)</title>
+  	<title>Model-driven system functionality = RDF (Resource Description Format) metadata repository</title>
 	  <section>
 	  	<title>Why RDF?</title>
 	  	<para>
@@ -85,6 +86,8 @@
 	  
 	  <section>
 	  	<title>What data is available in the repository?</title>
+	  	<para>
+	  	</para> 
 	  </section>
   </section>
    
@@ -93,61 +96,108 @@
   	<para>
   	Some existing application development frameworks make it easier to customize 
   	software by adding what are called hooks, or extension points. 
-  	For instance, in order to make it possible for other modules to add menu 
-  	items to an applications main menu the module that provides the user interface 
-  	may create a hook where other modules can register additional menu items. 
+  	Take for example an order management module that calculates sales commissions 
+  	on orders and suppose that this module wants to allow other modules to be 
+  	able to customize how commissions are calculated. 
+  	In many other frameworks in order to make it possible for other modules to 
+  	customize the calculation of sales commissions the order management module 
+  	would be required to define an 'extension-point', or hook, that other modules 
+  	could use to register additional calculation methods. 
   	The problems with this type of customization are:
   	<itemizedlist>
-  		<listitem><para>It requires significant extra effort on the part of the developer to create the hooks used for customization and extension</para></listitem>
-  		<listitem><para>It limits reuse since hooks have to be created <emphasis>before</emphasis> a module can be customized. 
-  		However, developers never anticipate all the ways in which a module may be resued and even if they do they often don't 
-  		make the effort to create hooks until and unless they know someone else is going to use them.</para></listitem>
+  		<listitem>
+  			<para>
+  			It requires significant extra effort on the part of the developer to 
+  			create the hooks used for customization and extension
+  			</para>
+  		</listitem>
+  		<listitem>
+  			<para>
+  			It limits reuse since hooks have to be created <emphasis>before</emphasis> 
+  			a module can be customized. 
+  			However, developers never anticipate all the ways in which other 
+  			developers may want to customize a module and even if they do they 
+  			often don't make the effort to create hooks until and unless they 
+  			know someone else is going to use them.
+  			</para>
+  		</listitem>
   	</itemizedlist>
   	For these reasons it is better to support an extension and customization 
   	scheme that does not require hooks, a scheme that enables modules to directly 
-  	'plug into' objects from other modules.  
+  	'plug into' objects from other modules.
+  	In Meteor all available functionality is defined by Java 
+  	interfaces and Meteor gives all modules the ability to customize the behavior 
+  	of any interface defined by any other module.
   	</para>
-  	
-  	<para><ulink url="">Guice</ulink></para>
-  	
-  	<para>
-  	There are two types of customization that can be made to software, customizing 
-  	data or customizing behavior.  An example of customizing data would be adding 
-  	a new menu item to an application's main menu.  An example of customizing behavior 
-  	would be performing spell checking on items when they are saved to the database. 
-  	In Meteor all relevant data goes into the metadata repository and data customizations 
-  	are always made to the data in the repository.  In Meteor, like in Java, all behavior 
-  	in encapsulated in objects but, unlike Java, Meteor makes it possible for modules 
-  	to customize the behavior of object from other modules by creating 'decorators' 
-  	and 'interceptors'.  
   	<section>
-  	
-An interceptor is a method that intercepts a business method invocation or a lifecycle callback event.
-An interceptor method may be defined on the bean class or on an interceptor class associated with the
-bean. An interceptor class is a class (distinct from the bean class itself) whose methods are invoked in
-response to business method invocations and/or lifecycle events on the bean class. Interceptors may be
-defined for session beans and message-driven beans. Business method interceptor methods may be
-defined to apply to all business methods of the bean class or to specific business methods only.  	
-  	</section>
-  	<para>
-  	Meteor has adopted the <ulink url="http://en.wikipedia.org/wiki/Resource_Description_Framework">Resource Description Format</ulink> (RDF) 
-  	for representing metadata. 
-  	RDF is a general method for conceptual description or modeling of information. 
-  	Meteor defines a Java API for accessing and manipulating RDF data. 
-  	Meteor all supports the <ulink url="http://en.wikipedia.org/wiki/Turtle_(syntax)">Turtle RDF serialization format</ulink>.
-  	</para>
+  		<title>Guice in Meteor</title>
+	  	<para> 
+	  	Instead of inventing its own 
+	  	method of enabling the ability to customize behavior Meteor uses another 
+	  	framework called <ulink url="http://code.google.com/p/google-guice/">Guice</ulink> 
+	  	to provide this functionality. 
+	  	Guice is well-know as a 'dependency injection' library but 
+	  	Guice also implements a capability know as 'interceptors', the ability to 
+	  	intercept and customize a method invocation on an interface.  Metoer reuses 
+	  	Guice to provide the ability to customize method invocations and also reuses 
+	  	Guice's dependency injection capability. 
+	  	However, using Guice directly to customize behavior can be quite tedious. 
+	  	Another problem with using Guice directly is that it's impossible for 
+	  	someone to get a complete picture of how the modules in a system customize 
+	  	each other. Therefore Meteor introduces the ability for modules to simply 
+	  	create 'decorator' and 'interceptor' classes that plug-into interface 
+	  	implementations. 
+	  	Meteor then automatically creates system metadata that describes how 
+	  	decorator and interceptor classes should be assembled into interface 
+	  	implementation.  Meteor also automatically configures Guice with the 
+	  	appropriate interceptors.  Decorator and interceptor classes may then 
+	  	use Guice annotation for dependency injection purposes.  Guice 
+	  	annotations may be used to inject Meteor-managed objects as well as 
+	  	OSGi services. 
+	  	</para>
+	 </section>
+  	<section>
+  		<title>Decorator and Interceptor classes</title>
+	  	<para> 
+	  	To make Guice easier to use in a modular system Meteor introduces the 
+	  	ability for modules to simply create 'decorator' and 'interceptor' 
+	  	classes that can be plugged-into interface implementations. 
+	  	Meteor then automatically creates system metadata that describes how 
+	  	decorator and interceptor classes should be assembled into interface 
+	  	implementation.  Meteor also automatically configures Guice with the 
+	  	appropriate interceptors.  Decorator and interceptor classes may then 
+	  	use Guice annotation for dependency injection purposes.  Guice 
+	  	annotations may be used to inject Meteor-managed objects as well as 
+	  	OSGi services.  The details of Decorators and Interceptors are described 
+	  	in <link linkend="decorators_and_interceptors">this section.</link>
+	  	</para>
+	  	<para> 
+	  	Because Meteor creates metadata in the system metadata repository that 
+	  	describes how decorators and interceptors are wired together it is 
+	  	possible to create a module to provide a system 'view' that provides a 
+	  	convenient view of the system for understanding how modules are wired 
+	  	together. Currently Metoer comes with a simple utility that creates a 
+	  	document to show what modules contribute functionaly to what interfaces.
+	  	</para>
+	 </section>
   </section>
   
   <section>
   	<title>Out of the Box Functionality</title>
 	  <section>
 	  	<title>Role-based Authorization</title>
+	  	<para>
+	  	</para> 
 	  </section>
 	  <section>
 	  	<title>Persistent Storage</title>
+	  	<para>
+	  	</para> 
 	  </section>
 	  <section>
 	  	<title>WebBench User Interface</title>
+	  	<para>
+	  	</para> 
 	  </section>
   </section>
 
