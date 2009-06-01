@@ -1,0 +1,60 @@
+turtleDoc ::= {statement {ws}} 
+statement ::= ((directive {ws} ".") | (triples {ws} ".") | comment) 
+directive ::= (prefixID | base) 
+prefixID ::= ("@prefix" (ws {ws}) [prefixName] ':' uriref) 
+base ::= ("@base" (ws {ws}) uriref) 
+triples ::= (subject predicateObjectList) 
+predicateObjectList ::= (verb objectList ";" {verb objectList ";"}) 
+objectList ::= (object {',' object}) 
+verb ::= (predicate | 'a') 
+comment ::= ('#' ([^#xA#xD])); 
+subject ::= "resource | blank"; 
+predicate ::= "resource"; 
+object ::= "resource | blank | literal"; 
+literal ::= "quotedString ( '@' language )? | datatypeString | integer | double | decimal | boolean"; 
+datatypeString ::= "quotedString '^^' resource"; 
+integer ::= "('-' | '+') ? [0-9]+"; 
+doubl ::= "('-' | '+') ? ( [0-9]+ '.' [0-9]* exponent | '.' ([0-9])+ exponent | ([0-9])+ exponent )"; 
+decimal ::= "('-' | '+')? ( [0-9]+ '.' [0-9]* | '.' ([0-9])+ | ([0-9])+ )"; 
+exponent ::= "[eE] ('-' | '+')? [0-9]+"; 
+bool ::= "'true' | 'false'"; 
+blank ::= "nodeID | '[]' | '[' predicateObjectList ']' | collection"; 
+itemList ::= "object+"; 
+collection ::= "'(' itemList? ')'"; 
+ws ::= "#x9 | #xA | #xD | #x20 | comment";  
+resource ::= "uriref | qname"; 
+nodeID ::= "'_:' name ";
+qname ::= "prefixName? ':' name?"; 
+uriref ::= "'<' relativeURI '>'";  
+language ::= "[a-z]+ ('-' [a-z0-9]+ )*";  
+nameStartChar ::= "[A-Z] | '_' | [a-z] | [#x00C0-#x00D6] | [#x00D8-#x00F6] | [#x00F8-#x02FF] | [#x0370-#x037D] | [#x037F-#x1FFF] | [#x200C-#x200D] | [#x2070-#x218F] | [#x2C00-#x2FEF] | [#x3001-#xD7FF] | [#xF900-#xFDCF] | [#xFDF0-#xFFFD] | [#x10000-#xEFFFF]"; 
+    public static String nameChar ::= "nameStartChar | '-' | [0-9] | #x00B7 | [#x0300-#x036F] | [#x203F-#x2040]"; 
+    public static String name ::= "nameStartChar nameChar*"; 
+prefixName ::= "( nameStartChar - '_' ) nameChar*"; 
+relativeURI ::= "ucharacter*"; 
+quotedString ::= "string | longString"; 
+string ::= "#x22 scharacter* #x22"; 
+longString ::= "#x22 #x22 #x22 lcharacter* #x22 #x22 #x22"; 
+character ::= "'\\u' hex hex hex hex | '\\U' hex hex hex hex hex hex hex hex | '\\\\' | [#x20-#x5B] | [#x5D-#x10FFFF]";  
+echaracter ::= "character | '\t' | '\n' | '\r'";  
+hex ::= "[#x30-#x39] | [#x41-#x46]"; 
+ucharacter ::= "( character - #x3E ) | '\\>'";  
+scharacter ::= "( echaracter - #x22 ) | '\"'";  
+lcharacter ::= "echaracter | '\"' | #x9 | #xA | #xD";
+ws= (("\n"  | "\r" | "\t" | " ") {("\n"  | "\r" | "\t" | " ")})   
+
+
+
+
+positive-number ::= (%digit% { %digit% })
+negative-number ::= ("-" positive-number)
+
+addition ::= (("+" | "-") (positive-number | ("(" negative-number ")") | mul-expression))
+sum-expression ::= ((positive-number | negative-number | mul-expression) addition {addition})
+
+multiplication ::= (("*" | "/") (positive-number | ("(" negative-number ")") | ("(" sum-expression ")")))
+mul-expression ::= ((positive-number | negative-number | ("(" sum-expression ")")) multiplication {multiplication})
+
+expression ::= sum-expression
+
+
