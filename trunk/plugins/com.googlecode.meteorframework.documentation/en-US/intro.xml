@@ -28,7 +28,7 @@
   </section>
   
   <section>
-  	<title>Dynamic, modular system assembly = OSGi Bundles</title>
+  	<title>Dynamic, modular system assembly: OSGi Bundles</title>
   	<para>
   	Meteor's first design goal is to make it possible to assemble a software 
   	system from modules.  Instead of defining its own concept of what a module is 
@@ -54,7 +54,7 @@
   </section>
   
   <section>
-  	<title>Model-driven system functionality = RDF (Resource Description Format) metadata repository</title>
+  	<title>Model-driven system functionality: RDF (Resource Description Format) metadata repository</title>
 	  <section>
 	  	<title>Why RDF?</title>
 	  	<para>
@@ -92,7 +92,7 @@
   </section>
    
   <section>
-  	<title>Customization: Metadata-driven Guice</title>
+  	<title>Unanticipated Customization: Metadata-driven Generic functions, Decorators, Interceptors and Dependency Injection</title>
   	<para>
   	Some existing application development frameworks make it easier to customize 
   	software by adding what are called hooks, or extension points. 
@@ -125,10 +125,27 @@
   	For these reasons it is better to support an extension and customization 
   	scheme that does not require hooks, a scheme that enables modules to directly 
   	'plug into' objects from other modules.
-  	In Meteor all available functionality is defined by Java 
-  	interfaces and Meteor gives all modules the ability to customize the behavior 
-  	of any interface defined by any other module.
   	</para>
+  	<section>
+	  	<title>Generic functions</title>
+	  	<para>
+	  	In Meteor all available functionality is defined by Java 
+	  	interfaces and Meteor gives all modules the ability to customize the behavior 
+	  	of any method of any interface defined by any other module. 
+	  	In Meteor all interface methods are implemented using a technique called <firstterm>generic functions</firstterm>.  	 
+	  	A generic function is a Java interface method and an associated collection 
+	  	of Java class methods each of which implements the interface method. 
+	  	At runtime when the interface method is invoked a subset of the methods are 
+	  	selected for execution (depending on the current runtime context) and arranged 
+	  	in a stack for execution.  The first invoked method may 
+	  	choose to return a result and complete the invocation or it may choose to pass 
+	  	the invocation further down the stack to the next method.
+	  	</para>
+	  	<para>
+	  	Generic functions are described in detail in later sections.
+	  	</para>
+  	</section
+  	
   	<section>
   		<title>Guice in Meteor</title>
 	  	<para> 
