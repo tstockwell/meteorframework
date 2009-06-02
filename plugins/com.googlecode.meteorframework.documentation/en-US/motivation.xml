@@ -68,7 +68,7 @@
   	</listitem>
   	<listitem>
   		<formalpara>
-  			<title>Unanticipated customation, or customization without hooks</title>
+  			<title>Unanticipated customization, or customization without hooks</title>
   			<para>
 			All functionality must be customizable without requiring vendors to build customization hooks into their modules. 
 			Many software framework enable customization by requiring developers to build 'hooks or 'extension points' 
