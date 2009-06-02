@@ -1,6 +1,26 @@
 <!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd"  [ ]>
 
 <chapter id="decorators">
+
+	  	<para>
+	  	A decorator is a Java class, often an abstract class, that intercepts 
+	  	invocations only for certain methods of certain Java interfaces and that is 
+	  	annotated with the @Decorator annotation (the @Decorator annotation tells 
+	  	Meteor to generate metadata describing the decorator and add that metadata 
+	  	to the repository - thus enabling Meteor to include the decorators methods 
+	  	in generic function invocations). 
+	  	Decorators are the most commonly used vehicle of customization in Meteor.  
+	  	Decorators may decorate any public interface, declared by any module, that 
+	  	is annotated with the @Model annotation (the @Model annotation tells 
+	  	Meteor to generate metadata describing the interface and put that 
+	  	metadata in the repository - enabling Meteor to create instances of that 
+	  	interface and to create generic functions representing all the methods 
+	  	declared in the interface).
+	  	Decorators are the perfect tool for customizing business concerns.
+	  	However, decorators aren't able to solve technical concerns that cut 
+	  	across many disparate interface, that's what interceptors are for.
+	  	</para>
+
   <title>Decorators</title>
   
   <para>Interceptors are a powerful way to capture and separate concerns

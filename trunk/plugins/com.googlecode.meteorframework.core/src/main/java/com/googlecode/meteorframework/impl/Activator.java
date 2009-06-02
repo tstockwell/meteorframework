@@ -3,7 +3,6 @@ package com.googlecode.meteorframework.impl;
 import java.net.URL;
 import java.util.logging.Level;
 
-
 import org.eclipse.osgi.util.ManifestElement;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
@@ -15,6 +14,7 @@ import org.osgi.framework.SynchronousBundleListener;
 
 import com.googlecode.meteorframework.Scope;
 import com.googlecode.meteorframework.utils.BundleClassloader;
+import com.googlecode.meteorframework.utils.FileLocator;
 import com.googlecode.meteorframework.utils.Logging;
 import com.googlecode.meteorframework.utils.OsgiUtils;
 
