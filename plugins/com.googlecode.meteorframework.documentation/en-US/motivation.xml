@@ -30,7 +30,8 @@
 <section id="design_goals">
   	<title>Design goals</title>
   <para>
-  In order to meet the above business goals, the Meteor framework is designed with the following design goals:
+  In order to meet the above business goals, the Meteor framework has adopted 
+  the following architectural goals:
   <itemizedlist>
   	<listitem>
   		<formalpara>
@@ -49,21 +50,28 @@
 		  </itemizedlist>
   		Modular assembly of systems can also increase the quality of software 
   		systems by allowing businesses to chose 'best-of-breed' modules instead of 
-  		being bound to any one vendor.
+  		being bound to any one vendor. 
   		</para> 
   	</listitem>
   	<listitem>
   		<formalpara>
-  			<title>Model-driven system functionality</title>
+  			<title>Model-driven engineering</title>
   			<para>
+  			Meteor provides a global metadata repository. 
 			A global metadata repository makes it possible for a module to implement 
-			entire software aspects like logging, persistence, or a user interface.
+			entire system aspects like workflows, or a user interface. 
+			Modules contribute metadata to the repository that model a particular 
+			aspect of the system, such as the user interface, or workflow. 
+			Other modules use metadata in the repository to implement the associated 
+			system aspect. 
 			</para>
   		</formalpara>
   		<para>  
-  		Model-driven development significantly reduces the cost of module development 
+  		Model-driven engineering significantly reduces the cost of module development 
   		for vendors since it eliminates the need for vendors to develop common 
-  		system aspects like persistence, or use-interface elements.
+  		system aspects like persistence, or user-interface elements.
+  		Model-driven engineering also makes modules more reusable since modules 
+  		are not tied to any particular implementation of a system aspect. 
   		</para> 
   	</listitem>
   	<listitem>

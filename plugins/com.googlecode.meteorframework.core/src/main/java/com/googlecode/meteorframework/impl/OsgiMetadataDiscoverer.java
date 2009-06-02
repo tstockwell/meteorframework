@@ -7,12 +7,12 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 import org.osgi.framework.Bundle;
 
 import com.googlecode.meteorframework.MeteorException;
 import com.googlecode.meteorframework.MeteorMetadataProvider;
 import com.googlecode.meteorframework.Scope;
+import com.googlecode.meteorframework.utils.FileLocator;
 import com.googlecode.meteorframework.utils.TurtleReader;
 
 @SuppressWarnings("unchecked")
