@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: org.jlense.test
+Bundle-GlobalName: org.jlense.test
+Bundle-Version: 1.0.0
+Bundle-Description: JLense Junit Test Support
+Bundle-Vendor: jlense.sf.net
+Export-Package: org.jlense.test
+Provide-Package: org.jlense.test
+DynamicImport-Package: *
+Bundle-SymbolicName: com.googlecode.meteorframework.junit.testrunner;singleton=true
+Bundle-ClassPath: bin/,library.jar
+Eclipse-AutoStart: true
+Import-Package: junit.framework;version="4.3.1",
+ junit.runner;version="4.3.1",
+ junit.textui;version="4.3.1"
