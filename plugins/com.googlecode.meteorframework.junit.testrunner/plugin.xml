@@ -15,7 +15,7 @@ JUnit test cases with a running instance of Eclipse
 -->
 <extension id="TestRunner" point="org.eclipse.core.runtime.applications">
   <application>
-     <run class="org.jlense.test.Main" />
+     <run class="com.googlecode.meteorframework.junit.testrunner.Main" />
   </application>
 </extension>
 
