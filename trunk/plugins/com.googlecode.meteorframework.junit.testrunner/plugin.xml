@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+
+
+<!--
+Declare the extension point used to register JUnit test cases
+-->
+<extension-point id="testCases" name="JUnit TestCases" />
+
+
+<!--
+Declare the application entry point used to run
+JUnit test cases with a running instance of Eclipse
+-->
+<extension id="TestRunner" point="org.eclipse.core.runtime.applications">
+  <application>
+     <run class="org.jlense.test.Main" />
+  </application>
+</extension>
+
+
+</plugin>
