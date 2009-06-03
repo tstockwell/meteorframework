@@ -11,6 +11,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import net.sf.cglib.proxy.Enhancer;
+import net.sf.cglib.proxy.MethodInterceptor;
+import net.sf.cglib.proxy.MethodProxy;
+
 import com.googlecode.meteorframework.BindingContext;
 import com.googlecode.meteorframework.Interceptor;
 import com.googlecode.meteorframework.Meteor;
