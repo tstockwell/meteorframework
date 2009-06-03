@@ -22,7 +22,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.osgi.util.ManifestElement;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
@@ -211,10 +210,7 @@ public class BundleClassloader extends URLClassLoader {
 				for (int i = 0; i < devpaths.length; i++) {
 					URL url = b.getEntry(devpaths[i]);
 					if (url != null)
-						try {
 							urls.add(FileLocator.resolve(url));
-						} catch (IOException ioe) {
-						}
 				}
 			}
 

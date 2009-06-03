@@ -1,4 +1,4 @@
-package org.jlense.test;
+package com.googlecode.meteorframework.junit.testrunner;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 

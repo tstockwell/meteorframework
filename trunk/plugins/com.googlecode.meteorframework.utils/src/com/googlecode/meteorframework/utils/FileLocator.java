@@ -31,7 +31,7 @@ public class FileLocator
 			return org.eclipse.core.runtime.FileLocator.resolve(url);
 		}
 		catch (Throwable t) {
+		    throw new RuntimeException(t);
 		}
-		return url;
 	}
 }

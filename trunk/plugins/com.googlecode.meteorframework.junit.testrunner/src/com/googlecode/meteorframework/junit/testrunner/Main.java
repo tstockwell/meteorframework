@@ -1,4 +1,6 @@
-package org.jlense.test;
+package com.googlecode.meteorframework.junit.testrunner;
+
+import org.jlense.test.TestRunner;
 
 import com.rpc.core.utils.CoreApplication;
 

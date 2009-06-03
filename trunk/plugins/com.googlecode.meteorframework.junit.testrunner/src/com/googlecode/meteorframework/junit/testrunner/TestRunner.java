@@ -1,6 +1,7 @@
-package org.jlense.test;
+package com.googlecode.meteorframework.junit.testrunner;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -12,10 +13,11 @@ import java.util.List;
 
 import junit.framework.AssertionFailedError;
 import junit.framework.Test;
+import junit.framework.TestCase;
 import junit.framework.TestListener;
 import junit.framework.TestResult;
 import junit.framework.TestSuite;
-import junit.runner.TestSuiteLoader;
+import junit.runner.BaseTestRunner;
 import junit.runner.Version;
 
 import org.apache.tools.ant.taskdefs.optional.junit.JUnitResultFormatter;
@@ -30,14 +32,13 @@ import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Platform;
+import org.jlense.test.TestDescriptor;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkEvent;
+import org.osgi.framework.FrameworkListener;
 
 /**
- * Runs JUnit test cases. When running JLense test cases it is important that
- * they be run inside the Eclipse runtime environment. This so that the tests
- * will be executed in the same runtime environment as regular JLense code. For
- * instance, classloading is one of the biggest sources of problems in the
- * Eclipse environment, and classloading problems will only be detected if tests
- * are run inside Eclipse.
+ * Runs JUnit test cases inside an OSGi container. 
  * 
  * This class works by running testcase using the classloader associated with
  * the plugin that declares the testcase.
@@ -48,6 +49,7 @@ import org.eclipse.core.runtime.Platform;
  * 
  * @author ted stockwell [emorning@sourceforge.net]
  */
+@SuppressWarnings("unchecked")
 public class TestRunner extends junit.textui.TestRunner implements TestListener {
     public static final int SUCCESS = 0;
     /**
@@ -71,53 +73,32 @@ public class TestRunner extends junit.textui.TestRunner implements TestListener 
     private String _categoryId = null;
 
     private HashMap _testsByCategoryId = new HashMap();
+    private FileOutputStream _xmlOutputStream;
 
 
     public TestRunner() {
         _testResult = createTestResult();
     }
 
+    public void destroy()
+    {
+        try { _xmlOutputStream.close(); } catch (Throwable t) { }
+    }
+    
+    
+
     ArrayList _classLoaders = new ArrayList();
     HashMap _classes = new HashMap();
-    TestSuiteLoader _loader = new TestSuiteLoader() {
-        public Class load(String suiteClassName) throws ClassNotFoundException {
-            Class klass = (Class) _classes.get(suiteClassName);
-            if (klass != null)
-                return klass;
-            for (Iterator iloader = _classLoaders.iterator(); iloader.hasNext();) {
-                ClassLoader loader = (ClassLoader) iloader.next();
-                try {
-                    klass = loader.loadClass(suiteClassName);
-                    if (klass != null)
-                        return klass;
-                } catch (Throwable t) {
-                    t.printStackTrace();
-                }
-            }
-            throw new ClassNotFoundException(suiteClassName);
-        }
-
-        public Class reload(Class aClass) throws ClassNotFoundException {
-            return aClass;
-        }
-    };
-
-    /**
-     * Runs this runnable with the given args and returns a result. The content
-     * of the args is unchecked and should conform to the expectations of the
-     * runnable being invoked. Typically this is a <code>String<code> array.
-     *
-     * @exception Exception if there is a problem running this runnable.
-     */
-    public Object run(Object arg) throws Exception {
+    
+    
+    
+    public Object runTests(BundleContext bundleContext, final String[] args) 
+    throws Exception {
+        
         FileOutputStream fileOutputStream = null;
         ArrayList testIds = new ArrayList(); // list of test ids to execute
 
         try {
-
-            String[] args = new String[0];
-            if (arg != null && arg instanceof String[])
-                args = (String[]) arg;
 
             String testId = null;
             boolean wait = false;
@@ -157,43 +138,11 @@ public class TestRunner extends junit.textui.TestRunner implements TestListener 
             plainFormatter.setOutput(System.out);
             addFormatter(plainFormatter);
             XMLJUnitResultFormatter xmlFormatter = new XMLJUnitResultFormatter();
-            IPath logPath = Platform.getStateLocation(Platform.getBundle("org.jlense.test"));
-            logPath = logPath.append(".testResults.xml");
-            logPath = logPath.makeAbsolute();
-            fileOutputStream = new FileOutputStream(logPath.toString());
+            File logPath = bundleContext.getDataFile( ".testResults.xml");
+            fileOutputStream = new FileOutputStream(logPath.getCanonicalFile());
             xmlFormatter.setOutput(fileOutputStream);
             addFormatter(xmlFormatter);
 
-            // ///////////////////
-            //
-            // iterate through the extenstion point registry and
-            // run the requested test, or all tests if no test is specified
-            //
-            IExtensionRegistry registry = Platform.getExtensionRegistry();
-            IExtensionPoint extensionPoint = registry.getExtensionPoint("org.jlense.test.testCases");
-            if (extensionPoint == null) {
-                if (testId != null)
-                    throw new Exception("Test not found:" + testId);
-                return null;
-            }
-            IExtension[] extensions = extensionPoint.getExtensions();
-            if (extensions == null) {
-                if (testId != null)
-                    throw new Exception("Test not found:" + testId);
-                return null;
-            }
-
-            /*
-             * If we are running a category of tests then populate the category
-             * maps first.
-             */
-            if (_categoryId != null) {
-                populateCategories(extensions);
-                List ids = (List) _testsByCategoryId.get(_categoryId);
-                if (ids == null)
-                    throw new Exception("No such category id: " + _categoryId);
-                testIds.addAll(ids);
-            }
 
             for (int i = 0; i < extensions.length; i++) {
                 IExtension iExtension = extensions[i];
@@ -388,10 +337,6 @@ public class TestRunner extends junit.textui.TestRunner implements TestListener 
         }
     }
 
-    public TestSuiteLoader getLoader() {
-        return _loader;
-    }
-
     public void configureTest(Test suite, IConfigurationElement element) throws CoreException {
         if (suite instanceof IExecutableExtension) {
             IConfigurationElement[] parms = element.getChildren("parameter"); //$NON-NLS-1$
@@ -414,6 +359,25 @@ public class TestRunner extends junit.textui.TestRunner implements TestListener 
                 configureTest(test, element);
             }
         }
+    }
+    
+    @Override
+    protected Class<? extends TestCase> loadSuiteClass( String suiteClassName ) throws ClassNotFoundException
+    {
+        Class klass = (Class) _classes.get(suiteClassName);
+        if (klass != null)
+            return klass;
+        for (Iterator iloader = _classLoaders.iterator(); iloader.hasNext();) {
+            ClassLoader loader = (ClassLoader) iloader.next();
+            try {
+                klass = loader.loadClass(suiteClassName);
+                if (klass != null)
+                    return klass;
+            } catch (Throwable t) {
+                t.printStackTrace();
+            }
+        }
+        throw new ClassNotFoundException(suiteClassName);
     }
 
 }
