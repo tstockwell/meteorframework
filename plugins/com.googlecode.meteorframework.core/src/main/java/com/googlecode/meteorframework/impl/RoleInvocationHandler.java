@@ -4,6 +4,9 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import net.sf.cglib.proxy.MethodInterceptor;
+import net.sf.cglib.proxy.MethodProxy;
+
 import com.googlecode.meteorframework.Meteor;
 import com.googlecode.meteorframework.MeteorException;
 import com.googlecode.meteorframework.MeteorNS;

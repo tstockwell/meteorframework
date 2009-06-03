@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.WeakHashMap;
 
+import net.sf.cglib.proxy.Enhancer;
+
 import com.googlecode.meteorframework.BindingContext;
 import com.googlecode.meteorframework.InvocationContext;
 import com.googlecode.meteorframework.Meteor;
