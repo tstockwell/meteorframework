@@ -13,9 +13,9 @@ import com.googlecode.meteorframework.Resource;
 import com.googlecode.meteorframework.Scope;
 import com.googlecode.meteorframework.annotation.Decorator;
 import com.googlecode.meteorframework.annotation.Inject;
-import com.googlecode.meteorframework.utils.ConversionService;
-import com.googlecode.meteorframework.utils.RDFDocumentBuilder;
-import com.googlecode.meteorframework.utils.UtilsNS;
+import com.googlecode.meteorframework.core.utils.ConversionService;
+import com.googlecode.meteorframework.core.utils.RDFDocumentBuilder;
+import com.googlecode.meteorframework.core.utils.UtilsNS;
 
 /**
  * Builds RDF/XML Documents from Resource objects. 

@@ -5,9 +5,9 @@ import com.googlecode.meteorframework.Scope;
 import com.googlecode.meteorframework.TypeLiteral;
 import com.googlecode.meteorframework.annotation.Decorator;
 import com.googlecode.meteorframework.annotation.Inject;
-import com.googlecode.meteorframework.utils.Adapter;
-import com.googlecode.meteorframework.utils.AdapterService;
-import com.googlecode.meteorframework.utils.UtilsNS;
+import com.googlecode.meteorframework.core.utils.Adapter;
+import com.googlecode.meteorframework.core.utils.AdapterService;
+import com.googlecode.meteorframework.core.utils.UtilsNS;
 
 @Decorator 
 public abstract class AdapterServiceImpl 

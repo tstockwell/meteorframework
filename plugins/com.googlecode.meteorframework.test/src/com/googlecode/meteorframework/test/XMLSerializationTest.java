@@ -19,7 +19,7 @@ import org.w3c.dom.Document;
 import com.googlecode.meteorframework.Meteor;
 import com.googlecode.meteorframework.Resource;
 import com.googlecode.meteorframework.Scope;
-import com.googlecode.meteorframework.utils.RDFDocumentBuilder;
+import com.googlecode.meteorframework.core.utils.RDFDocumentBuilder;
 
 public class XMLSerializationTest 
 extends TestCase 
