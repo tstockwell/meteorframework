@@ -1,4 +1,4 @@
-package com.googlecode.meteorframework.utils;
+package com.googlecode.meteorframework.core.utils;
 
 import java.util.Set;
 

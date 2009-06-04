@@ -9,7 +9,7 @@ import com.googlecode.meteorframework.Type;
 import com.googlecode.meteorframework.annotation.Decorator;
 import com.googlecode.meteorframework.annotation.Inject;
 import com.googlecode.meteorframework.annotation.Lookup;
-import com.googlecode.meteorframework.utils.Messages;
+import com.googlecode.meteorframework.core.utils.Messages;
 
 @Decorator abstract public class MessagesImpl
 implements Messages, Resource

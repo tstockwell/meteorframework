@@ -1,24 +1,24 @@
 package com.googlecode.meteorframework.test;
 
-import static com.googlecode.meteorframework.utils.TurtleGrammar.DOCUMENT;
-import static com.googlecode.meteorframework.utils.TurtleGrammar.LITERAL;
-import static com.googlecode.meteorframework.utils.TurtleGrammar.OBJECT_LIST;
-import static com.googlecode.meteorframework.utils.TurtleGrammar.PREDICATE_VALUES;
-import static com.googlecode.meteorframework.utils.TurtleGrammar.STATEMENT;
-import static com.googlecode.meteorframework.utils.TurtleGrammar.SUBJECT;
-import static com.googlecode.meteorframework.utils.TurtleGrammar.TRIPLES;
-import static com.googlecode.meteorframework.utils.TurtleGrammar.URIREF;
-import static com.googlecode.meteorframework.utils.TurtleGrammar.VERB;
+import static com.googlecode.meteorframework.core.utils.TurtleGrammar.DOCUMENT;
+import static com.googlecode.meteorframework.core.utils.TurtleGrammar.LITERAL;
+import static com.googlecode.meteorframework.core.utils.TurtleGrammar.OBJECT_LIST;
+import static com.googlecode.meteorframework.core.utils.TurtleGrammar.PREDICATE_VALUES;
+import static com.googlecode.meteorframework.core.utils.TurtleGrammar.STATEMENT;
+import static com.googlecode.meteorframework.core.utils.TurtleGrammar.SUBJECT;
+import static com.googlecode.meteorframework.core.utils.TurtleGrammar.TRIPLES;
+import static com.googlecode.meteorframework.core.utils.TurtleGrammar.URIREF;
+import static com.googlecode.meteorframework.core.utils.TurtleGrammar.VERB;
 
 import java.util.List;
 
+import com.googlecode.meteorframework.core.utils.TurtleGrammar;
 import com.googlecode.meteorframework.parser.Grammar;
 import com.googlecode.meteorframework.parser.MatchResults;
 import com.googlecode.meteorframework.parser.matcher.Matcher;
 import com.googlecode.meteorframework.parser.matcher.Matchers;
 import com.googlecode.meteorframework.parser.node.AbstractNode;
 import com.googlecode.meteorframework.parser.node.Navigation;
-import com.googlecode.meteorframework.utils.TurtleGrammar;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;

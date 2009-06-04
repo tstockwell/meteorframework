@@ -3,7 +3,7 @@ package com.googlecode.meteorframework.impl.utils;
 import com.googlecode.meteorframework.MeteorConversionException;
 import com.googlecode.meteorframework.MeteorException;
 import com.googlecode.meteorframework.annotation.Decorator;
-import com.googlecode.meteorframework.utils.ConversionService;
+import com.googlecode.meteorframework.core.utils.ConversionService;
 
 /**
  * Utility for converting scalar values to objects of a specified Class.

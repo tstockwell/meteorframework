@@ -9,9 +9,9 @@ import com.googlecode.meteorframework.Scope;
 import com.googlecode.meteorframework.Type;
 import com.googlecode.meteorframework.annotation.Decorator;
 import com.googlecode.meteorframework.annotation.Inject;
+import com.googlecode.meteorframework.core.utils.ConversionService;
 import com.googlecode.meteorframework.impl.ObjectImpl;
 import com.googlecode.meteorframework.impl.RepositoryImpl;
-import com.googlecode.meteorframework.utils.ConversionService;
 
 
 /**

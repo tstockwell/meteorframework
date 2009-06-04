@@ -1,4 +1,4 @@
-package com.googlecode.meteorframework.utils;
+package com.googlecode.meteorframework.core.utils;
 
 import com.googlecode.meteorframework.Service;
 import com.googlecode.meteorframework.annotation.IsMethod;

@@ -1,4 +1,4 @@
-package com.googlecode.meteorframework.utils;
+package com.googlecode.meteorframework.core.utils;
 
 import static com.googlecode.meteorframework.parser.Parsers.cho;
 import static com.googlecode.meteorframework.parser.Parsers.lcho;

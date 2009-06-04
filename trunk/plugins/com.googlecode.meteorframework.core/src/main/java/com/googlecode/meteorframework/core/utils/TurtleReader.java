@@ -1,13 +1,13 @@
-package com.googlecode.meteorframework.utils;
+package com.googlecode.meteorframework.core.utils;
 
-import static com.googlecode.meteorframework.utils.TurtleGrammar.OBJECT;
-import static com.googlecode.meteorframework.utils.TurtleGrammar.PREDICATE_VALUES;
-import static com.googlecode.meteorframework.utils.TurtleGrammar.PREFIX_ID;
-import static com.googlecode.meteorframework.utils.TurtleGrammar.PREFIX_NAME;
-import static com.googlecode.meteorframework.utils.TurtleGrammar.SUBJECT;
-import static com.googlecode.meteorframework.utils.TurtleGrammar.TRIPLES;
-import static com.googlecode.meteorframework.utils.TurtleGrammar.URIREF;
-import static com.googlecode.meteorframework.utils.TurtleGrammar.VERB;
+import static com.googlecode.meteorframework.core.utils.TurtleGrammar.OBJECT;
+import static com.googlecode.meteorframework.core.utils.TurtleGrammar.PREDICATE_VALUES;
+import static com.googlecode.meteorframework.core.utils.TurtleGrammar.PREFIX_ID;
+import static com.googlecode.meteorframework.core.utils.TurtleGrammar.PREFIX_NAME;
+import static com.googlecode.meteorframework.core.utils.TurtleGrammar.SUBJECT;
+import static com.googlecode.meteorframework.core.utils.TurtleGrammar.TRIPLES;
+import static com.googlecode.meteorframework.core.utils.TurtleGrammar.URIREF;
+import static com.googlecode.meteorframework.core.utils.TurtleGrammar.VERB;
 
 import java.io.IOException;
 import java.net.URL;

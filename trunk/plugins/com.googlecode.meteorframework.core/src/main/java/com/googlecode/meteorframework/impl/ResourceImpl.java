@@ -24,7 +24,7 @@ import com.googlecode.meteorframework.Scope;
 import com.googlecode.meteorframework.Type;
 import com.googlecode.meteorframework.annotation.Decorator;
 import com.googlecode.meteorframework.annotation.IsSingleton;
-import com.googlecode.meteorframework.utils.ConversionService;
+import com.googlecode.meteorframework.core.utils.ConversionService;
 
 
 

@@ -3,12 +3,12 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Core
 Bundle-SymbolicName: com.googlecode.meteorframework.core;singleton:=true
 Bundle-Version: 1.0.0
-Import-Package: com.googlecode.meteorframework.parser,
+Import-Package: com.googlecode.meteorframework.core.utils,
+ com.googlecode.meteorframework.parser,
  com.googlecode.meteorframework.parser.matcher,
  com.googlecode.meteorframework.parser.matcher.common,
  com.googlecode.meteorframework.parser.node,
  com.googlecode.meteorframework.parser.util,
- com.googlecode.meteorframework.utils,
  com.sun.mirror.apt,
  com.sun.mirror.declaration,
  javax.xml.parsers,
@@ -28,8 +28,8 @@ Export-Package: com.googlecode.meteorframework,
  com.googlecode.meteorframework.binding,
  com.googlecode.meteorframework.callback,
  com.googlecode.meteorframework.common,
+ com.googlecode.meteorframework.core.utils,
  com.googlecode.meteorframework.query,
- com.googlecode.meteorframework.query.jpa,
- com.googlecode.meteorframework.utils
+ com.googlecode.meteorframework.query.jpa
 Bundle-ClassPath: .
 Bundle-Activator: com.googlecode.meteorframework.impl.Activator
