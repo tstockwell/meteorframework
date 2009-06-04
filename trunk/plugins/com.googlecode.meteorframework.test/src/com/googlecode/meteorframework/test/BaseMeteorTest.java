@@ -1,8 +1,8 @@
 package com.googlecode.meteorframework.test;
 
-import com.googlecode.meteorframework.Meteor;
-import com.googlecode.meteorframework.Scope;
-import com.googlecode.meteorframework.binding.Testing;
+import com.googlecode.meteorframework.core.Meteor;
+import com.googlecode.meteorframework.core.Scope;
+import com.googlecode.meteorframework.core.binding.Testing;
 
 import junit.framework.TestCase;
 

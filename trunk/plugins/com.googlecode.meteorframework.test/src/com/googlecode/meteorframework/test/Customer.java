@@ -1,10 +1,10 @@
 package com.googlecode.meteorframework.test;
 
-import com.googlecode.meteorframework.Resource;
-import com.googlecode.meteorframework.Service;
-import com.googlecode.meteorframework.annotation.DefaultValue;
-import com.googlecode.meteorframework.annotation.IsWriteOnce;
-import com.googlecode.meteorframework.annotation.Model;
+import com.googlecode.meteorframework.core.Resource;
+import com.googlecode.meteorframework.core.Service;
+import com.googlecode.meteorframework.core.annotation.DefaultValue;
+import com.googlecode.meteorframework.core.annotation.IsWriteOnce;
+import com.googlecode.meteorframework.core.annotation.Model;
 
 @Model public interface Customer extends Resource {
 	

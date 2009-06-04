@@ -3,21 +3,21 @@ package com.googlecode.meteorframework.test;
 import java.util.Collection;
 import java.util.Set;
 
-import com.googlecode.meteorframework.BindingContext;
-import com.googlecode.meteorframework.BindingType;
-import com.googlecode.meteorframework.Meteor;
-import com.googlecode.meteorframework.MeteorException;
-import com.googlecode.meteorframework.MeteorNS;
-import com.googlecode.meteorframework.Property;
-import com.googlecode.meteorframework.Resource;
-import com.googlecode.meteorframework.Scope;
-import com.googlecode.meteorframework.Type;
-import com.googlecode.meteorframework.annotation.Inject;
-import com.googlecode.meteorframework.binding.Testing;
-import com.googlecode.meteorframework.query.URIRestriction;
+import com.googlecode.meteorframework.core.BindingContext;
+import com.googlecode.meteorframework.core.BindingType;
+import com.googlecode.meteorframework.core.Meteor;
+import com.googlecode.meteorframework.core.MeteorException;
+import com.googlecode.meteorframework.core.MeteorNS;
+import com.googlecode.meteorframework.core.Property;
+import com.googlecode.meteorframework.core.Resource;
+import com.googlecode.meteorframework.core.Scope;
+import com.googlecode.meteorframework.core.Type;
+import com.googlecode.meteorframework.core.annotation.Inject;
+import com.googlecode.meteorframework.core.binding.Testing;
+import com.googlecode.meteorframework.core.query.URIRestriction;
+import com.googlecode.meteorframework.core.test.extension.ExtensionNS;
 import com.googlecode.meteorframework.test.extension.CustomerExtension;
 import com.googlecode.meteorframework.test.extension.CustomerStatementAdvice;
-import com.googlecode.meteorframework.test.extension.ExtensionNS;
 
 
 

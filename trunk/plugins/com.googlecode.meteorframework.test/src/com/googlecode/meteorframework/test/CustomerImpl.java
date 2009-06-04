@@ -1,11 +1,11 @@
 package com.googlecode.meteorframework.test;
 
-import com.googlecode.meteorframework.InvocationContext;
-import com.googlecode.meteorframework.Meteor;
-import com.googlecode.meteorframework.Scope;
-import com.googlecode.meteorframework.annotation.Decorates;
-import com.googlecode.meteorframework.annotation.Decorator;
-import com.googlecode.meteorframework.annotation.Inject;
+import com.googlecode.meteorframework.core.InvocationContext;
+import com.googlecode.meteorframework.core.Meteor;
+import com.googlecode.meteorframework.core.Scope;
+import com.googlecode.meteorframework.core.annotation.Decorates;
+import com.googlecode.meteorframework.core.annotation.Decorator;
+import com.googlecode.meteorframework.core.annotation.Inject;
 
 @Decorator public abstract class CustomerImpl implements Customer {
 	

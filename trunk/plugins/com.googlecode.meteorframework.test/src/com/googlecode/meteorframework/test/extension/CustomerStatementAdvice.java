@@ -1,7 +1,7 @@
 package com.googlecode.meteorframework.test.extension;
 
-import com.googlecode.meteorframework.Meteor;
-import com.googlecode.meteorframework.annotation.Decorator;
+import com.googlecode.meteorframework.core.Meteor;
+import com.googlecode.meteorframework.core.annotation.Decorator;
 import com.googlecode.meteorframework.test.Customer;
 import com.googlecode.meteorframework.test.CustomerStatement;
 

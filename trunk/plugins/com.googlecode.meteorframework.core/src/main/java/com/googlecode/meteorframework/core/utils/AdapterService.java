@@ -1,9 +1,9 @@
 package com.googlecode.meteorframework.core.utils;
 
-import com.googlecode.meteorframework.MeteorException;
-import com.googlecode.meteorframework.Service;
-import com.googlecode.meteorframework.TypeLiteral;
-import com.googlecode.meteorframework.annotation.Model;
+import com.googlecode.meteorframework.core.MeteorException;
+import com.googlecode.meteorframework.core.Service;
+import com.googlecode.meteorframework.core.TypeLiteral;
+import com.googlecode.meteorframework.core.annotation.Model;
 
 /**
  * Utility for creating object adapters.

@@ -1,8 +1,8 @@
 package com.googlecode.meteorframework.test;
 
-import com.googlecode.meteorframework.annotation.Bind;
-import com.googlecode.meteorframework.annotation.Model;
-import com.googlecode.meteorframework.binding.Testing;
+import com.googlecode.meteorframework.core.annotation.Bind;
+import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.binding.Testing;
 
 @Model 
 @Bind(Testing.class)

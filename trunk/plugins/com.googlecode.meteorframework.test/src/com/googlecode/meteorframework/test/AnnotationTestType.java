@@ -1,13 +1,13 @@
 package com.googlecode.meteorframework.test;
 
-import com.googlecode.meteorframework.MeteorNS;
-import com.googlecode.meteorframework.Resource;
-import com.googlecode.meteorframework.Scope;
-import com.googlecode.meteorframework.Service;
-import com.googlecode.meteorframework.annotation.Decorator;
-import com.googlecode.meteorframework.annotation.Inject;
-import com.googlecode.meteorframework.annotation.Model;
-import com.googlecode.meteorframework.annotation.Setting;
+import com.googlecode.meteorframework.core.MeteorNS;
+import com.googlecode.meteorframework.core.Resource;
+import com.googlecode.meteorframework.core.Scope;
+import com.googlecode.meteorframework.core.Service;
+import com.googlecode.meteorframework.core.annotation.Decorator;
+import com.googlecode.meteorframework.core.annotation.Inject;
+import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.Setting;
 
 //do not remove this annotation, it is used for testing purposes 
 @Model({@Setting(property=MeteorNS.Resource.description, value=BootstrapTests.TEST_VALUE)})

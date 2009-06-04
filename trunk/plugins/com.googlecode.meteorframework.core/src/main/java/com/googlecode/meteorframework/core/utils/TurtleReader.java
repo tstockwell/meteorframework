@@ -15,11 +15,11 @@ import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 
-import com.googlecode.meteorframework.MeteorNS;
-import com.googlecode.meteorframework.Property;
-import com.googlecode.meteorframework.Resource;
-import com.googlecode.meteorframework.Scope;
-import com.googlecode.meteorframework.Type;
+import com.googlecode.meteorframework.core.MeteorNS;
+import com.googlecode.meteorframework.core.Property;
+import com.googlecode.meteorframework.core.Resource;
+import com.googlecode.meteorframework.core.Scope;
+import com.googlecode.meteorframework.core.Type;
 import com.googlecode.meteorframework.parser.MatchResults;
 import com.googlecode.meteorframework.parser.node.AbstractNode;
 import com.googlecode.meteorframework.parser.node.Navigation;

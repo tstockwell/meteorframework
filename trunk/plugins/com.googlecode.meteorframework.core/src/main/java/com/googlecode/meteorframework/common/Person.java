@@ -1,6 +1,6 @@
 package com.googlecode.meteorframework.common;
 
-import com.googlecode.meteorframework.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.Model;
 
 @Model public interface Person
 {

@@ -6,7 +6,7 @@
          point="org.eclipse.jdt.apt.core.annotationProcessorFactory">
       <factories enableDefault="true">
 	      <factory
-	         class="com.googlecode.meteorframework.annotation.apt.MeteorAnnotationProcessorFactory">
+	         class="com.googlecode.meteorframework.core.annotation.apt.MeteorAnnotationProcessorFactory">
 	      </factory>
       </factories>
 </extension>
