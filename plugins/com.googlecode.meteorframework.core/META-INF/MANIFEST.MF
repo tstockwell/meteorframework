@@ -22,14 +22,13 @@ Import-Package: com.googlecode.meteorframework.core.utils,
  org.eclipse.pde.core.plugin,
  org.osgi.framework;version="1.4.0",
  org.w3c.dom
-Export-Package: com.googlecode.meteorframework,
- com.googlecode.meteorframework.annotation,
- com.googlecode.meteorframework.annotation.apt,
- com.googlecode.meteorframework.binding,
- com.googlecode.meteorframework.callback,
+Export-Package: com.googlecode.meteorframework.callback,
  com.googlecode.meteorframework.common,
- com.googlecode.meteorframework.core.utils,
- com.googlecode.meteorframework.query,
- com.googlecode.meteorframework.query.jpa
+ com.googlecode.meteorframework.core,
+ com.googlecode.meteorframework.core.annotation,
+ com.googlecode.meteorframework.core.annotation.apt,
+ com.googlecode.meteorframework.core.binding,
+ com.googlecode.meteorframework.core.query,
+ com.googlecode.meteorframework.core.query.jpa,
+ com.googlecode.meteorframework.core.utils
 Bundle-ClassPath: .
-Bundle-Activator: com.googlecode.meteorframework.impl.Activator

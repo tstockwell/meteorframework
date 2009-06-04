@@ -1,10 +1,10 @@
 package com.googlecode.meteorframework.test;
 
-import com.googlecode.meteorframework.Resource;
-import com.googlecode.meteorframework.Scope;
-import com.googlecode.meteorframework.annotation.Decorates;
-import com.googlecode.meteorframework.annotation.Decorator;
-import com.googlecode.meteorframework.annotation.Inject;
+import com.googlecode.meteorframework.core.Resource;
+import com.googlecode.meteorframework.core.Scope;
+import com.googlecode.meteorframework.core.annotation.Decorates;
+import com.googlecode.meteorframework.core.annotation.Decorator;
+import com.googlecode.meteorframework.core.annotation.Inject;
 
 /**
  * This subclass always returns the same value from the getName method.

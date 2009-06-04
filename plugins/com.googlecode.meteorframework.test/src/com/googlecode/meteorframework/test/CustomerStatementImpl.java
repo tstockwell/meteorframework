@@ -2,9 +2,9 @@ package com.googlecode.meteorframework.test;
 
 import java.math.BigDecimal;
 
-import com.googlecode.meteorframework.Scope;
-import com.googlecode.meteorframework.annotation.Decorator;
-import com.googlecode.meteorframework.annotation.Inject;
+import com.googlecode.meteorframework.core.Scope;
+import com.googlecode.meteorframework.core.annotation.Decorator;
+import com.googlecode.meteorframework.core.annotation.Inject;
 
 
 @Decorator public abstract class CustomerStatementImpl implements CustomerStatement {

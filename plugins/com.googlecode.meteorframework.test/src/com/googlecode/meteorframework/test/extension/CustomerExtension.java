@@ -1,9 +1,9 @@
 package com.googlecode.meteorframework.test.extension;
 
-import com.googlecode.meteorframework.annotation.ExtensionOf;
-import com.googlecode.meteorframework.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ExtensionOf;
+import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.test.TestNS;
 import com.googlecode.meteorframework.test.Customer;
-import com.googlecode.meteorframework.test.TestNS;
 
 
 

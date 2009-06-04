@@ -5,9 +5,9 @@ import javax.xml.parsers.DocumentBuilder;
 
 import org.w3c.dom.Document;
 
-import com.googlecode.meteorframework.Resource;
-import com.googlecode.meteorframework.Service;
-import com.googlecode.meteorframework.annotation.Model;
+import com.googlecode.meteorframework.core.Resource;
+import com.googlecode.meteorframework.core.Service;
+import com.googlecode.meteorframework.core.annotation.Model;
 
 /**
  * Builds RDF/XML Documents from Resource objects. 

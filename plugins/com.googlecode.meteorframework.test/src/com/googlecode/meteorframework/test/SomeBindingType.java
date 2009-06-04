@@ -1,8 +1,8 @@
 package com.googlecode.meteorframework.test;
 
-import com.googlecode.meteorframework.BindingType;
-import com.googlecode.meteorframework.annotation.IsSingleton;
-import com.googlecode.meteorframework.annotation.Model;
+import com.googlecode.meteorframework.core.BindingType;
+import com.googlecode.meteorframework.core.annotation.IsSingleton;
+import com.googlecode.meteorframework.core.annotation.Model;
 
 @Model
 @IsSingleton

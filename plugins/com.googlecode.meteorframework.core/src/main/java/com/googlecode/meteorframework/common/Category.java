@@ -2,9 +2,9 @@ package com.googlecode.meteorframework.common;
 
 import java.util.Set;
 
-import com.googlecode.meteorframework.Type;
-import com.googlecode.meteorframework.annotation.InverseOf;
-import com.googlecode.meteorframework.annotation.Model;
+import com.googlecode.meteorframework.core.Type;
+import com.googlecode.meteorframework.core.annotation.InverseOf;
+import com.googlecode.meteorframework.core.annotation.Model;
 
 
 /**

@@ -1,8 +1,8 @@
 package com.googlecode.meteorframework.core.utils;
 
-import com.googlecode.meteorframework.MeteorException;
-import com.googlecode.meteorframework.Service;
-import com.googlecode.meteorframework.annotation.Model;
+import com.googlecode.meteorframework.core.MeteorException;
+import com.googlecode.meteorframework.core.Service;
+import com.googlecode.meteorframework.core.annotation.Model;
 
 /**
  * Utility for converting scalar values to objects of a specified Class.

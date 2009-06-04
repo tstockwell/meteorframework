@@ -16,9 +16,9 @@ import junit.framework.TestCase;
 
 import org.w3c.dom.Document;
 
-import com.googlecode.meteorframework.Meteor;
-import com.googlecode.meteorframework.Resource;
-import com.googlecode.meteorframework.Scope;
+import com.googlecode.meteorframework.core.Meteor;
+import com.googlecode.meteorframework.core.Resource;
+import com.googlecode.meteorframework.core.Scope;
 import com.googlecode.meteorframework.core.utils.RDFDocumentBuilder;
 
 public class XMLSerializationTest 
