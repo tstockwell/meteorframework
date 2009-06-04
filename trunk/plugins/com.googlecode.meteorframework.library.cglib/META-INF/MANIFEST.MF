@@ -3,7 +3,6 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Cglib Plug-in
 Bundle-SymbolicName: com.googlecode.meteorframework.library.cglib
 Bundle-Version: 2.2.0
-Bundle-ClassPath: cglib-nodep-2.2.jar
 Export-Package: net.sf.cglib.asm,
  net.sf.cglib.asm.signature,
  net.sf.cglib.beans,
@@ -13,3 +12,4 @@ Export-Package: net.sf.cglib.asm,
  net.sf.cglib.transform,
  net.sf.cglib.transform.impl,
  net.sf.cglib.util
+Bundle-ClassPath: .

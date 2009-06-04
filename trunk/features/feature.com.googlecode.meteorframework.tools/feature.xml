@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="feature.com.googlecode.meteorframework.tools"
-      label="Meteor Tools"
+      id="com.googlecode.meteorframework.tools"
+      label="Meteor APT Tools"
       version="1.0.0">
 
    <description url="http://www.example.com/description">
@@ -17,12 +17,12 @@
    </license>
 
    <requires>
-      <import plugin="org.eclipse.osgi"/>
-      <import plugin="org.eclipse.core.runtime"/>
       <import plugin="org.eclipse.jdt.apt.core"/>
       <import plugin="org.eclipse.core.resources"/>
-      <import plugin="org.eclipse.pde.core"/>
+      <import plugin="org.eclipse.core.runtime"/>
       <import plugin="org.eclipse.jdt.core"/>
+      <import plugin="org.eclipse.osgi"/>
+      <import plugin="org.eclipse.pde.core"/>
    </requires>
 
    <plugin
@@ -34,6 +34,20 @@
 
    <plugin
          id="com.googlecode.meteorframework.utils"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.googlecode.meteorframework.parser"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.googlecode.meteorframework.library.cglib"
          download-size="0"
          install-size="0"
          version="0.0.0"
