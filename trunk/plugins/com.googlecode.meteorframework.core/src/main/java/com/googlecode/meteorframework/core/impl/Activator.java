@@ -39,6 +39,7 @@ public class Activator implements BundleActivator {
 		try {
 			__activator= this;
 			__bundle= context.getBundle();
+			
 			__bundleClassloader.addBundle(__bundle);
 			
 			// Cause Model system repository to get created/initialized  
@@ -54,10 +55,8 @@ public class Activator implements BundleActivator {
 		}
 		final Scope systemScope= scope;
 		
-		// add Meteor bundle before all others
-		Bundle meteorBundle= context.getBundle();
-		__bundleClassloader.addBundle(meteorBundle);
-		OsgiMetadataDiscoverer.loadMetadata(meteorBundle, systemScope);
+		// add Meteor bundle to metadata before all others
+		OsgiMetadataDiscoverer.loadMetadata(__bundle, systemScope);
 		SystemScopeBootstrap.enableSystemBindings();
 		
 		
