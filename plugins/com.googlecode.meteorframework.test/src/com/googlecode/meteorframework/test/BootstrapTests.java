@@ -15,9 +15,9 @@ import com.googlecode.meteorframework.core.Type;
 import com.googlecode.meteorframework.core.annotation.Inject;
 import com.googlecode.meteorframework.core.binding.Testing;
 import com.googlecode.meteorframework.core.query.URIRestriction;
-import com.googlecode.meteorframework.core.test.extension.ExtensionNS;
 import com.googlecode.meteorframework.test.extension.CustomerExtension;
 import com.googlecode.meteorframework.test.extension.CustomerStatementAdvice;
+import com.googlecode.meteorframework.test.extension.ExtensionNS;
 
 
 

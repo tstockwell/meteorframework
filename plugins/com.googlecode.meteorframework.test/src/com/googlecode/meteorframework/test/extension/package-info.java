@@ -7,7 +7,7 @@ package com.googlecode.meteorframework.test.extension;
 import com.googlecode.meteorframework.core.MeteorNS;
 import com.googlecode.meteorframework.core.annotation.Model;
 import com.googlecode.meteorframework.core.annotation.Setting;
-import com.googlecode.meteorframework.core.test.TestNS;
+import com.googlecode.meteorframework.test.TestNS;
 
 
 
