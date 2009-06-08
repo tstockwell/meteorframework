@@ -31,7 +31,7 @@ implements Domain
 		return namespace;
 	}
 
-	private static Namespace findNamespace(Scope scope, String uri) 
+	static Namespace findNamespace(Scope scope, String uri) 
 	{
 		Namespace namespace= RepositoryImpl.findResourceByURI(scope, uri, Namespace.class);
 		if (namespace == null) 
