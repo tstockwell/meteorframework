@@ -1,4 +1,4 @@
-package net.sf.meteor.storage.triplestore.impl;
+package com.googlecode.meteorframework.storage.triplestore.impl;
 
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;
@@ -7,9 +7,6 @@ import java.sql.Driver;
 import java.sql.SQLException;
 import java.util.WeakHashMap;
 
-import net.sf.meteor.storage.triplestore.TripleStoreConfiguration;
-import net.sf.meteor.storage.triplestore.TripleStoreService;
-import net.sf.meteor.storage.triplestore.TripleStoreSession;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.dbcp.DelegatingConnection;
@@ -23,6 +20,9 @@ import com.googlecode.meteorframework.core.annotation.Inject;
 import com.googlecode.meteorframework.storage.StorageException;
 import com.googlecode.meteorframework.storage.StorageSession;
 import com.googlecode.meteorframework.storage.jdbc.JDBCDriverRegistry;
+import com.googlecode.meteorframework.storage.triplestore.TripleStoreConfiguration;
+import com.googlecode.meteorframework.storage.triplestore.TripleStoreService;
+import com.googlecode.meteorframework.storage.triplestore.TripleStoreSession;
 import com.googlecode.meteorframework.utils.Logging;
 
 @Decorator public abstract class TripleStoreServiceImpl 

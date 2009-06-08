@@ -1,10 +1,9 @@
-package net.sf.meteor.storage.triplestore.impl;
+package com.googlecode.meteorframework.storage.triplestore.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import net.sf.meteor.storage.triplestore.SQLBuilder;
 
 import com.googlecode.meteorframework.core.Meteor;
 import com.googlecode.meteorframework.core.MeteorException;
@@ -23,6 +22,7 @@ import com.googlecode.meteorframework.core.query.SimpleRestriction;
 import com.googlecode.meteorframework.core.query.URIRestriction;
 import com.googlecode.meteorframework.core.utils.ConversionService;
 import com.googlecode.meteorframework.storage.StorageException;
+import com.googlecode.meteorframework.storage.triplestore.SQLBuilder;
 import com.truemesh.squiggle.Criteria;
 import com.truemesh.squiggle.Literal;
 import com.truemesh.squiggle.LiteralValueSet;

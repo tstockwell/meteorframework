@@ -1,16 +1,16 @@
-package net.sf.meteor.storage.triplestore.impl;
+package com.googlecode.meteorframework.storage.triplestore.impl;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
 
-import net.sf.meteor.storage.triplestore.TripleStoreCodec;
 
 import com.googlecode.meteorframework.core.Resource;
 import com.googlecode.meteorframework.core.Scope;
 import com.googlecode.meteorframework.core.annotation.Decorator;
 import com.googlecode.meteorframework.core.annotation.Inject;
 import com.googlecode.meteorframework.storage.StorageException;
+import com.googlecode.meteorframework.storage.triplestore.TripleStoreCodec;
 
 /**
  * A service that Encodes/Decodes values for storage in the triple store.

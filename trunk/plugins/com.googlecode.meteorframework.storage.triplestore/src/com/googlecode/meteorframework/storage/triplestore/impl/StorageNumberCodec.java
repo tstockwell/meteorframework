@@ -1,4 +1,4 @@
-package net.sf.meteor.storage.triplestore.impl;
+package com.googlecode.meteorframework.storage.triplestore.impl;
 
 import java.math.BigDecimal;
 import java.text.ParseException;

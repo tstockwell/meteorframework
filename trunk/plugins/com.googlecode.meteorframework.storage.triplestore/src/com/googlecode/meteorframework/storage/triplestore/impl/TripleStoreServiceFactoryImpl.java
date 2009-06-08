@@ -1,9 +1,7 @@
-package net.sf.meteor.storage.triplestore.impl;
+package com.googlecode.meteorframework.storage.triplestore.impl;
 
 import java.util.HashMap;
 
-import net.sf.meteor.storage.triplestore.TripleStoreConfiguration;
-import net.sf.meteor.storage.triplestore.TripleStoreService;
 
 import com.googlecode.meteorframework.core.Meteor;
 import com.googlecode.meteorframework.core.Scope;
@@ -11,6 +9,8 @@ import com.googlecode.meteorframework.core.annotation.Decorator;
 import com.googlecode.meteorframework.core.annotation.Inject;
 import com.googlecode.meteorframework.storage.StorageService;
 import com.googlecode.meteorframework.storage.StorageServiceProvider;
+import com.googlecode.meteorframework.storage.triplestore.TripleStoreConfiguration;
+import com.googlecode.meteorframework.storage.triplestore.TripleStoreService;
 
 /**
  * This decorator hooks into StorageServiceFactory to create a 
