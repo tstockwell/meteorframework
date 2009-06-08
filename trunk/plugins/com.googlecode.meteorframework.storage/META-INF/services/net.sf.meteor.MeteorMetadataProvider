@@ -1,0 +1,3 @@
+# Meteor Content Providers
+net.sf.meteor.storage.jdbc.JdbcNS
+net.sf.meteor.storage.StorageNS
