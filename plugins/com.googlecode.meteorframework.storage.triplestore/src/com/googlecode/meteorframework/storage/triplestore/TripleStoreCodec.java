@@ -1,4 +1,4 @@
-package net.sf.meteor.storage.triplestore;
+package com.googlecode.meteorframework.storage.triplestore;
 
 import com.googlecode.meteorframework.core.Service;
 import com.googlecode.meteorframework.core.annotation.Model;

@@ -1,9 +1,9 @@
-package net.sf.meteor.storage.triplestore;
+package com.googlecode.meteorframework.storage.triplestore;
 
-import net.sf.meteor.storage.triplestore.impl.TripleStoreImpl;
 
 import com.googlecode.meteorframework.core.annotation.Model;
 import com.googlecode.meteorframework.storage.StorageSession;
+import com.googlecode.meteorframework.storage.triplestore.impl.TripleStoreImpl;
 
 @Model public interface TripleStoreSession extends StorageSession
 {

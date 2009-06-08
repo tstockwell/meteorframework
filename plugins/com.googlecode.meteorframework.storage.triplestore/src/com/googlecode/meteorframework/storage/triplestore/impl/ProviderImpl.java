@@ -1,12 +1,12 @@
-package net.sf.meteor.storage.triplestore.impl;
+package com.googlecode.meteorframework.storage.triplestore.impl;
 
-import net.sf.meteor.storage.triplestore.TripleStoreService;
-import net.sf.meteor.storage.triplestore.TripleStoreSession;
 
 import com.googlecode.meteorframework.core.Provider;
 import com.googlecode.meteorframework.core.Resource;
 import com.googlecode.meteorframework.core.annotation.Decorates;
 import com.googlecode.meteorframework.core.annotation.Decorator;
+import com.googlecode.meteorframework.storage.triplestore.TripleStoreService;
+import com.googlecode.meteorframework.storage.triplestore.TripleStoreSession;
 
 @Decorator abstract public class ProviderImpl 
 implements Provider

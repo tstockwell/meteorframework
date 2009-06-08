@@ -1,4 +1,4 @@
-package net.sf.meteor.storage.triplestore.impl;
+package com.googlecode.meteorframework.storage.triplestore.impl;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -17,13 +17,13 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import net.sf.meteor.storage.triplestore.TripleStoreCodec;
 import com.googlecode.meteorframework.core.MeteorNotFoundException;
 import com.googlecode.meteorframework.core.Property;
 import com.googlecode.meteorframework.core.Resource;
 import com.googlecode.meteorframework.core.Scope;
 import com.googlecode.meteorframework.core.annotation.Inject;
 import com.googlecode.meteorframework.storage.StorageException;
+import com.googlecode.meteorframework.storage.triplestore.TripleStoreCodec;
 import com.googlecode.meteorframework.utils.Logging;
 
 /**

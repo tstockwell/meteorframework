@@ -1,11 +1,9 @@
-package net.sf.meteor.storage.triplestore.impl;
+package com.googlecode.meteorframework.storage.triplestore.impl;
 
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.meteor.storage.triplestore.SQLBuilder;
-import net.sf.meteor.storage.triplestore.TripleStoreSession;
 
 import com.googlecode.meteorframework.core.Meteor;
 import com.googlecode.meteorframework.core.MeteorNotFoundException;
@@ -16,6 +14,8 @@ import com.googlecode.meteorframework.core.annotation.Inject;
 import com.googlecode.meteorframework.core.query.Selector;
 import com.googlecode.meteorframework.storage.StorageException;
 import com.googlecode.meteorframework.storage.StorageSession;
+import com.googlecode.meteorframework.storage.triplestore.SQLBuilder;
+import com.googlecode.meteorframework.storage.triplestore.TripleStoreSession;
 
 @Decorator public abstract class TripleStoreSessionImpl 
 implements TripleStoreSession

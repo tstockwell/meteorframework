@@ -9,7 +9,7 @@
 //
 // This module is provided "as is", without warranties of any kind.
 
-package net.sf.meteor.storage.triplestore.impl;
+package com.googlecode.meteorframework.storage.triplestore.impl;
 
 import java.io.PrintWriter;
 import java.sql.Connection;

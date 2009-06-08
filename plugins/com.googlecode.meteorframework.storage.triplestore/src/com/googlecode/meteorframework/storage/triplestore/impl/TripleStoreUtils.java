@@ -1,4 +1,4 @@
-package net.sf.meteor.storage.triplestore.impl;
+package com.googlecode.meteorframework.storage.triplestore.impl;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
