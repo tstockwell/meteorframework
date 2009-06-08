@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Pool Plug-in
+Bundle-SymbolicName: com.googlecode.meteorframework.library.apache.commons.pool
+Bundle-Version: 1.4.0
+Export-Package: org.apache.commons.pool,
+ org.apache.commons.pool.impl
