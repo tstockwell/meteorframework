@@ -12,6 +12,7 @@ import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.SynchronousBundleListener;
 
+import com.googlecode.meteorframework.core.Meteor;
 import com.googlecode.meteorframework.core.Scope;
 import com.googlecode.meteorframework.utils.BundleClassloader;
 import com.googlecode.meteorframework.utils.FileLocator;
@@ -127,25 +128,48 @@ public class Activator implements BundleActivator {
 
 	static protected boolean bundleUsesMeteor(Bundle bundle) throws BundleException {
 		String header= (String)bundle.getHeaders().get(Constants.REQUIRE_BUNDLE);
-		if (header == null)
-			return false;
-		ManifestElement[] requiredBundles = 
-			ManifestElement.parseHeader(Constants.REQUIRE_BUNDLE, header);
-		if (requiredBundles == null) 
-			return false;
-		boolean usesMeteor= false;
-		for (int i= 0; !usesMeteor && i < requiredBundles.length; i++) {
-			try {
-				ManifestElement element= requiredBundles[i]; 
-				String requiredBundle = element.getValue();
-				if (requiredBundle.equals(__bundle.getSymbolicName())) 
-					usesMeteor= true;
-			}
-			catch (Throwable e) {
-				e.printStackTrace();
+		if (header != null)
+		{
+			ManifestElement[] requiredBundles = 
+				ManifestElement.parseHeader(Constants.REQUIRE_BUNDLE, header);
+			if (requiredBundles != null)
+			{
+				for (int i= 0; i < requiredBundles.length; i++) {
+					try {
+						ManifestElement element= requiredBundles[i]; 
+						String requiredBundle = element.getValue();
+						if (requiredBundle.equals(__bundle.getSymbolicName())) 
+							return true;
+					}
+					catch (Throwable e) {
+						e.printStackTrace();
+					}
+				}
 			}
 		}
-		return usesMeteor;
+		
+		header= (String)bundle.getHeaders().get(Constants.IMPORT_PACKAGE);
+		if (header != null)
+		{
+			ManifestElement[] importedPackages = 
+				ManifestElement.parseHeader(Constants.IMPORT_PACKAGE, header);
+			if (importedPackages != null)
+			{
+				for (int i= 0; i < importedPackages.length; i++) {
+					try {
+						ManifestElement element= importedPackages[i]; 
+						String importedPackage = element.getValue();
+						if (0 <= importedPackage.indexOf(Meteor.class.getPackage().getName())) 
+							return true;
+					}
+					catch (Throwable e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+
+		return false;
 	}
 
 	public void stop(BundleContext context) throws Exception {
