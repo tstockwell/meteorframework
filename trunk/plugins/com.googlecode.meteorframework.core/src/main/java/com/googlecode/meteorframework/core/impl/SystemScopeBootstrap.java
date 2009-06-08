@@ -173,14 +173,15 @@ public class SystemScopeBootstrap {
 		RepositoryImpl.addResource(__systemScope, meteorNamespace);
 		
 		// com.googlecode.meteorframework.impl Namespace
+		String implNamespace= "meteor:"+SystemScopeBootstrap.class.getPackage().getName();
 		ObjectImpl meteorImplNamespace= new ObjectImpl(__systemScope, MeteorNS.Namespace.TYPE, null);
-		meteorImplNamespace.internalSetURI("meteor:com.googlecode.meteorframework.impl");
+		meteorImplNamespace.internalSetURI(implNamespace);
 		meteorImplNamespace.setValue(MeteorNS.Resource.type, namespaceType.internalCast(Type.class));
 		RepositoryImpl.addResource(__systemScope, meteorImplNamespace);
 		
 		// com.googlecode.meteorframework.impl.query Namespace
 		ObjectImpl meteorImplQueryNamespace= new ObjectImpl(__systemScope, MeteorNS.Namespace.TYPE, null);
-		meteorImplQueryNamespace.internalSetURI("meteor:com.googlecode.meteorframework.impl.query");
+		meteorImplQueryNamespace.internalSetURI(implNamespace+".query");
 		meteorImplQueryNamespace.setValue(MeteorNS.Resource.type, namespaceType.internalCast(Type.class));
 		RepositoryImpl.addResource(__systemScope, meteorImplQueryNamespace);
 		

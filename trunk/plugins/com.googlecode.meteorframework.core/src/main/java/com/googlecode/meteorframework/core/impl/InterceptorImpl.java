@@ -94,9 +94,12 @@ public class InterceptorImpl implements Interceptor {
 		return _order.compareTo(impl._order);
 	}
 
-	@Override public Namespace getNamespace() {
+	@Override public Namespace getNamespace() 
+	{
 		if (_namespace == null) {
-			_namespace= Meteor.getSystemScope().findNamespace(_handlerMethod.getDeclaringClass().getPackage());
+			Package javaPackage= _handlerMethod.getDeclaringClass().getPackage();
+			String uri= Meteor.PROTOCOL+javaPackage.getName();
+			_namespace= DomainImpl.findNamespace(_scope, uri);
 		}
 		return _namespace;
 	}

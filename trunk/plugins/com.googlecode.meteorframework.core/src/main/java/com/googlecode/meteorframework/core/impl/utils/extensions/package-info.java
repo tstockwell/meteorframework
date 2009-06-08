@@ -1,7 +1,7 @@
 
 
 @Model({
-	@Setting(property=MeteorNS.Namespace.dependencies, value="meteor:com.googlecode.meteorframework.impl.utils")})
+	@Setting(property=MeteorNS.Namespace.dependencies, value="meteor:com.googlecode.meteorframework.core.impl.utils")})
 package com.googlecode.meteorframework.core.impl.utils.extensions;
 
 import com.googlecode.meteorframework.core.MeteorNS;

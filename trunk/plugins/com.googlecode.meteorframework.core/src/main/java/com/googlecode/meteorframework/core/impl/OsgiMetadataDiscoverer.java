@@ -20,7 +20,7 @@ public class OsgiMetadataDiscoverer {
 	
 	public static void loadMetadata(Bundle bundle, Scope scope) {
 		
-		URL url= bundle.getEntry("/META-INF/services/com.googlecode.meteorframework.MeteorMetadataProvider");
+		URL url= bundle.getEntry("/META-INF/services/"+MeteorMetadataProvider.class.getName());
 		if (url == null)
 			return;
 		
