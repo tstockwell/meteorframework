@@ -8,3 +8,4 @@ Export-Package: org.apache.commons.dbcp,
  org.apache.commons.dbcp.cpdsadapter,
  org.apache.commons.dbcp.datasources,
  org.apache.commons.jocl
+Require-Bundle: com.googlecode.meteorframework.library.apache.commons.pool;bundle-version="1.4.0"
