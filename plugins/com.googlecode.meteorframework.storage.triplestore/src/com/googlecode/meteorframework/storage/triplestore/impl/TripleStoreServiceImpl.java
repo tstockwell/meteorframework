@@ -1,12 +1,8 @@
 package com.googlecode.meteorframework.storage.triplestore.impl;
 
-import java.lang.ref.ReferenceQueue;
-import java.lang.ref.WeakReference;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.SQLException;
-import java.util.WeakHashMap;
-
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.dbcp.DelegatingConnection;
@@ -29,16 +25,13 @@ import com.googlecode.meteorframework.utils.Logging;
 implements TripleStoreService, Resource 
 {
 	
-	String _jdbcURL; // URL of JDBC database to use
-	BasicDataSource _dataSource;
-	WeakHashMap<Connection, WeakReference<TripleStoreImpl>> _impls= new WeakHashMap<Connection, WeakReference<TripleStoreImpl>>();
-	ReferenceQueue<TripleStoreImpl> _queue= new ReferenceQueue<TripleStoreImpl>();
+	private String _jdbcURL; // URL of JDBC database to use
+	private BasicDataSource _dataSource;
 	
-	@Inject TripleStoreConfiguration _configuration;
-	@Inject StorageSession.Constructor _sessionConstructor;
-	@Inject JDBCDriverRegistry _driverRegistry;
-	@Inject Scope _scope;
-	@Decorates TripleStoreService _self;
+	private @Inject TripleStoreConfiguration _configuration;
+	private @Inject JDBCDriverRegistry _driverRegistry;
+	private @Inject Scope _scope;
+	private @Decorates TripleStoreService _self;
 	
 	
 	protected void init() {
