@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Appengine Storage
+Bundle-SymbolicName: com.googlecode.meteorframework.storage.appengine
+Bundle-Version: 1.0.0
+Bundle-Vendor: Meteor Frameworl
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
