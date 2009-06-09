@@ -3,7 +3,6 @@ package com.googlecode.meteorframework.storage;
 import java.util.List;
 
 import com.googlecode.meteorframework.core.MeteorNotFoundException;
-import com.googlecode.meteorframework.core.Service;
 import com.googlecode.meteorframework.core.Resource;
 import com.googlecode.meteorframework.core.annotation.Model;
 import com.googlecode.meteorframework.core.query.Selector;
@@ -19,10 +18,6 @@ import com.googlecode.meteorframework.core.query.Selector;
  */
 @Model public interface StorageSession extends Resource 
 {
-	@Model public interface Constructor extends Service {
-		public StorageSession create(StorageService connector);
-	}
-
 	public <T> T findByURI(Class<T> type, String uri)
 		throws MeteorNotFoundException;
 	
@@ -58,6 +53,7 @@ import com.googlecode.meteorframework.core.query.Selector;
 
     /**
      * Save all changes to persistent objects to the underlying system.
+     * If a transaction is active the transaction is committed.
      */
     public void flush();
 
