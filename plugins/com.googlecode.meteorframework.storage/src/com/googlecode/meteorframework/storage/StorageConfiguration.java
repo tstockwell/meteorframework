@@ -6,6 +6,6 @@ import com.googlecode.meteorframework.core.utils.Configuration;
 
 @Model public interface StorageConfiguration extends Configuration {
 
-	@DefaultValue("meteor:storage:triplestore")
+	@DefaultValue("meteor:storage:appengine")
 	public String getDefaultConnectionURL();
 }
