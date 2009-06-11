@@ -1,4 +1,4 @@
-package com.googlecode.meteorframework.storage.test;
+package com.googlecode.meteorframework.storage.triplestore;
 
 import java.text.ParseException;
 import java.util.ArrayList;
