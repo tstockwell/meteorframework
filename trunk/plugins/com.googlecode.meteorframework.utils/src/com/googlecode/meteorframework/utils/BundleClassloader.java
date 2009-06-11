@@ -141,9 +141,9 @@ public class BundleClassloader extends URLClassLoader {
     		_bundles.add(bundle);
     		_bundlesByName.put(bundleName, bundle);
     		
-    		List<String> packages= OsgiUtils.getExportedPackages(bundle);
-    		for (String packageName : packages)
-    			_bundlesByPackage.put(packageName, bundle);
+    		List<ManifestElement> packages= OsgiUtils.getExportedPackages(bundle);
+    		for (ManifestElement packageName : packages)
+    			_bundlesByPackage.put(packageName.getValue(), bundle);
     	}
     	
     	addBundleURLs(bundle);
@@ -153,16 +153,16 @@ public class BundleClassloader extends URLClassLoader {
     	return _bundlesByName.containsKey(p_bundle.getSymbolicName());
 	}
 
-	public Set<String> getAllDependentPackages(String packageName) 
+	public Set<ManifestElement> getAllDependentPackages(String packageName) 
 	throws BundleException
 	{
 		Bundle bundle= getBundleThatExportsPackage(packageName);
 		if (bundle == null) // will be null if package is not exported
 			return Collections.EMPTY_SET;
-		Set<String> bundleDependencies= OsgiUtils.getAllDependencies(bundle);
-		HashSet<String> dependentPackages= new HashSet<String>();
-		for (String bundleName : bundleDependencies) { 
-			Bundle bundle2= _bundlesByName.get(bundleName);
+		Set<ManifestElement> bundleDependencies= OsgiUtils.getAllDependencies(bundle);
+		HashSet<ManifestElement> dependentPackages= new HashSet<ManifestElement>();
+		for (ManifestElement bundleName : bundleDependencies) { 
+			Bundle bundle2= _bundlesByName.get(bundleName.getValue());
 			if (bundle2 != null)
 				dependentPackages.addAll(OsgiUtils.getExportedPackages(bundle2));
 		}

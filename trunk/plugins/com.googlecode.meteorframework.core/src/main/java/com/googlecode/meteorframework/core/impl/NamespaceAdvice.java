@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-
+import org.eclipse.osgi.util.ManifestElement;
 import org.osgi.framework.BundleException;
 
 import com.googlecode.meteorframework.core.Meteor;
@@ -51,12 +51,13 @@ import com.googlecode.meteorframework.core.annotation.Model;
 					namespace= _self.create(nsURI);
 				
 				// get dependencies form other bundles
-				Set<String> dependentPackages= Activator.getMeteorClassloader().getAllDependentPackages(javaType.getName());
+				Set<ManifestElement> dependentPackages= Activator.getMeteorClassloader().getAllDependentPackages(javaType.getName());
 				Set<Namespace> dependentNamespaces= new HashSet<Namespace>();
-				for (String dependentPackage : dependentPackages) {
-					Namespace dependency= RepositoryImpl.findResourceByURI(_repository, dependentPackage, Namespace.class);
+				for (ManifestElement dependentPackage : dependentPackages) {
+					String packageName= dependentPackage.getValue();
+					Namespace dependency= RepositoryImpl.findResourceByURI(_repository, packageName, Namespace.class);
 					if (dependency == null) 
-						dependency= _self.create(dependentPackage);
+						dependency= _self.create(packageName);
 					dependentNamespaces.add(dependency);
 				}
 				namespace.setDependencies(dependentNamespaces);

@@ -11,3 +11,5 @@ Import-Package: com.google.appengine.api.datastore,
  com.googlecode.meteorframework.core.query,
  com.googlecode.meteorframework.core.utils,
  com.googlecode.meteorframework.storage
+Export-Package: com.googlecode.meteorframework.storage.appengine,
+ com.googlecode.meteorframework.storage.appengine.impl
