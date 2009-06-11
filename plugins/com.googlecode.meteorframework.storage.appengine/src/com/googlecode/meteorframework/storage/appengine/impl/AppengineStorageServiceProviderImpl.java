@@ -13,7 +13,8 @@ import com.googlecode.meteorframework.storage.appengine.AppengineStorageService;
 
 /**
  * This decorator hooks into StorageServiceFactory to create a 
- * AppengineStorageTripleStoreConnector when the connection URL begins with  TRIPLESTORE_PROTOCOL
+ * AppengineStorageTripleStoreConnector when the connection URL begins with  
+ * AppengineStorageConfiguration.APPENGINE_STORAGE_PROTOCOL
  */
 @Decorator public abstract class AppengineStorageServiceProviderImpl
 implements StorageServiceProvider

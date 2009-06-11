@@ -3,6 +3,7 @@ package com.googlecode.meteorframework.utils;
 import java.util.Set;
 
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.osgi.util.ManifestElement;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 
@@ -18,9 +19,9 @@ public class PluginClassLoaderWrapper extends BundleClassloader {
 		try {
 			Bundle bundle= Platform.getBundle(plugin);
 			addBundle(bundle);
-			Set<String> dependencies= OsgiUtils.getAllDependencies(bundle);
-			for (String idb : dependencies)  
-				addBundle(Platform.getBundle(idb));
+			Set<ManifestElement> dependencies= OsgiUtils.getAllDependencies(bundle);
+			for (ManifestElement idb : dependencies)  
+				addBundle(Platform.getBundle(idb.getValue()));
 		}
 		catch (BundleException x) {
 			throw new RuntimeException("Error create classloader for plugin "+plugin, x);
