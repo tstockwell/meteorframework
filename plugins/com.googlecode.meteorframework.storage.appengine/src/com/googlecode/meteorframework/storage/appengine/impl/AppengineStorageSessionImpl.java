@@ -128,7 +128,7 @@ implements AppengineStorageSession
 		if ((resource instanceof Resource) == false)
 			throw new StorageException("Only objects that implement the "+Resource.class.getName()+" interface may be persisted");
 		
-		Entity entity= ((Resource)resource).castTo(Entity.class);
+		Entity entity= _conversionService.convert(resource, Entity.class);
 		_datastoreService.put(entity);
 	}
 
