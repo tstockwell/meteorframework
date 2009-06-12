@@ -15,14 +15,12 @@ import com.googlecode.meteorframework.core.annotation.Model;
 @Model public interface StorageService
 extends Service
 {
-	
 	public StorageSession openSession() 
 		throws StorageException;
 	
 	public void close();
 
 	public String getConnectionURL();
-	@IsWriteOnce public void setConnectionURL(String connectionURL);
 	
 	/**
 	 * A convenience method that opens a new session and 
