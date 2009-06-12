@@ -3,6 +3,7 @@ package com.googlecode.meteorframework.storage.appengine.impl;
 import java.util.HashMap;
 
 import com.googlecode.meteorframework.core.Meteor;
+import com.googlecode.meteorframework.core.Resource;
 import com.googlecode.meteorframework.core.Scope;
 import com.googlecode.meteorframework.core.annotation.Decorator;
 import com.googlecode.meteorframework.core.annotation.Inject;
@@ -32,6 +33,7 @@ implements StorageServiceProvider
 		if (storageService != null)
 			return storageService;
 
+		Resource prototype= _scope.createInstance(Resource.class);
 		storageService= _scope.createInstance(AppengineStorageService.class);
 		storageService.setConnectionURL(connectionURL);
 		__connectors.put(connectionURL, storageService);
