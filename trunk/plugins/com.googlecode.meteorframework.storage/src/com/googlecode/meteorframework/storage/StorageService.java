@@ -15,6 +15,7 @@ import com.googlecode.meteorframework.core.annotation.Model;
 @Model public interface StorageService
 extends Service
 {
+	
 	public StorageSession openSession() 
 		throws StorageException;
 	
