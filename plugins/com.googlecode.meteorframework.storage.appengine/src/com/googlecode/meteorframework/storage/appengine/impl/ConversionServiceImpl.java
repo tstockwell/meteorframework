@@ -3,6 +3,7 @@ package com.googlecode.meteorframework.storage.appengine.impl;
 import java.util.Map;
 
 import com.google.appengine.api.datastore.Entity;
+import com.googlecode.meteorframework.core.Property;
 import com.googlecode.meteorframework.core.Resource;
 import com.googlecode.meteorframework.core.Scope;
 import com.googlecode.meteorframework.core.annotation.Decorator;
@@ -16,8 +17,13 @@ implements ConversionService
 	@Inject Scope _scope;
 	
 	public Entity convert(Resource resource, Class<Entity> type) {
-		// TODO Auto-generated method stub
-		return null;
+		Entity entity= new Entity(resource.getType().getURI());
+		for (Property<?> property : resource.getContainedProperties())
+		{
+			Object value= resource.getProperty(property);
+			entity.setProperty(property.getURI(), value);
+		}
+		return entity;
 	}
 	
 	public Resource convert(Entity entity, Class<Resource> type) {

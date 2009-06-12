@@ -1,7 +1,11 @@
 package com.googlecode.meteorframework.storage.appengine.impl;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.Entity;
@@ -11,6 +15,7 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Transaction;
 import com.googlecode.meteorframework.core.MeteorNotFoundException;
+import com.googlecode.meteorframework.core.Property;
 import com.googlecode.meteorframework.core.Resource;
 import com.googlecode.meteorframework.core.annotation.After;
 import com.googlecode.meteorframework.core.annotation.Decorates;
@@ -121,12 +126,46 @@ implements AppengineStorageSession
 	/**
 	 * Adds a previously unpersisted object to the data store.
 	 */
-	@Override synchronized public void persist(Object resource) 
+	synchronized public void persist(Resource resource) 
 	throws StorageException
 	{
 		checkClosed();
-		if ((resource instanceof Resource) == false)
-			throw new StorageException("Only objects that implement the "+Resource.class.getName()+" interface may be persisted");
+		HashSet<String> completedURIs= new HashSet<String>();
+		persist(resource, completedURIs);
+	}
+	
+	private void persist(Resource resource, HashSet<String> completedURIs) 
+	{
+		
+		String resourceURI= resource.getURI();
+		completedURIs.add(resourceURI);
+		
+		Set<Property<?>> properties= resource.getContainedProperties();
+		for (Property<?> property : properties) 
+		{
+			if (property.isTemporal())
+				continue;
+			
+			Object value= resource.getProperty(property);
+			if (property.isMany()) {
+				if (property.isOrdered()) {
+					int i= 0;
+					for (Object val : (Collection<?>)value) 
+						persistPropertyValue(resourceURI, property, i++, val, statements, completedURIs);
+				}
+				else if (property.isIndexed()) {
+					for (Map.Entry<?, ?> entry : ((Map<?,?>)value).entrySet())  
+						persistPropertyValue(resourceURI, property, entry.getKey(), entry.getValue(), statements, completedURIs);
+				}
+				else {
+					for (Object val : (Collection<?>)value) 
+						persistPropertyValue(resourceURI, property, null, val, statements, completedURIs);
+				}
+			}
+			else 
+				persistPropertyValue(resourceURI, property, null, value, statements, completedURIs);
+		}
+		
 		
 		Entity entity= _conversionService.convert(resource, Entity.class);
 		_datastoreService.put(entity);

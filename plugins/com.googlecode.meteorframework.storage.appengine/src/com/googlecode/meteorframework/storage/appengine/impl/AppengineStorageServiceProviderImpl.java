@@ -32,7 +32,6 @@ implements StorageServiceProvider
 		if (storageService != null)
 			return storageService;
 
-
 		storageService= _scope.createInstance(AppengineStorageService.class);
 		storageService.setConnectionURL(connectionURL);
 		__connectors.put(connectionURL, storageService);
