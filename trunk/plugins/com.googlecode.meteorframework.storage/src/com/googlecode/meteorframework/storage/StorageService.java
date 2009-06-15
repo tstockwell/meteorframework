@@ -22,6 +22,7 @@ extends Service
 	public void close();
 
 	public String getConnectionURL();
+	@IsWriteOnce public void setConnectionURL(String url);
 	
 	/**
 	 * A convenience method that opens a new session and 
