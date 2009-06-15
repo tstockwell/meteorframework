@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.googlecode.meteorframework.core.CoreNS;
 import com.googlecode.meteorframework.core.Meteor;
-import com.googlecode.meteorframework.core.MeteorNS;
 import com.googlecode.meteorframework.core.Repository;
 import com.googlecode.meteorframework.core.Resource;
 import com.googlecode.meteorframework.core.Scope;
@@ -27,18 +27,18 @@ implements Repository, Resource
 	@Decorates Scope _self;
 	
 	static HashMap<String, Resource> getResourcesByURIMap(ObjectImpl scopeImpl) {
-		HashMap map= (HashMap) scopeImpl.getValue(MeteorNS.Repository.findResourceByURI);
+		HashMap map= (HashMap) scopeImpl.getValue(CoreNS.Repository.findResourceByURI);
 		if (map == null) {
 			map= new HashMap<String, Resource>();
-			scopeImpl.setValue(MeteorNS.Repository.findResourceByURI, map);
+			scopeImpl.setValue(CoreNS.Repository.findResourceByURI, map);
 		}
 		return map;
 	}
 	static HashMap<String, Set<Resource>> getResourcesByTypeMap(ObjectImpl scopeImpl) {
-		HashMap map= (HashMap) scopeImpl.getValue(MeteorNS.Repository.findResourcesByType);
+		HashMap map= (HashMap) scopeImpl.getValue(CoreNS.Repository.findResourcesByType);
 		if (map == null) {
 			map= new HashMap<String, Resource>();
-			scopeImpl.setValue(MeteorNS.Repository.findResourcesByType, map);
+			scopeImpl.setValue(CoreNS.Repository.findResourcesByType, map);
 		}
 		return map;
 	}
@@ -159,7 +159,7 @@ implements Repository, Resource
 	{
 		Resource resource= (Resource)getResourcesByURIMap(scopeImpl).get(uri);
 		if (resource == null) {
-			Collection<?> nestedScopes= (Collection<?>) scopeImpl.getValue(MeteorNS.Node.children);
+			Collection<?> nestedScopes= (Collection<?>) scopeImpl.getValue(CoreNS.Node.children);
 			if (nestedScopes != null) {
 				for (Object nestedScope : nestedScopes) {
 					resource= findResourceByURI(ObjectImpl.getObjectImpl(nestedScope), uri);
@@ -180,7 +180,7 @@ implements Repository, Resource
 			found.addAll(resources);
 		}
 
-		Collection<?> nestedScopes= (Collection<?>) scopeImpl.getValue(MeteorNS.Node.children);
+		Collection<?> nestedScopes= (Collection<?>) scopeImpl.getValue(CoreNS.Node.children);
 		if (nestedScopes != null) {
 			for (Object nestedScope : nestedScopes) {
 				Set<Resource> nestedResources= findResourcesByType(ObjectImpl.getObjectImpl(nestedScope), uri);

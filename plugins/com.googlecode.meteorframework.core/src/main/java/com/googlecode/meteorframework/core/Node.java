@@ -17,9 +17,9 @@ import com.googlecode.meteorframework.core.annotation.Model;
 	/**
 	 * @return any nested instances
 	 */
-	@InverseOf(MeteorNS.Node.parents)
+	@InverseOf(CoreNS.Node.parents)
 	List<Object> getChildren();
 	
-	@InverseOf(MeteorNS.Node.children)
+	@InverseOf(CoreNS.Node.children)
 	List<Object> getParents();
 }

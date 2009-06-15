@@ -8,11 +8,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.WeakHashMap;
 
-
+import com.googlecode.meteorframework.core.CoreNS;
 import com.googlecode.meteorframework.core.InvocationContext;
 import com.googlecode.meteorframework.core.Meteor;
 import com.googlecode.meteorframework.core.MeteorException;
-import com.googlecode.meteorframework.core.MeteorNS;
 import com.googlecode.meteorframework.core.Method;
 import com.googlecode.meteorframework.core.Property;
 import com.googlecode.meteorframework.core.Resource;
@@ -241,7 +240,7 @@ import com.googlecode.meteorframework.utils.Logging;
 					superClasses= new Class[] { Resource.class };
 				for (Class<?> superClass : superClasses) {
 					Type superType= createType(scope, superClass);
-					type.setProperty(MeteorNS.Type.superTypes, superType); 
+					type.setProperty(CoreNS.Type.superTypes, superType); 
 				}
 				
 				initType(scope, type);
@@ -308,16 +307,16 @@ import com.googlecode.meteorframework.utils.Logging;
 			}
 		}
 		
-		type.setProperty(MeteorNS.Type.declaredProperties, properties);
-		type.setProperty(MeteorNS.Type.declaredMethods, methods);
+		type.setProperty(CoreNS.Type.declaredProperties, properties);
+		type.setProperty(CoreNS.Type.declaredMethods, methods);
 	}
 	
 	
 	public void setFieldOrder(Object value) {
 		if (value instanceof String[]) {
-			_self.setProperty(MeteorNS.Type.fieldOrder, null);
+			_self.setProperty(CoreNS.Type.fieldOrder, null);
 			for (String v : ((String[])value)) {
-				_self.setProperty(MeteorNS.Type.fieldOrder, v);
+				_self.setProperty(CoreNS.Type.fieldOrder, v);
 			}
 		}
 		else

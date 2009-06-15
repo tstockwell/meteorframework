@@ -13,11 +13,11 @@ import java.util.Set;
 
 import com.googlecode.meteorframework.core.BindingContext;
 import com.googlecode.meteorframework.core.BindingType;
+import com.googlecode.meteorframework.core.CoreNS;
 import com.googlecode.meteorframework.core.Interceptor;
 import com.googlecode.meteorframework.core.InvocationContext;
 import com.googlecode.meteorframework.core.Meteor;
 import com.googlecode.meteorframework.core.MeteorException;
-import com.googlecode.meteorframework.core.MeteorNS;
 import com.googlecode.meteorframework.core.Property;
 import com.googlecode.meteorframework.core.Resource;
 import com.googlecode.meteorframework.core.Scope;
@@ -87,7 +87,7 @@ import com.googlecode.meteorframework.core.utils.ConversionService;
 		 */
 		ObjectImpl propertyObject= ObjectImpl.getObjectImpl(RepositoryImpl.findResourceByURI(_scope, propertyURI));
 		if (propertyObject != null) {
-			Collection<String> sameAs= (Collection<String>) propertyObject.getValue(MeteorNS.Resource.sameAs);
+			Collection<String> sameAs= (Collection<String>) propertyObject.getValue(CoreNS.Resource.sameAs);
 			if (sameAs != null && !sameAs.isEmpty()) {
 				String sameAsPropertyURI= sameAs.iterator().next();
 				return getProperty(sameAsPropertyURI, parameters);
@@ -147,14 +147,14 @@ import com.googlecode.meteorframework.core.utils.ConversionService;
 		 * instead.
 		 */
 		if (value == null && propertyObject != null) {
-			Object isMany= propertyObject.getValue(MeteorNS.Property.many);
+			Object isMany= propertyObject.getValue(CoreNS.Property.many);
 			if (Boolean.TRUE.equals(isMany)) {
-				Object isQualified= propertyObject.getValue(MeteorNS.Property.indexed);
+				Object isQualified= propertyObject.getValue(CoreNS.Property.indexed);
 				if (Boolean.TRUE.equals(isQualified)) {
 					value= new HashMap();
 				}
 				else {
-					Object isUnique= propertyObject.getValue(MeteorNS.Property.unique);
+					Object isUnique= propertyObject.getValue(CoreNS.Property.unique);
 					value= Boolean.TRUE.equals(isUnique) ? new LinkedHashSet() : new ArrayList();
 				}
 				_self.setValue(propertyURI, value);
@@ -476,7 +476,7 @@ import com.googlecode.meteorframework.core.utils.ConversionService;
 	}
 	@Override public void setType(Class javaType) {
 		Type type= DomainImpl.findType(_scope, javaType);
-		setProperty(MeteorNS.Resource.type, type);
+		setProperty(CoreNS.Resource.type, type);
 	}
 	
 	@Override public <T> Collection<T> getPropertyValues(String propertyURI) {
@@ -529,9 +529,9 @@ import com.googlecode.meteorframework.core.utils.ConversionService;
 		// do nothing		
 	}
 	
-	@Override public void setFacets(BindingContext bindingContext)
+	@Override public void setBindingContext(BindingContext bindingContext)
 	{
-		ObjectImpl.getObjectImpl(_self).setValue(MeteorNS.Resource.facets, bindingContext);
+		ObjectImpl.getObjectImpl(_self).setValue(CoreNS.Resource.bindingContext, bindingContext);
 	}
 	public void setFacets(String facetURI)
 	{
@@ -550,8 +550,8 @@ import com.googlecode.meteorframework.core.utils.ConversionService;
 			}
 			
 			if (bindingType != null) {
-				BindingContext facets= _self.getFacets().union(bindingType);
-				ObjectImpl.getObjectImpl(_self).setValue(MeteorNS.Resource.facets, facets);
+				BindingContext facets= _self.getBindingContext().union(bindingType);
+				ObjectImpl.getObjectImpl(_self).setValue(CoreNS.Resource.bindingContext, facets);
 				return;
 			}
 		}

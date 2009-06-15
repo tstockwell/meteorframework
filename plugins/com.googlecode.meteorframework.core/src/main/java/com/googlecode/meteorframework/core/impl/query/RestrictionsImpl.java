@@ -2,8 +2,8 @@ package com.googlecode.meteorframework.core.impl.query;
 
 import java.util.Set;
 
+import com.googlecode.meteorframework.core.CoreNS;
 import com.googlecode.meteorframework.core.MeteorException;
-import com.googlecode.meteorframework.core.MeteorNS;
 import com.googlecode.meteorframework.core.Property;
 import com.googlecode.meteorframework.core.Resource;
 import com.googlecode.meteorframework.core.Scope;
@@ -26,7 +26,7 @@ import com.googlecode.meteorframework.core.query.URIRestriction;
 @SuppressWarnings("unchecked")
 @Decorator public class RestrictionsImpl implements Restrictions {
 	
-	private @Lookup(MeteorNS.Resource.type) Property<Type> typeProperty;
+	private @Lookup(CoreNS.Resource.type) Property<Type> typeProperty;
 	private @Inject URIRestriction.Constructor uriCriterionConstructor;
 	private @Inject SimpleRestriction.Constructor simpleCriterionConstructor;
 	private @Inject InRestriction.Constructor _inRestrictions;

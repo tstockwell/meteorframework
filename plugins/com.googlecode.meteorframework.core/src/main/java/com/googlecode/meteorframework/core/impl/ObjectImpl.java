@@ -11,16 +11,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import net.sf.cglib.proxy.Enhancer;
-import net.sf.cglib.proxy.MethodInterceptor;
-import net.sf.cglib.proxy.MethodProxy;
-
 import com.googlecode.meteorframework.core.BindingContext;
+import com.googlecode.meteorframework.core.CoreNS;
 import com.googlecode.meteorframework.core.Interceptor;
 import com.googlecode.meteorframework.core.Meteor;
 import com.googlecode.meteorframework.core.MeteorException;
 import com.googlecode.meteorframework.core.MeteorMethodNotImplementedException;
-import com.googlecode.meteorframework.core.MeteorNS;
 import com.googlecode.meteorframework.core.Property;
 import com.googlecode.meteorframework.core.Resource;
 import com.googlecode.meteorframework.core.Scope;
@@ -231,7 +227,7 @@ public class ObjectImpl implements Resource, Cloneable  {
 		return _uri;
 	}
 	public String getTypeURI() {
-		Object type= getValue(MeteorNS.Resource.type);
+		Object type= getValue(CoreNS.Resource.type);
 		if (type != null) {
 			ObjectImpl impl= ObjectImpl.getObjectImpl(type);
 			if (impl != null)
@@ -416,7 +412,7 @@ public class ObjectImpl implements Resource, Cloneable  {
 				}
 				decorator= (T)enhancer.create();
 				
-				DecoratorManager.injectDependencies(_scope.internalCast(Scope.class), decorator, this, ctx.getFacets());
+				DecoratorManager.injectDependencies(_scope.internalCast(Scope.class), decorator, this, ctx.getBindingContext());
 				
 				addDecorator(decoratorClass, decorator);
 			}
@@ -439,12 +435,12 @@ public class ObjectImpl implements Resource, Cloneable  {
 		_scope= scope;		
 		_typeURI= typeURI;
 		if (_scope == null) {
-			if (!typeURI.equals(MeteorNS.Scope.TYPE))
+			if (!typeURI.equals(CoreNS.Scope.TYPE))
 				throw new MeteorException("Every resource must have a scope");
 			_scope= this;
 		}
 		addRole(Resource.class, this);
-		setValue(MeteorNS.Resource.facets, bindingContext);
+		setValue(CoreNS.Resource.facets, bindingContext);
 		_uri= Meteor.PROTOCOL+UUID.randomUUID();
 	}
 	public ObjectImpl(Scope scope, String typeURI, BindingContext bindingContext) {
@@ -463,7 +459,7 @@ public class ObjectImpl implements Resource, Cloneable  {
 	
 	@Override public boolean equals(Object object) {
 		try {
-			return (Boolean)MethodDispatcher.invoke(MeteorNS.Resource.equals, this, new Object[] { object });
+			return (Boolean)MethodDispatcher.invoke(CoreNS.Resource.equals, this, new Object[] { object });
 		}
 		
 		/*
@@ -481,7 +477,7 @@ public class ObjectImpl implements Resource, Cloneable  {
 	@Override public int hashCode()
 	{
 		try {
-			return (Integer)MethodDispatcher.invoke(MeteorNS.Resource.hashCode, this, (Object[])null);
+			return (Integer)MethodDispatcher.invoke(CoreNS.Resource.hashCode, this, (Object[])null);
 		}
 		
 		/*
@@ -493,35 +489,35 @@ public class ObjectImpl implements Resource, Cloneable  {
 	}
 
 	@Override public <T> T castTo(Class<T> roleClass) {
-		return (T)MethodDispatcher.invoke(MeteorNS.Resource.castTo, this, new Object[] { roleClass });
+		return (T)MethodDispatcher.invoke(CoreNS.Resource.castTo, this, new Object[] { roleClass });
 	}
 
 	@Override public Set<Resource> getRoles() {
-		return getProperty(MeteorNS.Resource.roles);
+		return getProperty(CoreNS.Resource.roles);
 	}
 
 	@Override public Set<Resource> getRoles(Type type) {
-		return getProperty(MeteorNS.Resource.roles, type);
+		return getProperty(CoreNS.Resource.roles, type);
 	}
 
 	@Override public <T> Set<T> getRoles(Class<T> javaType) {
-		return getProperty(MeteorNS.Resource.roles, javaType);
+		return getProperty(CoreNS.Resource.roles, javaType);
 	}
 
 	@Override public void setRoles(Set<Resource> roles) {
-		setProperty(MeteorNS.Resource.roles, roles);
+		setProperty(CoreNS.Resource.roles, roles);
 	}
 
 	@Override public String getURI() {
-		return getProperty(MeteorNS.Resource.uRI);
+		return getProperty(CoreNS.Resource.uRI);
 	}
 
 	@Override public Set<Property<?>> getContainedProperties() {
-		return (Set<Property<?>>)MethodDispatcher.invoke(MeteorNS.Resource.getContainedProperties, this);
+		return (Set<Property<?>>)MethodDispatcher.invoke(CoreNS.Resource.getContainedProperties, this);
 	}
 
-	@Override public BindingContext getFacets() {
-		return getProperty(MeteorNS.Resource.facets);
+	@Override public BindingContext getBindingContext() {
+		return getProperty(CoreNS.Resource.facets);
 	}
 
 	@Override public void addProperty(String propertyURI, Object value, Object... parameters)
@@ -550,27 +546,27 @@ public class ObjectImpl implements Resource, Cloneable  {
 		setProperty(ObjectImpl.getObjectImpl(property).internalGetURI(), value, parameters);
 	}
 	@Override public Type getType() {
-		return (Type)MethodDispatcher.invoke(MeteorNS.Resource.getProperty, this, new Object[] { MeteorNS.Resource.type, new Object[0] });
+		return (Type)MethodDispatcher.invoke(CoreNS.Resource.getProperty, this, new Object[] { MeteorNS.Resource.type, new Object[0] });
 	}
 	@Override public Set<String> getSameAs()
 	{
-		return (Set<String>)MethodDispatcher.invoke(MeteorNS.Resource.getProperty, this, new Object[] { MeteorNS.Resource.sameAs, new Object[0] });
+		return (Set<String>)MethodDispatcher.invoke(CoreNS.Resource.getProperty, this, new Object[] { MeteorNS.Resource.sameAs, new Object[0] });
 	}
 	@Override public <T> T getProperty(String propertyURI, Object... arguments) {
 		Object[] args= new Object[2];
 		args[0]= propertyURI;
 		args[1]= arguments;
-		return (T)MethodDispatcher.invoke(MeteorNS.Resource.getProperty, this, args);
+		return (T)MethodDispatcher.invoke(CoreNS.Resource.getProperty, this, args);
 	}
 	@Override public String getDescription() {
-		return (String)getProperty(MeteorNS.Resource.description);
+		return (String)getProperty(CoreNS.Resource.description);
 	}
 	@Override public void setProperty(String propertyURI, Object value, Object... arguments) {
 		Object[] args= new Object[3];
 		args[0]= propertyURI;
 		args[1]= value;
 		args[2]= arguments;
-		MethodDispatcher.invoke(MeteorNS.Resource.setProperty, this, args);
+		MethodDispatcher.invoke(CoreNS.Resource.setProperty, this, args);
 	}
 
 	@Override public void removeProperty(String propertyURI, Object value, Object... parameters) {
@@ -578,7 +574,7 @@ public class ObjectImpl implements Resource, Cloneable  {
 		args[0]= propertyURI;
 		args[1]= value;
 		args[2]= parameters;
-		MethodDispatcher.invoke(MeteorNS.Resource.removeProperty, this, args);
+		MethodDispatcher.invoke(CoreNS.Resource.removeProperty, this, args);
 	}
 
 
@@ -586,48 +582,48 @@ public class ObjectImpl implements Resource, Cloneable  {
 	{
 		Object[] args= new Object[1];
 		args[0]= propertyURI;
-		return (Collection<T>) MethodDispatcher.invoke(MeteorNS.Resource.getPropertyValues, this, args);
+		return (Collection<T>) MethodDispatcher.invoke(CoreNS.Resource.getPropertyValues, this, args);
 	}
 	
 	@Override public boolean isInstanceOf(Class<?> javaType)
 	{
-		return (Boolean) MethodDispatcher.invoke(MeteorNS.Resource.isInstanceOf, this, new Object[] { javaType });
+		return (Boolean) MethodDispatcher.invoke(CoreNS.Resource.isInstanceOf, this, new Object[] { javaType });
 	}
 	
 	@Override public boolean isInstanceOf(Type type)
 	{
-		return (Boolean) MethodDispatcher.invoke(MeteorNS.Resource.isInstanceOf, this, new Object[] { type });
+		return (Boolean) MethodDispatcher.invoke(CoreNS.Resource.isInstanceOf, this, new Object[] { type });
 	}
 
 
 
 	@Override public void setDescription(String p_description) {
-		setProperty(MeteorNS.Resource.description, p_description);
+		setProperty(CoreNS.Resource.description, p_description);
 	}
 	@Override public void setType(Type p_type) {
-		setProperty(MeteorNS.Resource.type, p_type);
+		setProperty(CoreNS.Resource.type, p_type);
 	}
 	@Override public void setType(Class javaType) {
-		setProperty(MeteorNS.Resource.type, javaType);
+		setProperty(CoreNS.Resource.type, javaType);
 	}
-	@Override public void setFacets(BindingContext bindingContext) {
-		setProperty(MeteorNS.Resource.facets, bindingContext);
+	@Override public void setBindingContext(BindingContext bindingContext) {
+		setProperty(CoreNS.Resource.facets, bindingContext);
 	}
 	@Override public void setSameAs(Set<String> uris)
 	{
-		setProperty(MeteorNS.Resource.sameAs, uris);
+		setProperty(CoreNS.Resource.sameAs, uris);
 	}
 	@Override public void setURI(String uri) {
-		setProperty(MeteorNS.Resource.uRI, uri);
+		setProperty(CoreNS.Resource.uRI, uri);
 	}
 	@Override public String getLabel() {
-		return getProperty(MeteorNS.Resource.label);
+		return getProperty(CoreNS.Resource.label);
 	}
 	@Override public void setLabel(String label) {
-		setProperty(MeteorNS.Resource.label, label);
+		setProperty(CoreNS.Resource.label, label);
 	}
 	@Override public void postConstruct() {
-		MethodDispatcher.invoke(MeteorNS.Resource.postConstruct, this, NO_ARGS);
+		MethodDispatcher.invoke(CoreNS.Resource.postConstruct, this, NO_ARGS);
 	}
 
 
@@ -655,7 +651,7 @@ public class ObjectImpl implements Resource, Cloneable  {
 
 				Resource superType= RepositoryImpl.findResourceByURI(_scope, superTypeURI);
 				if (superType != null) {
-					Collection supers= (Collection) ObjectImpl.getObjectImpl(superType).getValue(MeteorNS.Type.superTypes);
+					Collection supers= (Collection) ObjectImpl.getObjectImpl(superType).getValue(CoreNS.Type.superTypes);
 					if (supers != null) {
 						for (Object type : supers) 
 							todo.add(ObjectImpl.getObjectImpl(type).internalGetURI());

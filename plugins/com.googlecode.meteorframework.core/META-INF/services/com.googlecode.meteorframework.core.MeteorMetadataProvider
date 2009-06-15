@@ -3,4 +3,5 @@ com.googlecode.meteorframework.core.query.QueryNS
 com.googlecode.meteorframework.core.CoreNS
 com.googlecode.meteorframework.core.annotation.AnnotationNS
 com.googlecode.meteorframework.common.CommonNS
+com.googlecode.meteorframework.core.binding.BindingNS
 com.googlecode.meteorframework.core.utils.UtilsNS

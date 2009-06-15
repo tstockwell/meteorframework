@@ -7,8 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.googlecode.meteorframework.core.CoreNS;
 import com.googlecode.meteorframework.core.Interceptor;
-import com.googlecode.meteorframework.core.MeteorNS;
 import com.googlecode.meteorframework.core.Resource;
 import com.googlecode.meteorframework.core.annotation.MeteorAnnotationUtils;
 
@@ -116,7 +116,7 @@ public class ParameterValueSpecializer extends BaseSpecializer {
 		 * So, if we have not yet found specializer then check Resource type.  
 		 */
 		if (specializerInfo == null) {
-			Map<String, SpecializerInfo> specializersByValue= _specializersByType.get(implementingType= MeteorNS.Resource.TYPE);
+			Map<String, SpecializerInfo> specializersByValue= _specializersByType.get(implementingType= CoreNS.Resource.TYPE);
 			if (specializersByValue != null)
 				specializerInfo= specializersByValue.get(argumentValue);
 		}

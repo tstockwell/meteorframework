@@ -5,9 +5,9 @@ import java.util.Set;
 
 import com.googlecode.meteorframework.core.BindingContext;
 import com.googlecode.meteorframework.core.BindingType;
+import com.googlecode.meteorframework.core.CoreNS;
 import com.googlecode.meteorframework.core.Meteor;
 import com.googlecode.meteorframework.core.MeteorException;
-import com.googlecode.meteorframework.core.MeteorNS;
 import com.googlecode.meteorframework.core.Property;
 import com.googlecode.meteorframework.core.Resource;
 import com.googlecode.meteorframework.core.Scope;
@@ -48,14 +48,14 @@ extends BaseMeteorTest
 	{
 		Resource resource= _scope.createInstance(Resource.class);
 		
-		Type resourceType= _scope.findResourceByURI(MeteorNS.Resource.TYPE, Type.class);
+		Type resourceType= _scope.findResourceByURI(CoreNS.Resource.TYPE, Type.class);
 		assertSame(resourceType, resource.getType());
 		assertEquals(resourceType, resource.getType());
-		assertEquals(MeteorNS.Resource.TYPE, resourceType.getURI());
+		assertEquals(CoreNS.Resource.TYPE, resourceType.getURI());
 		
-		Property<?> descriptionProperty= _scope.findResourceByURI(MeteorNS.Resource.description, Property.class);
-		assertNotNull("Property not found :"+MeteorNS.Resource.description, descriptionProperty);
-		assertEquals("Not correct Type", MeteorNS.Property.TYPE, descriptionProperty.getType().getURI());
+		Property<?> descriptionProperty= _scope.findResourceByURI(CoreNS.Resource.description, Property.class);
+		assertNotNull("Property not found :"+CoreNS.Resource.description, descriptionProperty);
+		assertEquals("Not correct Type", CoreNS.Property.TYPE, descriptionProperty.getType().getURI());
 		
 		Resource resource2= _scope.createInstance(Resource.class);
 		resource2.setURI(resource.getURI());
@@ -67,9 +67,9 @@ extends BaseMeteorTest
 	public void testClassVariableInitialization() 
 	throws Throwable  
 	{
-		Property<?> decsriptionProperty= _scope.findResourceByURI(MeteorNS.Resource.description, Property.class);
-		assertNotNull("Property not found :"+MeteorNS.Resource.description, decsriptionProperty);
-		assertEquals("Not correct Type", MeteorNS.Property.TYPE, decsriptionProperty.getType().getURI());
+		Property<?> decsriptionProperty= _scope.findResourceByURI(CoreNS.Resource.description, Property.class);
+		assertNotNull("Property not found :"+CoreNS.Resource.description, decsriptionProperty);
+		assertEquals("Not correct Type", CoreNS.Property.TYPE, decsriptionProperty.getType().getURI());
 		
 		// create a URIRestriction in order to test that service classes can 
 		//create and initialize class variables
@@ -83,7 +83,7 @@ extends BaseMeteorTest
 	{
 		Type type= _scope.findResourceByURI(TestNS.AnnotationTestType.TYPE, Type.class);
 		assertNotNull(type);
-		String testValue= type.getProperty(MeteorNS.Resource.description);
+		String testValue= type.getProperty(CoreNS.Resource.description);
 		assertEquals("Properties set in annotations seem to not be working", TEST_VALUE, testValue);
 	}
 	
@@ -97,7 +97,7 @@ extends BaseMeteorTest
 	public void testSemanticEquivalentAnnotations() 
 	throws Throwable  
 	{
-		Property<Type> extensionOfProperty= _scope.findResourceByURI(MeteorNS.Type.extensionOf, Property.class);
+		Property<Type> extensionOfProperty= _scope.findResourceByURI(CoreNS.Type.extensionOf, Property.class);
 		assertNotNull(extensionOfProperty);
 		Set<Property<Type>> inverseOf= extensionOfProperty.getInverseOf();
 		assertNotNull("Multivalued properties should return empty collections, not null", inverseOf);
@@ -337,7 +337,7 @@ extends BaseMeteorTest
 	
 	public void testMultivaluePropertyRange() {
 		Property<BindingContext> facetsProperty= 
-			_scope.findResourceByURI(MeteorNS.Resource.facets, Property.class);
+			_scope.findResourceByURI(CoreNS.Resource.bindingContext, Property.class);
 	
 		String msg= "The range of a multi-valued property should be the value type, not the container type";
 		assertEquals(msg, BindingType.class, facetsProperty.getRange().getJavaType());

@@ -21,7 +21,7 @@ extends Service
 	/**
 	 * @return any nested repositories
 	 */
-	@SameAs(MeteorNS.Node.children)
+	@SameAs(CoreNS.Node.children)
 	List<Repository> getNestedRepositories();
 	
 	/**

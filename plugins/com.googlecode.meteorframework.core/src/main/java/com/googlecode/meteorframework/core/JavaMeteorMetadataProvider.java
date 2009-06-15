@@ -14,7 +14,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.osgi.internal.baseadaptor.DevClassPathHelper;
@@ -94,7 +93,7 @@ implements MeteorMetadataProvider
 						java.lang.Package package1= class1.getPackage();
 						Model modelAnnotation= package1.getAnnotation(Model.class);
 						if (modelAnnotation != null) {
-							List<String> dependencies= MeteorAnnotationUtils.getPropertyValues(modelAnnotation, MeteorNS.Namespace.dependencies);
+							List<String> dependencies= MeteorAnnotationUtils.getPropertyValues(modelAnnotation, CoreNS.Namespace.dependencies);
 							if (!dependencies.isEmpty()) {
 								HashSet<String> packageNames= new HashSet<String>();
 								for (String packageURI : dependencies) {

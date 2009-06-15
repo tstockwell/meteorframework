@@ -18,7 +18,7 @@ extends Service
 	/**
 	 * @return any nested domains
 	 */
-	@SameAs(MeteorNS.Node.children)
+	@SameAs(CoreNS.Node.children)
 	List<Domain> getNestedDomains();
 	
 	/**

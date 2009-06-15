@@ -7,7 +7,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import com.googlecode.meteorframework.core.annotation.SemanticEquivalent;
-import com.googlecode.meteorframework.core.annotation.Setting;
 import com.googlecode.meteorframework.security.SecurityNS;
 
 /**
@@ -19,7 +18,7 @@ import com.googlecode.meteorframework.security.SecurityNS;
 @Documented
 @Retention(value=RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD, ElementType.TYPE})
-@SemanticEquivalent({@Setting(property=SecurityNS.SecurableType.actions, value="{$value}")})
+@SemanticEquivalent({SecurityNS.SecurableType.actions, "{$value}"})
 public @interface CheckPermisson
 {
 	/**

@@ -6,7 +6,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.googlecode.meteorframework.core.MeteorNS;
+import com.googlecode.meteorframework.core.CoreNS;
 
 
 /**
@@ -20,7 +20,7 @@ import com.googlecode.meteorframework.core.MeteorNS;
 @Documented
 @Retention(value=RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
-@SemanticEquivalent({@Setting(property=MeteorNS.Resource.sameAs, value="{$value}")})
+@SemanticEquivalent({CoreNS.Resource.sameAs, "{$value}"})
 public @interface SameAs 
 {
 	public String value();

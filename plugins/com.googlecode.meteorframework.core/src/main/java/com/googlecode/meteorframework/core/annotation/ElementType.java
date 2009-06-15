@@ -5,13 +5,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.googlecode.meteorframework.core.MeteorNS;
+import com.googlecode.meteorframework.core.CoreNS;
 
 
 @Documented
 @Retention(value=RetentionPolicy.RUNTIME)
 @Target({java.lang.annotation.ElementType.METHOD})
-@SemanticEquivalent({@Setting(property=MeteorNS.Resource.type, value="{$value}")})
+@SemanticEquivalent({CoreNS.Resource.type, "{$value}"})
 public @interface ElementType 
 {
 	public String value();

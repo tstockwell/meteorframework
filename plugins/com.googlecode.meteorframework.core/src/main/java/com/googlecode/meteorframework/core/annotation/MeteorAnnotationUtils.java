@@ -8,8 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-
-import com.googlecode.meteorframework.core.MeteorNS;
+import com.googlecode.meteorframework.core.CoreNS;
 import com.sun.mirror.declaration.MethodDeclaration;
 import com.sun.mirror.declaration.Modifier;
 
@@ -99,9 +98,9 @@ public class MeteorAnnotationUtils {
 		
 		Model model= methodDeclaration.getAnnotation(Model.class);
 		if (model != null) {
-			List<String> type= MeteorAnnotationUtils.getPropertyValues(model, MeteorNS.Resource.type);
+			List<String> type= MeteorAnnotationUtils.getPropertyValues(model, CoreNS.Resource.type);
 			if (!type.isEmpty())
-				return type.contains(MeteorNS.Property.TYPE);
+				return type.contains(CoreNS.Property.TYPE);
 		}
 		
 		String methodName= methodDeclaration.getSimpleName();
@@ -123,9 +122,9 @@ public class MeteorAnnotationUtils {
 		
 		Model model= methodDeclaration.getAnnotation(Model.class);
 		if (model != null) {
-			List<String> type= MeteorAnnotationUtils.getPropertyValues(model, MeteorNS.Resource.type);
+			List<String> type= MeteorAnnotationUtils.getPropertyValues(model, CoreNS.Resource.type);
 			if (!type.isEmpty())
-				return type.contains(MeteorNS.Property.TYPE);
+				return type.contains(CoreNS.Property.TYPE);
 		}
 		
 		if (methodDeclaration.getAnnotation(IsMethod.class) != null)
@@ -151,9 +150,9 @@ public class MeteorAnnotationUtils {
 			return false;
 		Model model= methodDeclaration.getAnnotation(Model.class);
 		if (model != null) {
-			List<String> type= MeteorAnnotationUtils.getPropertyValues(model, MeteorNS.Resource.type);
+			List<String> type= MeteorAnnotationUtils.getPropertyValues(model, CoreNS.Resource.type);
 			if (!type.isEmpty())
-				return type.contains(MeteorNS.Method.TYPE);
+				return type.contains(CoreNS.Method.TYPE);
 		}
 		
 		if (methodDeclaration.getAnnotation(IsMethod.class) != null)

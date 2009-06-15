@@ -7,10 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-
+import com.googlecode.meteorframework.core.CoreNS;
 import com.googlecode.meteorframework.core.Meteor;
 import com.googlecode.meteorframework.core.MeteorException;
-import com.googlecode.meteorframework.core.MeteorNS;
 import com.googlecode.meteorframework.core.Property;
 import com.googlecode.meteorframework.core.Resource;
 import com.googlecode.meteorframework.core.Scope;
@@ -42,7 +41,7 @@ import com.googlecode.meteorframework.utils.Logging;
 		if (objRange instanceof String) {
 			Type type= RepositoryImpl.findResourceByURI(_scope, (String)objRange, Type.class);
 			if (type != null) {
-				_self.setProperty(MeteorNS.Property.range, type);
+				_self.setProperty(CoreNS.Property.range, type);
 				return type;
 			}
 			return null;

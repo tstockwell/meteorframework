@@ -7,17 +7,20 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import com.googlecode.meteorframework.core.CoreNS;
+import com.googlecode.meteorframework.core.binding.BindingNS;
 
 
-/**
- * A convenience annotation for marking a property as write-once.
- * 
- * @author Ted Stockwell
- */
 @Documented
 @Retention(value=RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
-@SemanticEquivalent({CoreNS.Property.writeOnce, "true"})
-public @interface IsWriteOnce 
+@SemanticEquivalent({
+	CoreNS.Resource.bindingContext, "[", 
+		CoreNS.Resource.type, BindingNS.Formatted.TYPE, ";",
+		BindingNS.Formatted.format, "{$value}",
+	"]"
+})
+public @interface Formatted 
 {
+	public String value();
+	
 }

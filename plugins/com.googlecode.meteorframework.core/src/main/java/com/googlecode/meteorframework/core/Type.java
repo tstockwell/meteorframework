@@ -23,16 +23,16 @@ import com.googlecode.meteorframework.core.annotation.Model;
 	
 	public Class<T> getJavaType();
 	
-	@InverseOf(MeteorNS.Type.subTypes) 
+	@InverseOf(CoreNS.Type.subTypes) 
 	public Set<Type<?>> getSuperTypes();
 	
-	@InverseOf(MeteorNS.Type.superTypes) 
+	@InverseOf(CoreNS.Type.superTypes) 
 	public Set<Type<? extends T>> getSubTypes();
 
-	@InverseOf(MeteorNS.Property.domain) 
+	@InverseOf(CoreNS.Property.domain) 
 	public Set<Property<?>> getDeclaredProperties();
 
-	@InverseOf(MeteorNS.Method.domain) 
+	@InverseOf(CoreNS.Method.domain) 
 	public Set<Method<?>> getDeclaredMethods();
 	
 	@IsMethod
@@ -45,7 +45,7 @@ import com.googlecode.meteorframework.core.annotation.Model;
 	/**
 	 * Denotes the Types that this Type extends.
 	 */
-	@InverseOf(MeteorNS.Type.extensions) 
+	@InverseOf(CoreNS.Type.extensions) 
 	public Set<Type<? extends T>> getExtensionOf();
 	public void addExtensionOf(Type<? extends T> extensionOf);
 	public void removeExtensionOf(Type<? extends T> extensionOf);
@@ -54,7 +54,7 @@ import com.googlecode.meteorframework.core.annotation.Model;
 	/**
 	 * Denotes the Types that extend this Type.
 	 */	
-	@InverseOf(MeteorNS.Type.extensionOf) 
+	@InverseOf(CoreNS.Type.extensionOf) 
 	public Set<Type<? extends T>> getExtensions();
 	
 
@@ -92,7 +92,7 @@ import com.googlecode.meteorframework.core.annotation.Model;
 	@IsMethod
 	public boolean isSuperTypeOf(Type<?> type);
 	
-	@InverseOf(MeteorNS.Namespace.types) 
+	@InverseOf(CoreNS.Namespace.types) 
 	public Namespace getNamespace();
 	
 	public void setNamespace(Namespace namespace);

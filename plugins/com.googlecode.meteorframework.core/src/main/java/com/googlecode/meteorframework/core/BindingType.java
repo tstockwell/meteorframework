@@ -42,6 +42,6 @@ import com.googlecode.meteorframework.core.annotation.Model;
  * 
  * @author Ted Stockwell
  */
-@Model public abstract class BindingType
+@Model public interface BindingType
 {
 }

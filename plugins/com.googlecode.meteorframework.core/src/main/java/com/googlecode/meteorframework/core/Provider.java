@@ -18,7 +18,7 @@ extends Service
 	/**
 	 * @return any nested providers
 	 */
-	@SameAs(MeteorNS.Node.children)
+	@SameAs(CoreNS.Node.children)
 	public List<Provider> getNestedProviders();
 	
 	/**
@@ -61,6 +61,16 @@ extends Service
 	 */
 	public <T> T createInstance(TypeLiteral<T> javaType, BindingType... bindings);
 	public <T> T createInstance(Class<T> javaType, BindingType... bindings);
+	
+	/**
+	 * Just like createInstance but does not call any @PostConstruct methods.
+	 * After performing some initialization on the prototype the actualize 
+	 * method should be called to invoke any @PostConstruct methods.
+	 */
+	public <T> T createPrototype(TypeLiteral<T> javaType, BindingType... bindings);
+	public <T> T createPrototype(Class<T> javaType, BindingType... bindings);
+	public void actualize(Object prototype);
+	
 	
 	/**
 	 * Adds an instance to this Provider's internal cache of objects.

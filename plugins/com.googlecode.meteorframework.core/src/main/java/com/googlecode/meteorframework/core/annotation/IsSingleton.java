@@ -6,13 +6,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.googlecode.meteorframework.core.MeteorNS;
+import com.googlecode.meteorframework.core.CoreNS;
 
 
 @Documented
 @Retention(value=RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE })
-@SemanticEquivalent({@Setting(property=MeteorNS.Type.singleton, value="true")})
+@SemanticEquivalent({CoreNS.Type.singleton, "true"})
 public @interface IsSingleton 
 {
 }

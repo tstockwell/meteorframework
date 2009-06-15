@@ -2,7 +2,7 @@ package com.googlecode.meteorframework.security;
 
 import java.util.Set;
 
-import com.googlecode.meteorframework.core.MeteorNS;
+import com.googlecode.meteorframework.core.CoreNS;
 import com.googlecode.meteorframework.core.annotation.ExtensionOf;
 import com.googlecode.meteorframework.core.annotation.InverseOf;
 import com.googlecode.meteorframework.core.annotation.Model;
@@ -14,7 +14,7 @@ import com.googlecode.meteorframework.core.annotation.Model;
  * 
  * @author ted stockwell
  */
-@ExtensionOf(MeteorNS.Resource.TYPE)
+@ExtensionOf(CoreNS.Resource.TYPE)
 @Model public interface SecurableType<T>
 {
 	/**

@@ -17,7 +17,7 @@ import com.googlecode.meteorframework.core.annotation.Model;
 	 * The set of Types to which this method belongs.
 	 * May be empty.
 	 */
-	@InverseOf(MeteorNS.Type.declaredMethods) 
+	@InverseOf(CoreNS.Type.declaredMethods) 
 	public abstract Set<Type<?>> getDomain();
 
 	public abstract Type<?> getRange();
@@ -26,13 +26,13 @@ import com.googlecode.meteorframework.core.annotation.Model;
 	/**
 	 * Denotes the Methods that this Method advises.
 	 */
-	@InverseOf(MeteorNS.Method.advisedBy) 
+	@InverseOf(CoreNS.Method.advisedBy) 
 	public abstract Set<Method<T>> getAdvises();
 
 	/**
 	 * Denotes the Methods that advise this Method.
 	 */
-	@InverseOf(MeteorNS.Method.advises) 
+	@InverseOf(CoreNS.Method.advises) 
 	public abstract Set<Method<T>> getAdvisedBy();
 
 	/**

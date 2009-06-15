@@ -7,9 +7,9 @@ import java.util.Set;
 import org.eclipse.osgi.util.ManifestElement;
 import org.osgi.framework.BundleException;
 
+import com.googlecode.meteorframework.core.CoreNS;
 import com.googlecode.meteorframework.core.Meteor;
 import com.googlecode.meteorframework.core.MeteorException;
-import com.googlecode.meteorframework.core.MeteorNS;
 import com.googlecode.meteorframework.core.Namespace;
 import com.googlecode.meteorframework.core.Scope;
 import com.googlecode.meteorframework.core.annotation.Decorates;
@@ -66,7 +66,7 @@ import com.googlecode.meteorframework.core.annotation.Model;
 				// get dependencies in same bundle
 				Model modelAnnotation= javaType.getAnnotation(Model.class);
 				if (modelAnnotation != null) {
-					List<String> dependencies= MeteorAnnotationUtils.getPropertyValues(modelAnnotation, MeteorNS.Namespace.dependencies);
+					List<String> dependencies= MeteorAnnotationUtils.getPropertyValues(modelAnnotation, CoreNS.Namespace.dependencies);
 					if (!dependencies.isEmpty()) {
 						for (String packageURI : dependencies) {
 							Namespace dependency= RepositoryImpl.findResourceByURI(_repository, packageURI, Namespace.class);

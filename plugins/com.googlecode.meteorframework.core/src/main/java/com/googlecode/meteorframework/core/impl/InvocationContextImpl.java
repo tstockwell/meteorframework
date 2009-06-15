@@ -6,10 +6,10 @@ import java.util.Collections;
 import java.util.List;
 
 import com.googlecode.meteorframework.core.BindingContext;
+import com.googlecode.meteorframework.core.CoreNS;
 import com.googlecode.meteorframework.core.Interceptor;
 import com.googlecode.meteorframework.core.InvocationContext;
 import com.googlecode.meteorframework.core.Meteor;
-import com.googlecode.meteorframework.core.MeteorNS;
 import com.googlecode.meteorframework.core.Resource;
 import com.googlecode.meteorframework.core.annotation.After;
 import com.googlecode.meteorframework.core.annotation.Around;
@@ -68,7 +68,7 @@ public class InvocationContextImpl implements InvocationContext {
 		// create binding context and then remove interceptors that have any 
 		// binding not in the current binding context.
 		if (receiver != null)
-			_bindingContext= _bindingContext.union((BindingContext)impl.getValue(MeteorNS.Resource.facets));
+			_bindingContext= _bindingContext.union((BindingContext)impl.getValue(CoreNS.Resource.bindingContext));
 		if (Meteor.isMeteorInvocation())
 			_bindingContext= _bindingContext.union(Meteor.getInvocationContext().getFacets());
 		_interceptors= new ArrayList<Interceptor>();

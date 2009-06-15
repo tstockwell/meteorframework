@@ -29,18 +29,20 @@ import com.googlecode.meteorframework.core.annotation.Model;
 	public Scope getScope();
 	
 	/**
-	 * Every resource remembers the facet ambit in which it was created.
+	 * Every resource remembers the binding context in which it was created.
 	 * Every method call or property access made through a resource 
-	 * has the facet ambit added to the current facet ambit.
+	 * has the resource's binding context added to the current binding context.
 	 * 
 	 * This property enables some interesting capabilities.
-	 * For instance, test data can be inserted into a production database 
+	 * For instance, it would be possible to implement a storage facility 
+	 * such that test data could be inserted into a production database 
 	 * and the test data will only be visible to applications that are 
-	 * running in 'test mode'.
+	 * running in 'test mode' because only data that matches the current 
+	 * binding context would be included in selects. 
 	 */
 	@IsTemporal
-	public BindingContext getFacets();
-	public void setFacets(BindingContext bindingContext);
+	public BindingContext getBindingContext();
+	public void setBindingContext(BindingContext bindingContext);
 	
 	/**
 	 * Get this object's URI.
@@ -95,7 +97,7 @@ import com.googlecode.meteorframework.core.annotation.Model;
 	@IsMethod 
 	public void addProperty(String propertyURI, Object value, Object...parameters);
 	
-	@ElementType(MeteorNS.Method.TYPE) 
+	@ElementType(CoreNS.Method.TYPE) 
 	public void removeProperty(String propertyURI, Object value, Object...parameters);
 	
 	@IsMethod 

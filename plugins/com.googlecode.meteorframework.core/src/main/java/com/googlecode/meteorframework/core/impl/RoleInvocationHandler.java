@@ -4,12 +4,9 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import net.sf.cglib.proxy.MethodInterceptor;
-import net.sf.cglib.proxy.MethodProxy;
-
+import com.googlecode.meteorframework.core.CoreNS;
 import com.googlecode.meteorframework.core.Meteor;
 import com.googlecode.meteorframework.core.MeteorException;
-import com.googlecode.meteorframework.core.MeteorNS;
 import com.googlecode.meteorframework.core.Resource;
 import com.googlecode.meteorframework.core.annotation.MeteorAnnotationUtils;
 import com.googlecode.meteorframework.core.annotation.Model;
@@ -154,7 +151,7 @@ implements MethodInterceptor
 				args[0]= invocationInfo.resourceURI;
 				args[1]= arguments;
 				
-				return MethodDispatcher.invoke(MeteorNS.Resource.getProperty, (Resource)meteorObject, args);
+				return MethodDispatcher.invoke(CoreNS.Resource.getProperty, (Resource)meteorObject, args);
 
 			case SET:
 				
@@ -165,7 +162,7 @@ implements MethodInterceptor
 				args[2]= new Object[arguments.length - 1];
 				System.arraycopy(arguments, 1, args[2], 0, arguments.length - 1);
 				
-				return MethodDispatcher.invoke(MeteorNS.Resource.setProperty, (Resource)meteorObject, args);
+				return MethodDispatcher.invoke(CoreNS.Resource.setProperty, (Resource)meteorObject, args);
 				
 			case INVOKE:
 				
