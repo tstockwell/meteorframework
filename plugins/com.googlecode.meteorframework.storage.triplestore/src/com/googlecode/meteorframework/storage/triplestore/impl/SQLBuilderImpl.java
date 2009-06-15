@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-
+import com.googlecode.meteorframework.core.CoreNS;
 import com.googlecode.meteorframework.core.Meteor;
 import com.googlecode.meteorframework.core.MeteorException;
-import com.googlecode.meteorframework.core.MeteorNS;
 import com.googlecode.meteorframework.core.Scope;
 import com.googlecode.meteorframework.core.annotation.Decorates;
 import com.googlecode.meteorframework.core.annotation.Decorator;
@@ -67,7 +66,7 @@ import com.truemesh.squiggle.criteria.OR;
 
 		Table range= new Table(STATEMENTS, "RANGE");
 		select.addJoin(_records, SUBJECT, range, SUBJECT);
-		select.addCriteria(new MatchCriteria(range, PREDICATE, MatchCriteria.EQUALS, MeteorNS.Resource.type));
+		select.addCriteria(new MatchCriteria(range, PREDICATE, MatchCriteria.EQUALS, CoreNS.Resource.type));
 		select.addCriteria(new MatchCriteria(range, VALUE, MatchCriteria.EQUALS, selector.getRange().getURI()));
 		
 		Restriction restriction= selector.getRestriction();
