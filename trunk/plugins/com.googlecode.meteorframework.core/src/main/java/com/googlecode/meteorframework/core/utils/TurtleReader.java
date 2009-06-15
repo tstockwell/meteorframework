@@ -15,7 +15,7 @@ import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 
-import com.googlecode.meteorframework.core.MeteorNS;
+import com.googlecode.meteorframework.core.CoreNS;
 import com.googlecode.meteorframework.core.Property;
 import com.googlecode.meteorframework.core.Resource;
 import com.googlecode.meteorframework.core.Scope;
@@ -111,7 +111,7 @@ public class TurtleReader
 			{
 				String predicate = Navigation.findById(valueNode, VERB).getText();
 				if ("a".equalsIgnoreCase(predicate))
-					predicate= "<"+MeteorNS.Resource.type+">";
+					predicate= "<"+CoreNS.Resource.type+">";
 
 				List<AbstractNode> objectNodes = Navigation.findAllById(valueNode, OBJECT);
 				for (AbstractNode objectNode : objectNodes)
@@ -124,9 +124,9 @@ public class TurtleReader
 
 					if (resource == null)
 					{
-						if (!MeteorNS.Resource.type.equals(propertyURI))
+						if (!CoreNS.Resource.type.equals(propertyURI))
 							throw new ParseException("Meteor N3 reader requires " +
-									MeteorNS.Resource.type + 
+									CoreNS.Resource.type + 
 									" to be the first listed property", _position);
 
 						String typeURI = getURI(value);

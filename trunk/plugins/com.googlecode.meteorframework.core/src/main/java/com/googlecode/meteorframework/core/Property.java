@@ -134,7 +134,7 @@ import com.googlecode.meteorframework.core.annotation.Model;
 	 * The set of Types to which this property belongs.
 	 * May be empty.
 	 */
-	@InverseOf(MeteorNS.Type.declaredProperties) 
+	@InverseOf(CoreNS.Type.declaredProperties) 
 	public Set<Type<?>> getDomain();
 	public void setDomain(Set<Type<?>> domainTypes);
 	
@@ -150,7 +150,7 @@ import com.googlecode.meteorframework.core.annotation.Model;
 	 * Property equality should be expressed with the Resource:sameAs 
 	 * construct.
 	 */
-	@InverseOf(MeteorNS.Property.equivalentOf) 
+	@InverseOf(CoreNS.Property.equivalentOf) 
 	public Set<Property<T>> getEquivalentOf();
 	public void setEquivalentOf(Set<Property<T>> equivalentProperties);
 	

@@ -6,9 +6,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.googlecode.meteorframework.core.MeteorNS;
+import com.googlecode.meteorframework.core.CoreNS;
 import com.googlecode.meteorframework.core.annotation.SemanticEquivalent;
-import com.googlecode.meteorframework.core.annotation.Setting;
 import com.googlecode.meteorframework.security.SecurityNS;
 
 /**
@@ -20,7 +19,7 @@ import com.googlecode.meteorframework.security.SecurityNS;
 @Documented
 @Retention(value=RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD, ElementType.TYPE})
-@SemanticEquivalent({@Setting(property=MeteorNS.Resource.type, value=SecurityNS.SecurableType.TYPE)})
+@SemanticEquivalent({CoreNS.Resource.type, SecurityNS.SecurableType.TYPE})
 public @interface IsSecuredType
 {
 }

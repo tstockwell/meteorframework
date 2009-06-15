@@ -4,8 +4,8 @@ import java.lang.reflect.Method;
 
 import com.googlecode.meteorframework.core.BindingContext;
 import com.googlecode.meteorframework.core.BindingType;
+import com.googlecode.meteorframework.core.CoreNS;
 import com.googlecode.meteorframework.core.Meteor;
-import com.googlecode.meteorframework.core.MeteorNS;
 import com.googlecode.meteorframework.core.Resource;
 import com.googlecode.meteorframework.core.Scope;
 import com.googlecode.meteorframework.core.annotation.Bind;
@@ -48,9 +48,9 @@ import com.googlecode.meteorframework.core.annotation.ProcessesAnnotations;
 		BindingType bindingType= _scope.getInstance(_annotation.value());
 		String targetURI= Meteor.getURIForJavaElement(_target);
 		Resource targetResource= _scope.findResourceByURI(targetURI);
-		BindingContext bindingContext= targetResource.getFacets();
+		BindingContext bindingContext= targetResource.getBindingContext();
 		bindingContext= bindingContext.union(bindingType);
-		targetResource.setProperty(MeteorNS.Resource.facets, bindingContext);
+		targetResource.setProperty(CoreNS.Resource.bindingContext, bindingContext);
 	}
 
 	@Override public void addBehavior() {

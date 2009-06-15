@@ -48,7 +48,7 @@ extends Provider, Repository, Domain
 	/**
 	 * @return any nested scopes
 	 */
-	@SameAs(MeteorNS.Node.children)
+	@SameAs(CoreNS.Node.children)
 	List<Scope> getNestedScopes();
 	
 	/**

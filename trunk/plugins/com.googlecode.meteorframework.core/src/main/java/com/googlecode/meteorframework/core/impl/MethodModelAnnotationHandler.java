@@ -7,9 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.googlecode.meteorframework.core.CoreNS;
 import com.googlecode.meteorframework.core.Interceptor;
 import com.googlecode.meteorframework.core.Meteor;
-import com.googlecode.meteorframework.core.MeteorNS;
 import com.googlecode.meteorframework.core.Resource;
 import com.googlecode.meteorframework.core.Scope;
 import com.googlecode.meteorframework.core.annotation.After;
@@ -43,7 +43,7 @@ import com.googlecode.meteorframework.core.annotation.ProcessesAnnotations;
 		@Override @After public void addResource(Resource resource)
 		{
 			ObjectImpl impl= ObjectImpl.getObjectImpl(resource);
-			if (impl.getTypeURI().equals(MeteorNS.Method.TYPE)) {
+			if (impl.getTypeURI().equals(CoreNS.Method.TYPE)) {
 				String methodURI= impl.internalGetURI();
 				for (WildInfo info : __wildInfo) {
 					if (MeteorAnnotationUtils.matches(info.wildURI, methodURI)) {
@@ -71,7 +71,7 @@ import com.googlecode.meteorframework.core.annotation.ProcessesAnnotations;
 		_handlerMethod= (Method)target;
 		_annotation= (Model)annotation;
 		if (!Modifier.isAbstract(_handlerMethod.getModifiers())) {
-			List<String> advises= MeteorAnnotationUtils.getPropertyValues(_annotation, MeteorNS.Method.advises);
+			List<String> advises= MeteorAnnotationUtils.getPropertyValues(_annotation, CoreNS.Method.advises);
 			if (advises.isEmpty()) {
 				
 				Class<?> class1= _handlerMethod.getDeclaringClass();

@@ -6,9 +6,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.googlecode.meteorframework.core.CoreNS;
 import com.googlecode.meteorframework.core.Interceptor;
 import com.googlecode.meteorframework.core.MeteorMethodNotImplementedException;
-import com.googlecode.meteorframework.core.MeteorNS;
 import com.googlecode.meteorframework.core.Method;
 import com.googlecode.meteorframework.core.Resource;
 
@@ -68,7 +68,7 @@ public class MethodDispatcher {
 		 * not explicitly extend from Resource.
 		 * So, add interceptors from Resource type.  
 		 */
-		Map<String, ParameterTypeSpecializer> specializersByMethod= _specializersByType.get(MeteorNS.Resource.TYPE);
+		Map<String, ParameterTypeSpecializer> specializersByMethod= _specializersByType.get(CoreNS.Resource.TYPE);
 		if (specializersByMethod != null)
 			if ((methodSpecializer= specializersByMethod.get(methodURI)) != null)
 				interceptors.addAll(0, methodSpecializer.findInterceptors(methodURI, impl, arguments));

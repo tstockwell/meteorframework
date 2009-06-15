@@ -6,13 +6,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.googlecode.meteorframework.core.MeteorNS;
+import com.googlecode.meteorframework.core.CoreNS;
 
 
 @Documented
 @Retention(value=RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD, ElementType.TYPE, ElementType.PACKAGE})
-@SemanticEquivalent({@Setting(property=MeteorNS.Resource.label, value="{$value}")})
+@SemanticEquivalent({CoreNS.Resource.label, "{$value}"})
 public @interface Label 
 {
 	public String value();

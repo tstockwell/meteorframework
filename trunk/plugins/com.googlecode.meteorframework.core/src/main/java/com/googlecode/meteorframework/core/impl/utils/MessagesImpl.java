@@ -1,7 +1,7 @@
 package com.googlecode.meteorframework.core.impl.utils;
 
+import com.googlecode.meteorframework.core.CoreNS;
 import com.googlecode.meteorframework.core.Meteor;
-import com.googlecode.meteorframework.core.MeteorNS;
 import com.googlecode.meteorframework.core.Property;
 import com.googlecode.meteorframework.core.Resource;
 import com.googlecode.meteorframework.core.Scope;
@@ -17,7 +17,7 @@ implements Messages, Resource
 	@Inject Scope _scope;
 	@Inject Messages _messages;
 	
-	@Lookup(MeteorNS.Resource.TYPE) Type<Resource> _resourceType;
+	@Lookup(CoreNS.Resource.TYPE) Type<Resource> _resourceType;
 	
 	@Override
 	public String getText(String defaultValue)

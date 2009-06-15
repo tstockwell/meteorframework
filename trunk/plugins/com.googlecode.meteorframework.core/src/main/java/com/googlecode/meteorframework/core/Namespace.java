@@ -57,14 +57,14 @@ extends Resource, ModelElement, Comparable<Namespace>
 	/**
 	 * The packages on which this package depends.
 	 */
-	@InverseOf(MeteorNS.Namespace.dependents) 
+	@InverseOf(CoreNS.Namespace.dependents) 
 	public Set<Namespace> getDependencies();
 	public void setDependencies(Set<Namespace> packages); 
 
 	/**
 	 * Packages which are dependent on this package.
 	 */
-	@InverseOf(MeteorNS.Namespace.dependencies) 
+	@InverseOf(CoreNS.Namespace.dependencies) 
 	public Set<Namespace> getDependents(); 
 	public void setDependents(Set<Namespace> packages);
 	
@@ -75,7 +75,7 @@ extends Resource, ModelElement, Comparable<Namespace>
 	/**
 	 * @return The types that belong to this namespace.
 	 */
-	@InverseOf(MeteorNS.Type.namespace) 
+	@InverseOf(CoreNS.Type.namespace) 
 	public Set<Type<?>> getTypes();
 	public void setTypes(Set<Type<?>> types);
 }
