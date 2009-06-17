@@ -2,7 +2,7 @@ package com.googlecode.meteorframework.storage;
 
 import com.googlecode.meteorframework.core.Service;
 import com.googlecode.meteorframework.core.annotation.IsWriteOnce;
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 
 
 /**
@@ -12,7 +12,7 @@ import com.googlecode.meteorframework.core.annotation.Model;
  * 
  * @author Ted Stockwell
  */
-@Model public interface StorageService
+@ModelElement public interface StorageService
 extends Service
 {
 	

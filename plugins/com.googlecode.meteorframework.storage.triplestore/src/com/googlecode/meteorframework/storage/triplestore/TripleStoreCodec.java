@@ -1,7 +1,7 @@
 package com.googlecode.meteorframework.storage.triplestore;
 
 import com.googlecode.meteorframework.core.Service;
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 
 /**
  * A service that Encodes/Decodes values for storage in the triple store.
@@ -12,7 +12,7 @@ import com.googlecode.meteorframework.core.annotation.Model;
  * 
  * @author ted stockwell
  */
-@Model public interface TripleStoreCodec extends Service {
+@ModelElement public interface TripleStoreCodec extends Service {
 	
 	/**
 	 * @param stringValue The value from the triplestore to decode

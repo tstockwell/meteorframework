@@ -1,8 +1,8 @@
 package com.googlecode.meteorframework.storage.jdbc;
 
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 
-@Model public interface JDBCDriverDescriptor {
+@ModelElement public interface JDBCDriverDescriptor {
 	/**
 	 * @return The JDBC protocol prefix used by the driver.
 	 */

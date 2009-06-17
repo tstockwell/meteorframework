@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.googlecode.meteorframework.core.MeteorNotFoundException;
 import com.googlecode.meteorframework.core.Resource;
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 import com.googlecode.meteorframework.core.query.Selector;
 
 /**
@@ -16,7 +16,7 @@ import com.googlecode.meteorframework.core.query.Selector;
  *  
  * @author Ted Stockwell
  */
-@Model public interface StorageSession extends Resource 
+@ModelElement public interface StorageSession extends Resource 
 {
 	public <T> T findByURI(Class<T> type, String uri)
 		throws MeteorNotFoundException;
