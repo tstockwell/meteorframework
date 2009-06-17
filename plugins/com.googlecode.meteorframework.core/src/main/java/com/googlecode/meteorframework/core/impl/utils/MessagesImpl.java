@@ -6,12 +6,15 @@ import com.googlecode.meteorframework.core.Property;
 import com.googlecode.meteorframework.core.Resource;
 import com.googlecode.meteorframework.core.Scope;
 import com.googlecode.meteorframework.core.Type;
+import com.googlecode.meteorframework.core.annotation.Bind;
 import com.googlecode.meteorframework.core.annotation.Decorator;
 import com.googlecode.meteorframework.core.annotation.Inject;
 import com.googlecode.meteorframework.core.annotation.Lookup;
+import com.googlecode.meteorframework.core.binding.Formatted;
 import com.googlecode.meteorframework.core.utils.Messages;
 
-@Decorator abstract public class MessagesImpl
+@Decorator @Bind(Formatted.class) 
+abstract public class MessagesImpl
 implements Messages, Resource
 {
 	@Inject Scope _scope;
