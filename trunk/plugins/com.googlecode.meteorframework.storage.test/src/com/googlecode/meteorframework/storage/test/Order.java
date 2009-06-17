@@ -6,9 +6,9 @@ import java.util.Set;
 
 import com.googlecode.meteorframework.core.Resource;
 import com.googlecode.meteorframework.core.annotation.IsComposite;
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 
-@Model public interface Order extends Resource
+@ModelElement public interface Order extends Resource
 {
 	@IsComposite // indicates that items should be deleted when the order is deleted
 	Set<Item> getItems();

@@ -1,8 +1,8 @@
 package net.sf.meteor.transaction;
 
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 
-@Model public interface UnitOfWork
+@ModelElement public interface UnitOfWork
 {
 	public void begin() throws TransactionException;
 

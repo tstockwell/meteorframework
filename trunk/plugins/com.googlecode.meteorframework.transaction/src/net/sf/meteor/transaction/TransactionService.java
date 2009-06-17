@@ -1,8 +1,8 @@
 package net.sf.meteor.transaction;
 
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 
-@Model public interface TransactionService
+@ModelElement public interface TransactionService
 {
 	public UnitOfWork getUnitOfWork();
 }

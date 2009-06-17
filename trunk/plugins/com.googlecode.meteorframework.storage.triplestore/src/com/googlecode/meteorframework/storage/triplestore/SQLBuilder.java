@@ -1,7 +1,7 @@
 package com.googlecode.meteorframework.storage.triplestore;
 
 import com.googlecode.meteorframework.core.Service;
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 import com.googlecode.meteorframework.core.query.Restriction;
 import com.googlecode.meteorframework.core.query.Selector;
 import com.truemesh.squiggle.Criteria;
@@ -17,10 +17,10 @@ import com.truemesh.squiggle.SelectQuery;
  * 
  * @author Ted Stockwell
  */
-@Model public interface SQLBuilder
+@ModelElement public interface SQLBuilder
 {
 	
-	@Model public interface Constructor extends Service {
+	@ModelElement public interface Constructor extends Service {
 		public SelectQuery create(Selector<?> criteria);
 	}
 	

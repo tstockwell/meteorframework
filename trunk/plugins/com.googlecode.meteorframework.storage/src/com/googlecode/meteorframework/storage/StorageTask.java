@@ -1,8 +1,8 @@
 package com.googlecode.meteorframework.storage;
 
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 
-@Model public interface StorageTask<T> 
+@ModelElement public interface StorageTask<T> 
 {
 	public T run(StorageSession session);
 	

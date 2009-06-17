@@ -1,9 +1,9 @@
 package com.googlecode.meteorframework.storage.test;
 
 import com.googlecode.meteorframework.core.Resource;
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 
-@Model public interface Item extends Resource
+@ModelElement public interface Item extends Resource
 {
 
 }

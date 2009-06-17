@@ -1,8 +1,8 @@
 package com.googlecode.meteorframework.storage;
 
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 
-@Model
+@ModelElement
 public interface StorageServiceDescriptor {
 	
 	public String getConnectionURL();

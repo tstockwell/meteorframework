@@ -4,7 +4,7 @@ import java.sql.Driver;
 import java.util.Set;
 
 import com.googlecode.meteorframework.core.Service;
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 
 /**
  * A service for obtaining JDBC drivers.
@@ -25,7 +25,7 @@ import com.googlecode.meteorframework.core.annotation.Model;
  * 
  * @author ted stockwell
  */
-@Model public interface JDBCDriverRegistry extends Service {
+@ModelElement public interface JDBCDriverRegistry extends Service {
 	
 	/**
 	 * Returns null if no supporting driver could be found.

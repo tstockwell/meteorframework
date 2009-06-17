@@ -2,10 +2,10 @@ package com.googlecode.meteorframework.storage.triplestore;
 
 import com.googlecode.meteorframework.core.annotation.DefaultValue;
 import com.googlecode.meteorframework.core.annotation.Description;
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 import com.googlecode.meteorframework.core.utils.Configuration;
 
-@Model public interface TripleStoreConfiguration extends Configuration {
+@ModelElement public interface TripleStoreConfiguration extends Configuration {
 	
 	public static final String TRIPLESTORE_PROTOCOL = "meteor:storage:triplestore";
 

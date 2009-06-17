@@ -1,9 +1,9 @@
 package com.googlecode.meteorframework.storage.triplestore;
 
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 import com.googlecode.meteorframework.storage.StorageService;
 
-@Model public interface TripleStoreService extends StorageService
+@ModelElement public interface TripleStoreService extends StorageService
 {
 
 }
