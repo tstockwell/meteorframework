@@ -2,10 +2,10 @@ package com.googlecode.meteorframework.security;
 
 import java.util.Set;
 
-import com.googlecode.meteorframework.common.Person;
 import com.googlecode.meteorframework.core.Service;
 import com.googlecode.meteorframework.core.annotation.InverseOf;
 import com.googlecode.meteorframework.core.annotation.ModelElement;
+import com.googlecode.meteorframework.core.common.Person;
 
 @ModelElement public interface User extends Person
 {
