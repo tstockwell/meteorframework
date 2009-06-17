@@ -1,4 +1,4 @@
-package com.googlecode.meteorframework.common;
+package com.googlecode.meteorframework.core.common;
 
 import com.googlecode.meteorframework.core.annotation.ModelElement;
 

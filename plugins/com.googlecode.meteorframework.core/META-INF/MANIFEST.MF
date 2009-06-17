@@ -4,11 +4,11 @@ Bundle-Name: Core
 Bundle-SymbolicName: com.googlecode.meteorframework.core;singleton:=true
 Bundle-Version: 1.0.0
 Export-Package: com.googlecode.meteorframework.callback,
- com.googlecode.meteorframework.common,
  com.googlecode.meteorframework.core,
  com.googlecode.meteorframework.core.annotation,
  com.googlecode.meteorframework.core.annotation.apt,
  com.googlecode.meteorframework.core.binding,
+ com.googlecode.meteorframework.core.common,
  com.googlecode.meteorframework.core.query,
  com.googlecode.meteorframework.core.query.jpa,
  com.googlecode.meteorframework.core.utils

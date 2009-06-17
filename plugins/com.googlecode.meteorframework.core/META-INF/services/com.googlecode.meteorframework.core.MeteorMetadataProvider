@@ -5,3 +5,4 @@ com.googlecode.meteorframework.core.annotation.AnnotationNS
 com.googlecode.meteorframework.core.binding.BindingNS
 com.googlecode.meteorframework.common.CommonNS
 com.googlecode.meteorframework.core.utils.UtilsNS
+com.googlecode.meteorframework.core.common.CommonNS
