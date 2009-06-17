@@ -20,7 +20,7 @@ import com.googlecode.meteorframework.core.CoreNS;
 @Documented
 @Retention(value=RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
-@EquivalentMetadata({CoreNS.Resource.type, CoreNS.Function.TYPE})
-public @interface IsMethod 
+@EquivalentMetadata("a <"+CoreNS.Function.TYPE+">")
+public @interface IsFunction 
 {
 }

@@ -1,8 +1,8 @@
 package com.googlecode.meteorframework.core.utils;
 
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 
-@Model public interface Adapter
+@ModelElement public interface Adapter
 {
 	Object getAdaptedObject();
 }

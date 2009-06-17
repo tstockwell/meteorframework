@@ -12,7 +12,7 @@ import com.googlecode.meteorframework.core.InvocationContext;
 import com.googlecode.meteorframework.core.Meteor;
 import com.googlecode.meteorframework.core.Namespace;
 import com.googlecode.meteorframework.core.Scope;
-import com.googlecode.meteorframework.core.annotation.Bind;
+import com.googlecode.meteorframework.core.annotation.Binding;
 
 
 public class InterceptorImpl implements Interceptor {
@@ -120,16 +120,16 @@ public class InterceptorImpl implements Interceptor {
 			
 			// look for binding annotations attached to method
 			for (Annotation annotation : _handlerMethod.getAnnotations()) {
-				if (annotation instanceof Bind) { 
-					Class<? extends BindingType> facetClass= ((Bind)annotation).value();
+				if (annotation instanceof Binding) { 
+					Class<? extends BindingType> facetClass= ((Binding)annotation).value();
 					BindingType bindingType= _scope.getInstance(facetClass);
 					bindings.add(bindingType);
 				}
 			}
 			// look for binding annotations at class level
 			for (Annotation annotation : _handlerMethod.getDeclaringClass().getAnnotations()) {
-				if (annotation instanceof Bind) {
-					Class<? extends BindingType> facetClass= ((Bind)annotation).value();
+				if (annotation instanceof Binding) {
+					Class<? extends BindingType> facetClass= ((Binding)annotation).value();
 					BindingType bindingType= _scope.getInstance(facetClass);
 					bindings.add(bindingType);
 				}

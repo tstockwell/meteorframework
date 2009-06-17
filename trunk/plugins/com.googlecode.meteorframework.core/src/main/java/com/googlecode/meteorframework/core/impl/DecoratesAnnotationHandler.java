@@ -3,7 +3,7 @@ package com.googlecode.meteorframework.core.impl;
 import com.googlecode.meteorframework.core.BindingContext;
 import com.googlecode.meteorframework.core.MeteorException;
 import com.googlecode.meteorframework.core.annotation.Decorates;
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 import com.googlecode.meteorframework.core.annotation.ProcessesAnnotations;
 
 /**
@@ -12,7 +12,7 @@ import com.googlecode.meteorframework.core.annotation.ProcessesAnnotations;
  */
 @ProcessesAnnotations(Decorates.class)
 @SuppressWarnings("unchecked")
-@Model public class DecoratesAnnotationHandler extends InjectAnnotationHandler {
+@ModelElement public class DecoratesAnnotationHandler extends InjectAnnotationHandler {
 	
 	@Override
 	public void inject(Object decorator, Object delegate, BindingContext bindingContext)

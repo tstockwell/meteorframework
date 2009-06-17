@@ -3,7 +3,6 @@ package com.googlecode.meteorframework.core;
 import java.util.Set;
 
 import com.googlecode.meteorframework.core.annotation.InverseOf;
-import com.googlecode.meteorframework.core.annotation.Model;
 
 
 /**
@@ -11,7 +10,10 @@ import com.googlecode.meteorframework.core.annotation.Model;
  *
  * @param <T> The type of objects associated with this properties range.
  */
-@Model public interface Property<T> extends Resource, ModelElement {
+@com.googlecode.meteorframework.core.annotation.ModelElement 
+public interface Property<T> 
+extends Resource, ModelElement 
+{
 	
 	
 //	public void initFromJavaTypes(java.lang.reflect.Method getMethod, java.lang.reflect.Method setMethod);

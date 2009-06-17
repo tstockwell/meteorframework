@@ -11,7 +11,7 @@ import com.googlecode.meteorframework.core.Namespace;
 import com.googlecode.meteorframework.core.Scope;
 import com.googlecode.meteorframework.core.Type;
 import com.googlecode.meteorframework.core.annotation.MeteorAnnotationUtils;
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 import com.googlecode.meteorframework.core.annotation.ModelAnnotationHandler;
 import com.googlecode.meteorframework.core.annotation.ProcessesAnnotations;
 
@@ -20,22 +20,22 @@ import com.googlecode.meteorframework.core.annotation.ProcessesAnnotations;
  * Processes @Model annotation attached to Java class declarations.
  * @author Ted Stockwell
  */
-@ProcessesAnnotations(Model.class)
+@ProcessesAnnotations(ModelElement.class)
 @SuppressWarnings("unchecked")
-@Model public class ClassModelAnnotationHandler implements ModelAnnotationHandler {
+@ModelElement public class ClassModelAnnotationHandler implements ModelAnnotationHandler {
 	
 	private ArrayList<ModelAnnotationHandler> _handlers= new ArrayList<ModelAnnotationHandler>();
 	private Scope _scope;
 	private Class _javaType= null;
-	private Model _annotation;
+	private ModelElement _annotation;
 	
 	public boolean initialize(Scope repository, Object p_annotation, Object p_target) {
 		
 		_scope= repository;
 		
-		if (!(p_annotation instanceof Model))
+		if (!(p_annotation instanceof ModelElement))
 			throw new RuntimeException("This handler only handles Model annotations");
-		_annotation= (Model)p_annotation;
+		_annotation= (ModelElement)p_annotation;
 		
 		if (p_target instanceof Method) {
 //			Method method= (Method)p_target;			

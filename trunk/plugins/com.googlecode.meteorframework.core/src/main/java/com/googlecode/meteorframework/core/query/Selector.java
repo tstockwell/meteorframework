@@ -2,7 +2,7 @@ package com.googlecode.meteorframework.core.query;
 
 import com.googlecode.meteorframework.core.Service;
 import com.googlecode.meteorframework.core.Type;
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 
 /**
  * Describes criteria used to select a set of objects from a repository of objects.
@@ -12,9 +12,9 @@ import com.googlecode.meteorframework.core.annotation.Model;
  * @param <T> The type of objects that the Selector select.
  * 	The range property will return the type of objects that the Selector select.
  */
-@Model public interface Selector<T> {
+@ModelElement public interface Selector<T> {
 	
-	@Model public interface Constructor extends Service {
+	@ModelElement public interface Constructor extends Service {
 		public <T> Selector<T> create(Class<T> rangeClass, Restriction restriction);
 	}
 	

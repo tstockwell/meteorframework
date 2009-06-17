@@ -11,5 +11,5 @@ import java.lang.annotation.Target;
 @Target({ElementType.ANNOTATION_TYPE})
 public @interface EquivalentMetadata
 {
-	String[] value() default {};
+	String value();
 }

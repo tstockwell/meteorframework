@@ -2,7 +2,7 @@ package com.googlecode.meteorframework.core;
 
 import java.util.List;
 
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 import com.googlecode.meteorframework.core.annotation.SameAs;
 
 
@@ -42,7 +42,7 @@ import com.googlecode.meteorframework.core.annotation.SameAs;
  * 
  * @author Ted Stockwell
  */
-@Model public interface Scope 
+@ModelElement public interface Scope 
 extends Provider, Repository, Domain 
 {
 	/**

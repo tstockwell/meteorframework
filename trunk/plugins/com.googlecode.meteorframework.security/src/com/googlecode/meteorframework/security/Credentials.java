@@ -7,10 +7,10 @@ import java.io.Serializable;
 
 import com.googlecode.meteorframework.core.annotation.FieldOrder;
 import com.googlecode.meteorframework.core.annotation.Label;
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 
 @FieldOrder({SecurityNS.Credentials.loginID})
-@Model public interface Credentials extends Serializable {
+@ModelElement public interface Credentials extends Serializable {
 	
 	@Label("User") 
 	String 	getLoginID();

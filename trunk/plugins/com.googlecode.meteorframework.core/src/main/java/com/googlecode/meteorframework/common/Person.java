@@ -1,8 +1,8 @@
 package com.googlecode.meteorframework.common;
 
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 
-@Model public interface Person
+@ModelElement public interface Person
 {
 	String getFirstName();
 	void setFirstName(String firstName);

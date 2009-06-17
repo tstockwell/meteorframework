@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.googlecode.meteorframework.core.annotation.IsReadOnly;
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 import com.googlecode.meteorframework.core.annotation.SameAs;
 
 
@@ -15,7 +15,7 @@ import com.googlecode.meteorframework.core.annotation.SameAs;
  * 
  * @author Ted Stockwell
  */
-@Model public interface Repository 
+@ModelElement public interface Repository 
 extends Service
 {
 	/**

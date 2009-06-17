@@ -4,7 +4,7 @@ import java.util.Set;
 
 import com.googlecode.meteorframework.core.Resource;
 import com.googlecode.meteorframework.core.annotation.InverseOf;
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 
 /**
  * Represents an action type that can be performed on some resource.
@@ -21,7 +21,7 @@ import com.googlecode.meteorframework.core.annotation.Model;
  *  
  * @author Ted Stockwell
  */
-@Model public interface ActionType extends Resource 
+@ModelElement public interface ActionType extends Resource 
 {
 	
 	/**

@@ -13,7 +13,7 @@ import com.googlecode.meteorframework.core.Scope;
 import com.googlecode.meteorframework.core.Type;
 import com.googlecode.meteorframework.core.annotation.Decorator;
 import com.googlecode.meteorframework.core.annotation.MeteorAnnotationUtils;
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 import com.googlecode.meteorframework.core.annotation.ModelAnnotationHandler;
 import com.googlecode.meteorframework.core.annotation.ProcessesAnnotations;
 
@@ -24,7 +24,7 @@ import com.googlecode.meteorframework.core.annotation.ProcessesAnnotations;
  */
 @ProcessesAnnotations(Decorator.class)
 @SuppressWarnings("unchecked")
-@Model public class DecoratorAnnotationHandler implements ModelAnnotationHandler {
+@ModelElement public class DecoratorAnnotationHandler implements ModelAnnotationHandler {
 	
 	private Scope _scope;
 	private Class _javaType= null;

@@ -1,7 +1,7 @@
 package com.googlecode.meteorframework.security;
 
 import com.googlecode.meteorframework.core.annotation.InverseOf;
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 import com.googlecode.meteorframework.core.query.Restriction;
 
 /**
@@ -27,7 +27,7 @@ import com.googlecode.meteorframework.core.query.Restriction;
  * 
  * @author Ted Stockwell
  */
-@Model public interface Permission<T>
+@ModelElement public interface Permission<T>
 {
 	/**
 	 * action to which this configuration applies

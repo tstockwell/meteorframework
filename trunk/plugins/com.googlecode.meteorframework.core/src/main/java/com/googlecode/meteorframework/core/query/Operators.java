@@ -1,13 +1,13 @@
 package com.googlecode.meteorframework.core.query;
 
 import com.googlecode.meteorframework.core.Service;
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 
 /**
  * A service that defines basic operators
  * @author ted stockwell
  */
-@Model public interface Operators extends Service {
+@ModelElement public interface Operators extends Service {
 	
 	public Operator eq();
 	public Operator lt();

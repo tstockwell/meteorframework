@@ -1,6 +1,6 @@
 package com.googlecode.meteorframework.storage.appengine;
 
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 import com.googlecode.meteorframework.storage.StorageService;
 
 /**
@@ -25,7 +25,7 @@ import com.googlecode.meteorframework.storage.StorageService;
  *  
  * @author Ted Stockwell
  */
-@Model 
+@ModelElement 
 public interface AppengineStorageService
 extends StorageService
 {

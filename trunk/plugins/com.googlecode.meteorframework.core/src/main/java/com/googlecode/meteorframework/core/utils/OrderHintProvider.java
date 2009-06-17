@@ -3,7 +3,7 @@ package com.googlecode.meteorframework.core.utils;
 import java.util.Set;
 
 import com.googlecode.meteorframework.core.annotation.InverseOf;
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 
 
 /**
@@ -11,7 +11,7 @@ import com.googlecode.meteorframework.core.annotation.Model;
  * @author Ted Stockwell
  *
  */
-@Model public interface OrderHintProvider
+@ModelElement public interface OrderHintProvider
 {
 	/**
 	 * The set of objects that should come after this object.

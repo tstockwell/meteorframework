@@ -8,9 +8,12 @@ import java.lang.annotation.Target;
 
 @Documented
 @Retention(value=RetentionPolicy.RUNTIME)
-@Target({ElementType.TYPE, ElementType.METHOD, ElementType.PARAMETER, ElementType.PACKAGE})
-public @interface Model {
+@Target({ElementType.TYPE, ElementType.PACKAGE})
+public @interface ModelElement {
 	
-	Metadata[] value() default {};
+	/**
+	 * metadata to apply to associated model element
+	 */
+	String value() default ""; 
 
 }

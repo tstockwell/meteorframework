@@ -10,7 +10,7 @@ import java.util.List;
 import com.googlecode.meteorframework.core.Meteor;
 import com.googlecode.meteorframework.core.Resource;
 import com.googlecode.meteorframework.core.annotation.MeteorAnnotationUtils;
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 
 
 public class ReflectionUtils
@@ -21,7 +21,7 @@ public class ReflectionUtils
 		String targetName= handlerMethod.getName();
 		Class<?>[] class1= handlerMethod.getDeclaringClass().getInterfaces();
 		for (Class<?> class2 : class1) {
-			if (!class2.isAnnotationPresent(Model.class))
+			if (!class2.isAnnotationPresent(ModelElement.class))
 				continue;
 			
 			Method[] methods= class2.getMethods();
@@ -46,7 +46,7 @@ public class ReflectionUtils
 			if (completed.contains(superType))
 				continue;
 			completed.add(superType);
-			if (!superType.isAnnotationPresent(Model.class))
+			if (!superType.isAnnotationPresent(ModelElement.class))
 				continue;
 			superTypes.add(superType);
 			todo.addAll(Arrays.asList(superType.getInterfaces()));

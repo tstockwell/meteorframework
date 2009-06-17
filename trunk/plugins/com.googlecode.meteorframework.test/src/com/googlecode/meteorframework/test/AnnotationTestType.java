@@ -6,11 +6,10 @@ import com.googlecode.meteorframework.core.Scope;
 import com.googlecode.meteorframework.core.Service;
 import com.googlecode.meteorframework.core.annotation.Decorator;
 import com.googlecode.meteorframework.core.annotation.Inject;
-import com.googlecode.meteorframework.core.annotation.Model;
-import com.googlecode.meteorframework.core.annotation.Metadata;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 
 //do not remove this annotation, it is used for testing purposes 
-@Model({@Metadata({CoreNS.Resource.description, BootstrapTests.TEST_VALUE})})
+@ModelElement("<"+CoreNS.Resource.description+"> '"+BootstrapTests.TEST_VALUE+"'")
 public interface AnnotationTestType extends Service
 {
 	

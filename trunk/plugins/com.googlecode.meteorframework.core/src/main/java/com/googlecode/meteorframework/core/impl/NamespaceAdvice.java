@@ -16,7 +16,7 @@ import com.googlecode.meteorframework.core.annotation.Decorates;
 import com.googlecode.meteorframework.core.annotation.Decorator;
 import com.googlecode.meteorframework.core.annotation.Inject;
 import com.googlecode.meteorframework.core.annotation.MeteorAnnotationUtils;
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 
 @Decorator public abstract class NamespaceAdvice implements Namespace {
 	
@@ -64,7 +64,7 @@ import com.googlecode.meteorframework.core.annotation.Model;
 				
 				
 				// get dependencies in same bundle
-				Model modelAnnotation= javaType.getAnnotation(Model.class);
+				ModelElement modelAnnotation= javaType.getAnnotation(ModelElement.class);
 				if (modelAnnotation != null) {
 					List<String> dependencies= MeteorAnnotationUtils.getPropertyValues(modelAnnotation, CoreNS.Namespace.dependencies);
 					if (!dependencies.isEmpty()) {

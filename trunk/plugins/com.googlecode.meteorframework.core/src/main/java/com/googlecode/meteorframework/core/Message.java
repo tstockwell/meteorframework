@@ -1,7 +1,7 @@
 package com.googlecode.meteorframework.core;
 
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 
-@Model public interface Message<T> {
+@ModelElement public interface Message<T> {
 	
 }

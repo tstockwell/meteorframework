@@ -1,9 +1,9 @@
 package com.googlecode.meteorframework.security;
 
 import com.googlecode.meteorframework.core.Service;
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 
-@Model public interface SecurityService 
+@ModelElement public interface SecurityService 
 extends Service
 {
 	public String getConnectionURL();

@@ -19,7 +19,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.apt.core.env.EclipseAnnotationProcessorEnvironment;
 import org.eclipse.jdt.core.IJavaProject;
 
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 import com.sun.mirror.apt.AnnotationProcessor;
 import com.sun.mirror.apt.AnnotationProcessorEnvironment;
 import com.sun.mirror.apt.Filer;
@@ -40,7 +40,7 @@ implements AnnotationProcessor
 	{
 		_env = env;
 		_modelDeclaration= (AnnotationTypeDeclaration)
-			env.getTypeDeclaration(Model.class.getName());
+			env.getTypeDeclaration(ModelElement.class.getName());
 	}
 
 	public void process()

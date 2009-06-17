@@ -3,7 +3,7 @@ package com.googlecode.meteorframework.core.utils;
 import com.googlecode.meteorframework.core.MeteorException;
 import com.googlecode.meteorframework.core.Service;
 import com.googlecode.meteorframework.core.TypeLiteral;
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 
 /**
  * Utility for creating object adapters.
@@ -12,7 +12,7 @@ import com.googlecode.meteorframework.core.annotation.Model;
  * 
  * @author Ted Stockwell
  */
-@Model public interface AdapterService extends Service {
+@ModelElement public interface AdapterService extends Service {
 	
 	/**
 	 * Create an adapter of the specified class (if possible).

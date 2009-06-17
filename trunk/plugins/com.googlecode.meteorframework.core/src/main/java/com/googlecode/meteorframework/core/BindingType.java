@@ -1,6 +1,6 @@
 package com.googlecode.meteorframework.core;
 
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 
 /**
  * A binding represents some client-visible semantic of an API 
@@ -42,6 +42,6 @@ import com.googlecode.meteorframework.core.annotation.Model;
  * 
  * @author Ted Stockwell
  */
-@Model public interface BindingType
+@ModelElement public interface BindingType
 {
 }

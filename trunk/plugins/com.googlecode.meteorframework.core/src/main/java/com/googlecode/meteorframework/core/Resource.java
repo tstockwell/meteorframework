@@ -4,9 +4,9 @@ import java.util.Collection;
 import java.util.Set;
 
 import com.googlecode.meteorframework.core.annotation.ElementType;
-import com.googlecode.meteorframework.core.annotation.IsMethod;
+import com.googlecode.meteorframework.core.annotation.IsFunction;
 import com.googlecode.meteorframework.core.annotation.IsTemporal;
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 
 
 
@@ -21,7 +21,7 @@ import com.googlecode.meteorframework.core.annotation.Model;
  * @author Ted Stockwell
  */
 @SuppressWarnings("unchecked")
-@Model public interface Resource {
+@ModelElement public interface Resource {
 		
 	/**
 	 * Returns the scope from which this object was created.
@@ -62,23 +62,27 @@ import com.googlecode.meteorframework.core.annotation.Model;
 	 */
 	public void postConstruct();
 	
-	@IsMethod 
+	@IsFunction 
 	public boolean isInstanceOf(Class<?> javaType);
 	
-	@IsMethod 
+	@IsFunction 
 	public boolean isInstanceOf(Type type);
 		
-	@IsMethod 
+	@IsFunction 
 	public void setProperty(String propertyURI, Object value, Object...parameters);
 	
-	@IsMethod 
+	@IsFunction 
 	public void setProperty(Property property, Object value, Object...parameters);
 	
-	@IsMethod 
+	/**
+	 * A convenient method that looks up the denoted property in the current 
+	 * scope and then calls getProperty(Property, Object...)
+	 */
+	@IsFunction 
 	public  <T> T getProperty(String propertyURI, Object...parameters);
 	
-	@IsMethod 
-	public <T> T getProperty(Property property, Object...parameters);
+	@IsFunction 
+	public <T> T getProperty(Property<T> property, Object...parameters);
 	
 	/**
 	 * This method returns all the values stored in this resource for the given property.
@@ -86,7 +90,7 @@ import com.googlecode.meteorframework.core.annotation.Model;
 	 * If this property is indexed or ordered then a collection of the values, 
 	 * in no particular order, is returned.  
 	 */
-	@IsMethod 
+	@IsFunction 
 	public <T> Collection<T> getPropertyValues(String propertyURI);
 	
 	/**
@@ -94,13 +98,13 @@ import com.googlecode.meteorframework.core.annotation.Model;
 	 * Since the setProperty MUST also accept individual values for multivalued properties 
 	 * this method is really just a convenience.   
 	 */
-	@IsMethod 
+	@IsFunction 
 	public void addProperty(String propertyURI, Object value, Object...parameters);
 	
 	@ElementType(CoreNS.Function.TYPE) 
 	public void removeProperty(String propertyURI, Object value, Object...parameters);
 	
-	@IsMethod 
+	@IsFunction 
 	public void clearProperty(String propertyURI);
 	
 	public String getDescription();
@@ -149,7 +153,7 @@ import com.googlecode.meteorframework.core.annotation.Model;
 	 */
 	public String toString();
 	
-	@IsMethod  public Set<Property<?>> getContainedProperties();
+	@IsFunction  public Set<Property<?>> getContainedProperties();
 
 	/**
 	 * Creates a decorator that intercepts methods calls on this object and 

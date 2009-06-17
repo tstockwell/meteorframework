@@ -4,7 +4,7 @@ import java.util.Set;
 
 import com.googlecode.meteorframework.core.Property;
 import com.googlecode.meteorframework.core.Service;
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 
 
 /**
@@ -13,9 +13,9 @@ import com.googlecode.meteorframework.core.annotation.Model;
  *
  * @param <T>  The property's value type.
  */
-@Model public interface InRestriction<T> extends Restriction {
+@ModelElement public interface InRestriction<T> extends Restriction {
 	
-	@Model public interface Constructor  extends Service
+	@ModelElement public interface Constructor  extends Service
 	{
 		public <T> InRestriction<T> create(Property<T> property, Set<T> value);
 	}

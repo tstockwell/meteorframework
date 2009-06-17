@@ -2,7 +2,7 @@ package com.googlecode.meteorframework.core.utils;
 
 import com.googlecode.meteorframework.core.MeteorException;
 import com.googlecode.meteorframework.core.Service;
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 
 /**
  * Utility for converting scalar values to objects of a specified Class.
@@ -11,7 +11,7 @@ import com.googlecode.meteorframework.core.annotation.Model;
  * 
  * @author Ted Stockwell
  */
-@Model public interface ConversionService extends Service {
+@ModelElement public interface ConversionService extends Service {
 	
 	/**
 	 * Convert the value to an object of the specified class (if possible).

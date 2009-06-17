@@ -12,7 +12,7 @@ import com.googlecode.meteorframework.core.Meteor;
 import com.googlecode.meteorframework.core.MeteorException;
 import com.googlecode.meteorframework.core.Resource;
 import com.googlecode.meteorframework.core.annotation.MeteorAnnotationUtils;
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 
 
 /**
@@ -124,7 +124,7 @@ implements MethodInterceptor
 		
 		// process superclasses too, if any
 		for (Class<?> superClass : roleClass.getInterfaces()) {
-			if (superClass.isAnnotationPresent(Model.class))
+			if (superClass.isAnnotationPresent(ModelElement.class))
 				initMethods(superClass);
 		}
 		

@@ -2,7 +2,7 @@ package com.googlecode.meteorframework.security.test;
 
 import com.googlecode.meteorframework.core.Meteor;
 import com.googlecode.meteorframework.core.Provider;
-import com.googlecode.meteorframework.core.annotation.Bind;
+import com.googlecode.meteorframework.core.annotation.Binding;
 import com.googlecode.meteorframework.core.annotation.Decorates;
 import com.googlecode.meteorframework.core.annotation.Decorator;
 import com.googlecode.meteorframework.core.binding.Testing;
@@ -13,7 +13,7 @@ implements Provider
 {
 	@Decorates Provider _self;
 	
-	@Bind(Testing.class)
+	@Binding(Testing.class)
 	public Credentials getInstance(Class<Credentials> class1)
 	{
 		Credentials credentials= (Credentials)Meteor.proceed();

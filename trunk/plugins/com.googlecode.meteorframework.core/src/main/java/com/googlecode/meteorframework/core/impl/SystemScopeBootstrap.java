@@ -134,7 +134,7 @@ public class SystemScopeBootstrap {
 		typeType.setValue(CoreNS.Type.superTypes, superTypes);
 		
 		ObjectImpl methodType= new ObjectImpl(__systemScope, CoreNS.Type.TYPE, null);
-		methodType.internalSetURI(CoreNS.Method.TYPE);
+		methodType.internalSetURI(CoreNS.Function.TYPE);
 		methodType.setValue(CoreNS.Resource.type, typeType.internalCast(Type.class));
 		superTypes= new HashSet<Object>();
 		superTypes.add(resourceType.internalCast(Type.class));

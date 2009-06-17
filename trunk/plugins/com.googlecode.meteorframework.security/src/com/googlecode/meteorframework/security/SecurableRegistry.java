@@ -2,7 +2,7 @@ package com.googlecode.meteorframework.security;
 
 import java.util.Set;
 
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 
 /**
  * Used by security implements to discover all the SecurableTypes in the 
@@ -14,7 +14,7 @@ import com.googlecode.meteorframework.core.annotation.Model;
  * 
  * @author ted stockwell
  */
-@Model public interface SecurableRegistry
+@ModelElement public interface SecurableRegistry
 {
 	public Set<SecurableCategory> getAllSecurableCategories();
 }

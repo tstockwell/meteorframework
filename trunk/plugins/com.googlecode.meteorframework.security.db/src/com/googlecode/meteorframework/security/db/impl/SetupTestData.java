@@ -2,7 +2,7 @@ package com.googlecode.meteorframework.security.db.impl;
 
 import com.googlecode.meteorframework.core.Meteor;
 import com.googlecode.meteorframework.core.annotation.After;
-import com.googlecode.meteorframework.core.annotation.Bind;
+import com.googlecode.meteorframework.core.annotation.Binding;
 import com.googlecode.meteorframework.core.annotation.Decorator;
 import com.googlecode.meteorframework.core.annotation.Inject;
 import com.googlecode.meteorframework.core.binding.Testing;
@@ -18,7 +18,7 @@ implements SecurityServiceFactory
 	@Inject User.Constructor _users;
 	@Inject AuthorizationContext.Constructor _authorizations;
 	
-	@Override @After @Bind(Testing.class)
+	@Override @After @Binding(Testing.class)
 	public SecurityService create(String connectionURL)
 	{
 		SecurityService service= (SecurityService)Meteor.getResult();

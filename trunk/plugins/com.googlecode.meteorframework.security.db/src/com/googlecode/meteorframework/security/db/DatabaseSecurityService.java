@@ -1,7 +1,7 @@
 package com.googlecode.meteorframework.security.db;
 
 import com.googlecode.meteorframework.core.Service;
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 import com.googlecode.meteorframework.security.SecurityService;
 import com.googlecode.meteorframework.storage.StorageService;
 
@@ -10,10 +10,10 @@ import com.googlecode.meteorframework.storage.StorageService;
  * 
  * @author Ted Stockwell
  */
-@Model public interface DatabaseSecurityService
+@ModelElement public interface DatabaseSecurityService
 extends SecurityService
 {
-	@Model public interface Constructor extends Service {
+	@ModelElement public interface Constructor extends Service {
 		public DatabaseSecurityService create(String serviceURL, StorageService storageService);
 	}
 	

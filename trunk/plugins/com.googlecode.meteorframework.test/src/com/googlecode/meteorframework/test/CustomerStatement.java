@@ -4,12 +4,12 @@ import java.math.BigDecimal;
 
 import com.googlecode.meteorframework.core.Resource;
 import com.googlecode.meteorframework.core.Service;
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 
 
-@Model public interface CustomerStatement extends Resource {
+@ModelElement public interface CustomerStatement extends Resource {
 	
-	@Model public interface Constructor extends Service {
+	@ModelElement public interface Constructor extends Service {
 		public CustomerStatement create(Customer customer);
 	}
 	

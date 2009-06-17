@@ -1,8 +1,8 @@
 package com.googlecode.meteorframework.storage.appengine;
 
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 
-@Model
+@ModelElement
 public interface AppengineQueryFactory {
 
 }

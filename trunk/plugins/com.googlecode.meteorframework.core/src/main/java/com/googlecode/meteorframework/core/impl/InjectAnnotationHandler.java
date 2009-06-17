@@ -11,7 +11,7 @@ import com.googlecode.meteorframework.core.MeteorException;
 import com.googlecode.meteorframework.core.Scope;
 import com.googlecode.meteorframework.core.annotation.Inject;
 import com.googlecode.meteorframework.core.annotation.InjectionAnnotationHandler;
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 import com.googlecode.meteorframework.core.annotation.ProcessesAnnotations;
 import com.googlecode.meteorframework.utils.Logging;
 
@@ -21,7 +21,7 @@ import com.googlecode.meteorframework.utils.Logging;
  */
 @ProcessesAnnotations(Inject.class)
 @SuppressWarnings("unchecked")
-@Model public class InjectAnnotationHandler implements InjectionAnnotationHandler {
+@ModelElement public class InjectAnnotationHandler implements InjectionAnnotationHandler {
 	
 	protected WeakReference<Scope> _scopeReference;
 	protected WeakReference<Class> _javaType= null;

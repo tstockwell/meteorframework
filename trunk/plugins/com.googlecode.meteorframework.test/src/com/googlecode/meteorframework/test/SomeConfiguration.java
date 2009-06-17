@@ -1,12 +1,12 @@
 package com.googlecode.meteorframework.test;
 
 import com.googlecode.meteorframework.core.Service;
-import com.googlecode.meteorframework.core.annotation.Bind;
+import com.googlecode.meteorframework.core.annotation.Binding;
 import com.googlecode.meteorframework.core.annotation.Decorator;
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 import com.googlecode.meteorframework.core.binding.Testing;
 
-@Model public interface SomeConfiguration extends Service
+@ModelElement public interface SomeConfiguration extends Service
 {
 	public static final String BASE_VALUE="value";  
 	public static final String TEST_VALUE="TESTING value";
@@ -26,7 +26,7 @@ import com.googlecode.meteorframework.core.binding.Testing;
 		}
 	}
 	
-	@Bind(Testing.class)
+	@Binding(Testing.class)
 	@Decorator public static class TestSomeConfigurationImpl implements SomeConfiguration {
 		@Override public String getSomeProperty() {
 			return TEST_VALUE;  
