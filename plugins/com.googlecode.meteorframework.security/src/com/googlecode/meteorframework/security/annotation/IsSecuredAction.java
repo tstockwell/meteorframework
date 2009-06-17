@@ -6,7 +6,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.googlecode.meteorframework.core.CoreNS;
 import com.googlecode.meteorframework.core.annotation.EquivalentMetadata;
 import com.googlecode.meteorframework.security.SecurityNS;
 
@@ -19,7 +18,7 @@ import com.googlecode.meteorframework.security.SecurityNS;
 @Documented
 @Retention(value=RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD, ElementType.TYPE})
-@EquivalentMetadata({CoreNS.Resource.type, SecurityNS.ActionType.TYPE})
+@EquivalentMetadata("a <"+SecurityNS.ActionType.TYPE+">")
 public @interface IsSecuredAction
 {
 }

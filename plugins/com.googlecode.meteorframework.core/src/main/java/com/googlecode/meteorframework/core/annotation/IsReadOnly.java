@@ -19,7 +19,7 @@ import com.googlecode.meteorframework.core.CoreNS;
 @Documented
 @Retention(value=RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
-@EquivalentMetadata({CoreNS.Property.readOnly, "true"})
+@EquivalentMetadata("<"+CoreNS.Property.readOnly+"> 'true'")
 public @interface IsReadOnly 
 {
 }

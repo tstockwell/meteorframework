@@ -536,7 +536,7 @@ public class ObjectImpl implements Resource, Cloneable  {
 		
 	}
 
-	@Override public <T> T getProperty(Property property, Object... parameters) {
+	@Override public <T> T getProperty(Property<T> property, Object... parameters) {
 		return getProperty(ObjectImpl.getObjectImpl(property).internalGetURI(), parameters);
 	}
 

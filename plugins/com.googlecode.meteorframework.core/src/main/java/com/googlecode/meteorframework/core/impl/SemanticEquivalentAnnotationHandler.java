@@ -6,7 +6,7 @@ import java.lang.reflect.Method;
 import com.googlecode.meteorframework.core.Meteor;
 import com.googlecode.meteorframework.core.Resource;
 import com.googlecode.meteorframework.core.Scope;
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 import com.googlecode.meteorframework.core.annotation.ModelAnnotationHandler;
 import com.googlecode.meteorframework.core.annotation.ProcessesAnnotations;
 import com.googlecode.meteorframework.core.annotation.EquivalentMetadata;
@@ -15,7 +15,7 @@ import com.googlecode.meteorframework.core.utils.TurtleReader;
 import com.googlecode.meteorframework.utils.Logging;
 
 @ProcessesAnnotations(EquivalentMetadata.class)
-@Model 
+@ModelElement 
 public class SemanticEquivalentAnnotationHandler implements ModelAnnotationHandler {
 	
 	public static class SemanticHandler implements ModelAnnotationHandler {

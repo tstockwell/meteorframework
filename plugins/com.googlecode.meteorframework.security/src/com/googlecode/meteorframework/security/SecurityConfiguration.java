@@ -1,9 +1,9 @@
 package com.googlecode.meteorframework.security;
 
 import com.googlecode.meteorframework.core.annotation.DefaultValue;
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 
-@Model public interface SecurityConfiguration
+@ModelElement public interface SecurityConfiguration
 {
 	/**
 	 * The URL of the default security service.

@@ -3,7 +3,7 @@ package com.googlecode.meteorframework.core;
 import java.util.List;
 
 import com.googlecode.meteorframework.core.annotation.InverseOf;
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 
 
 
@@ -12,7 +12,7 @@ import com.googlecode.meteorframework.core.annotation.Model;
  * 
  * @author Ted Stockwell
  */
-@Model public interface Node
+@ModelElement public interface Node
 {
 	/**
 	 * @return any nested instances

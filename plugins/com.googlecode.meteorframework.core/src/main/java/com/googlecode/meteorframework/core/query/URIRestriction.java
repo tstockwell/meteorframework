@@ -1,7 +1,7 @@
 package com.googlecode.meteorframework.core.query;
 
 import com.googlecode.meteorframework.core.Service;
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 
 /**
  * Selects objects by URI.
@@ -9,9 +9,9 @@ import com.googlecode.meteorframework.core.annotation.Model;
  *
  * @param <T>  The property's value type.
  */
-@Model public interface URIRestriction extends Restriction {
+@ModelElement public interface URIRestriction extends Restriction {
 	
-	@Model public interface Constructor extends Service{
+	@ModelElement public interface Constructor extends Service{
 		public URIRestriction create(Operator operator, String uri);
 		
 		public URIRestriction create(String uri);

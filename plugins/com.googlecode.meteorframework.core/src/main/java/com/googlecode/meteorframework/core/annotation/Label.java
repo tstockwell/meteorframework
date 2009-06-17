@@ -12,7 +12,7 @@ import com.googlecode.meteorframework.core.CoreNS;
 @Documented
 @Retention(value=RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD, ElementType.TYPE, ElementType.PACKAGE})
-@EquivalentMetadata({CoreNS.Resource.label, "{$value}"})
+@EquivalentMetadata("<"+CoreNS.Resource.label+"> '{$value}'")
 public @interface Label 
 {
 	public String value();

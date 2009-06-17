@@ -20,7 +20,7 @@ import com.googlecode.meteorframework.core.CoreNS;
 @Documented
 @Retention(value=RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
-@EquivalentMetadata({CoreNS.Resource.sameAs, "{$value}"})
+@EquivalentMetadata("<"+CoreNS.Resource.sameAs+"> <{$value}>")
 public @interface SameAs 
 {
 	public String value();

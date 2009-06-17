@@ -21,7 +21,7 @@ public class MeteorAnnotationUtils {
 		return 0 <= uri.indexOf('*');
 	}
 	
-	private static HashMap<Model, Map<String, List<String>>> __annotationProperties= new HashMap<Model, Map<String, List<String>>>();
+	private static HashMap<ModelElement, Map<String, List<String>>> __annotationProperties= new HashMap<ModelElement, Map<String, List<String>>>();
 
 	/**
 	 * 
@@ -53,14 +53,14 @@ public class MeteorAnnotationUtils {
 		return isMethodBinding;
 	}
 
-	public static List<String> getPropertyValues(Model annotation, String type) {
+	public static List<String> getPropertyValues(ModelElement annotation, String type) {
 		List<String> list= getAllPropertyValues(annotation).get(type);
 		if (list == null)
 			return Collections.EMPTY_LIST;
 		return list;
 	}
 
-	public static Map<String, List<String>> getAllPropertyValues(Model annotation) {
+	public static Map<String, List<String>> getAllPropertyValues(ModelElement annotation) {
 		Map<String, List<String>> properties= __annotationProperties.get(annotation);
 		if (properties == null) {
 			//TODO - will need to expand this parsing facility
@@ -103,10 +103,10 @@ public class MeteorAnnotationUtils {
 		if (methodDeclaration.getModifiers().contains(Modifier.STATIC))
 			return false;
 		
-		if (methodDeclaration.getAnnotation(IsMethod.class) != null)
+		if (methodDeclaration.getAnnotation(IsFunction.class) != null)
 			return false;
 		
-		Model model= methodDeclaration.getAnnotation(Model.class);
+		ModelElement model= methodDeclaration.getAnnotation(ModelElement.class);
 		if (model != null) {
 			List<String> type= MeteorAnnotationUtils.getPropertyValues(model, CoreNS.Resource.type);
 			if (!type.isEmpty())
@@ -127,17 +127,17 @@ public class MeteorAnnotationUtils {
 		if (java.lang.reflect.Modifier.isStatic(methodDeclaration.getModifiers()))
 			return false;
 		
-		if (methodDeclaration.getAnnotation(IsMethod.class) != null)
+		if (methodDeclaration.getAnnotation(IsFunction.class) != null)
 			return false;
 		
-		Model model= methodDeclaration.getAnnotation(Model.class);
+		ModelElement model= methodDeclaration.getAnnotation(ModelElement.class);
 		if (model != null) {
 			List<String> type= MeteorAnnotationUtils.getPropertyValues(model, CoreNS.Resource.type);
 			if (!type.isEmpty())
 				return type.contains(CoreNS.Property.TYPE);
 		}
 		
-		if (methodDeclaration.getAnnotation(IsMethod.class) != null)
+		if (methodDeclaration.getAnnotation(IsFunction.class) != null)
 			return true;
 		
 		String methodName= methodDeclaration.getName();
@@ -158,14 +158,14 @@ public class MeteorAnnotationUtils {
 			return false;
 		if (java.lang.reflect.Modifier.isStatic(methodDeclaration.getModifiers()))
 			return false;
-		Model model= methodDeclaration.getAnnotation(Model.class);
+		ModelElement model= methodDeclaration.getAnnotation(ModelElement.class);
 		if (model != null) {
 			List<String> type= MeteorAnnotationUtils.getPropertyValues(model, CoreNS.Resource.type);
 			if (!type.isEmpty())
-				return type.contains(CoreNS.Method.TYPE);
+				return type.contains(CoreNS.Function.TYPE);
 		}
 		
-		if (methodDeclaration.getAnnotation(IsMethod.class) != null)
+		if (methodDeclaration.getAnnotation(IsFunction.class) != null)
 			return true;
 		
 		String methodName= methodDeclaration.getName();
@@ -181,7 +181,7 @@ public class MeteorAnnotationUtils {
 	{
 		if (javaType == null)
 			return false;
-		return javaType.isAnnotationPresent(Model.class);
+		return javaType.isAnnotationPresent(ModelElement.class);
 	}
 
 }

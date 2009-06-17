@@ -1,7 +1,7 @@
 package com.googlecode.meteorframework.storage.appengine;
 
 import com.google.appengine.api.datastore.Query;
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 import com.googlecode.meteorframework.core.query.Restriction;
 import com.googlecode.meteorframework.core.query.Selector;
 
@@ -15,7 +15,7 @@ import com.googlecode.meteorframework.core.query.Selector;
  * 
  * @author Ted Stockwell
  */
-@Model public interface QueryBuilder
+@ModelElement public interface QueryBuilder
 {
 	public Query createQuery(Selector<?> criteria); 
 	public void addFilter(Query query, Restriction restriction);

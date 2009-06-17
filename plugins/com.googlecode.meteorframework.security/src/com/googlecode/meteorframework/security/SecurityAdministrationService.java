@@ -2,10 +2,10 @@ package com.googlecode.meteorframework.security;
 
 import java.util.List;
 
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 import com.googlecode.meteorframework.core.query.Selector;
 
-@Model public interface SecurityAdministrationService 
+@ModelElement public interface SecurityAdministrationService 
 {
 	public SecurityService getSecurityService();
     

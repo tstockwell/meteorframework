@@ -24,7 +24,7 @@ import org.osgi.framework.Constants;
 
 import com.googlecode.meteorframework.core.annotation.InjectionAnnotationHandler;
 import com.googlecode.meteorframework.core.annotation.MeteorAnnotationUtils;
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 import com.googlecode.meteorframework.core.annotation.ModelAnnotationHandler;
 import com.googlecode.meteorframework.core.annotation.ProcessesAnnotations;
 import com.googlecode.meteorframework.utils.Logging;
@@ -91,7 +91,7 @@ implements MeteorMetadataProvider
 					
 					if (class1.getName().endsWith(".package-info")) {
 						java.lang.Package package1= class1.getPackage();
-						Model modelAnnotation= package1.getAnnotation(Model.class);
+						ModelElement modelAnnotation= package1.getAnnotation(ModelElement.class);
 						if (modelAnnotation != null) {
 							List<String> dependencies= MeteorAnnotationUtils.getPropertyValues(modelAnnotation, CoreNS.Namespace.dependencies);
 							if (!dependencies.isEmpty()) {
@@ -398,7 +398,7 @@ implements MeteorMetadataProvider
 		
 		// register model annotation handlers
 		for (final Class<?> handlerType : classes) {
-			if (!handlerType.isAnnotationPresent(Model.class))
+			if (!handlerType.isAnnotationPresent(ModelElement.class))
 				continue;
 			if (!ModelAnnotationHandler.class.isAssignableFrom(handlerType))
 				continue;
@@ -425,7 +425,7 @@ implements MeteorMetadataProvider
 		
 		// register injection annotation handlers
 		for (final Class<?> handlerType : classes) {
-			if (!handlerType.isAnnotationPresent(Model.class))
+			if (!handlerType.isAnnotationPresent(ModelElement.class))
 				continue;
 			if (!InjectionAnnotationHandler.class.isAssignableFrom(handlerType))
 				continue;

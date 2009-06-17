@@ -1,9 +1,13 @@
 package com.googlecode.meteorframework.core;
 
-import com.googlecode.meteorframework.core.annotation.Model;
 
-
-@Model public interface ModelElement
+/**
+ * Base class for all meta types.
+ * @author Ted Stockwell
+ */
+@com.googlecode.meteorframework.core.annotation.ModelElement 
+public interface ModelElement
+extends Resource
 {
 	/**
 	 * Denotes bindings that must always apply to the associated model element.

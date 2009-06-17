@@ -6,14 +6,14 @@ import com.googlecode.meteorframework.core.Property;
 import com.googlecode.meteorframework.core.Resource;
 import com.googlecode.meteorframework.core.Service;
 import com.googlecode.meteorframework.core.Type;
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 
 
 /**
  * Convenience methods for creating restrictiions.
  * @author Ted Stockwell
  */
-@Model public interface Restrictions extends Service {
+@ModelElement public interface Restrictions extends Service {
 	
 	public Restriction uriEq(Resource reference);
 	public Restriction uriEq(String uri);

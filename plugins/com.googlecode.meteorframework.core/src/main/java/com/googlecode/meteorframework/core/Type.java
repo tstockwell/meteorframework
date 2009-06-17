@@ -4,8 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.googlecode.meteorframework.core.annotation.InverseOf;
-import com.googlecode.meteorframework.core.annotation.IsMethod;
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.IsFunction;
 
 
 
@@ -19,7 +18,10 @@ import com.googlecode.meteorframework.core.annotation.Model;
  * 
  * @param <T> The Java Type to which this Type applies.
  */
-@Model public interface Type<T> extends Resource, ModelElement {
+@com.googlecode.meteorframework.core.annotation.ModelElement 
+public interface Type<T> 
+extends Resource, ModelElement 
+{
 	
 	public Class<T> getJavaType();
 	
@@ -35,10 +37,10 @@ import com.googlecode.meteorframework.core.annotation.Model;
 	@InverseOf(CoreNS.Function.domain) 
 	public Set<Function<?>> getDeclaredFunctions();
 	
-	@IsMethod
+	@IsFunction
 	public boolean isAssignableFrom(Type<? extends T> type);
 	
-	@IsMethod
+	@IsFunction
 	public boolean isAssignableFrom(Class<?> javaType);
 	
 	
@@ -89,7 +91,7 @@ import com.googlecode.meteorframework.core.annotation.Model;
 	 * Returns true if this type is that same as, or a super type of, the 
 	 * given type. 
 	 */
-	@IsMethod
+	@IsFunction
 	public boolean isSuperTypeOf(Type<?> type);
 	
 	@InverseOf(CoreNS.Namespace.types) 

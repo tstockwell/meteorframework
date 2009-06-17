@@ -3,7 +3,6 @@ package com.googlecode.meteorframework.core;
 import java.util.Set;
 
 import com.googlecode.meteorframework.core.annotation.InverseOf;
-import com.googlecode.meteorframework.core.annotation.Model;
 
 
 
@@ -38,10 +37,12 @@ import com.googlecode.meteorframework.core.annotation.Model;
  * @author Ted Stockwell 
  *  
  */
-@Model public interface Namespace 
+@com.googlecode.meteorframework.core.annotation.ModelElement 
+public interface Namespace 
 extends Resource, ModelElement, Comparable<Namespace> 
 {
-	@Model public interface Constructor extends Service {
+	@com.googlecode.meteorframework.core.annotation.ModelElement 
+	public interface Constructor extends Service {
 		
 		/**
 		 * Creates a Namespace with the given URI.

@@ -394,7 +394,7 @@ import com.googlecode.meteorframework.core.utils.ConversionService;
 		setProperty(ObjectImpl.getObjectImpl(property).internalGetURI(), value, parameters);
 	}
 	
-	@Override public <T> T getProperty(Property property, Object...parameters) {
+	@Override public <T> T getProperty(Property<T> property, Object...parameters) {
 		return (T)getProperty(ObjectImpl.getObjectImpl(property).internalGetURI(), parameters);
 	}
 	

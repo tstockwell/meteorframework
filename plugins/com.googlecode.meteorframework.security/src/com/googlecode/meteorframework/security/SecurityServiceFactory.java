@@ -1,6 +1,6 @@
 package com.googlecode.meteorframework.security;
 
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 
 
 /**
@@ -8,7 +8,7 @@ import com.googlecode.meteorframework.core.annotation.Model;
  * 
  * @author Ted Stockwell
  */
-@Model public interface SecurityServiceFactory
+@ModelElement public interface SecurityServiceFactory
 {
 	
 	/**

@@ -25,7 +25,6 @@ import com.googlecode.meteorframework.parser.MatchResults;
 import com.googlecode.meteorframework.parser.node.AbstractNode;
 import com.googlecode.meteorframework.parser.node.Navigation;
 import com.googlecode.meteorframework.parser.util.Files;
-import com.sun.org.apache.bcel.internal.generic.GETSTATIC;
 
 
 /**

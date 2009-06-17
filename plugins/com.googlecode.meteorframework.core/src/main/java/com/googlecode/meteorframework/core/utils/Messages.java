@@ -1,7 +1,7 @@
 package com.googlecode.meteorframework.core.utils;
 
 import com.googlecode.meteorframework.core.Service;
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 
 
 /**
@@ -11,6 +11,6 @@ import com.googlecode.meteorframework.core.annotation.Model;
  * 
  * @author Ted Stockwell
  */
-@Model public interface Messages extends Service {
+@ModelElement public interface Messages extends Service {
 	
 }

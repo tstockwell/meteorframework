@@ -1,9 +1,9 @@
 package com.googlecode.meteorframework.core.query;
 
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 
 /**
  * Represents a where clause or having clause in a query.
  */
-@Model public interface Restriction {
+@ModelElement public interface Restriction {
 }

@@ -1,9 +1,9 @@
 package com.googlecode.meteorframework.security.db;
 
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 import com.googlecode.meteorframework.security.AuthorizationContext;
 
-@Model public interface DatabaseAuthorizationContext
+@ModelElement public interface DatabaseAuthorizationContext
 extends AuthorizationContext
 {
 

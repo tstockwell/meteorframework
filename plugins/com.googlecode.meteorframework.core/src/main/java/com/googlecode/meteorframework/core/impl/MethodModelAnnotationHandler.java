@@ -14,7 +14,7 @@ import com.googlecode.meteorframework.core.Resource;
 import com.googlecode.meteorframework.core.Scope;
 import com.googlecode.meteorframework.core.annotation.After;
 import com.googlecode.meteorframework.core.annotation.MeteorAnnotationUtils;
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 import com.googlecode.meteorframework.core.annotation.ModelAnnotationHandler;
 import com.googlecode.meteorframework.core.annotation.ProcessesAnnotations;
 
@@ -25,15 +25,15 @@ import com.googlecode.meteorframework.core.annotation.ProcessesAnnotations;
  * @see PropertyModelAnnotationHandler 
  * @author Ted Stockwell
  */
-@ProcessesAnnotations({Model.class})
-@Model public class MethodModelAnnotationHandler implements ModelAnnotationHandler {
+@ProcessesAnnotations({ModelElement.class})
+@ModelElement public class MethodModelAnnotationHandler implements ModelAnnotationHandler {
 	
 	private String[] _methodURIs;
 	private String[] _typeURIs;
 	private java.lang.reflect.Method _handlerMethod;
 	private boolean _isDefaultImplementation= false;
 	private Scope _scope;
-	private Model _annotation;
+	private ModelElement _annotation;
 	
 	
 	static class WildInfo { String wildURI; String typeURI; Interceptor interceptor; };
@@ -43,7 +43,7 @@ import com.googlecode.meteorframework.core.annotation.ProcessesAnnotations;
 		@Override @After public void addResource(Resource resource)
 		{
 			ObjectImpl impl= ObjectImpl.getObjectImpl(resource);
-			if (impl.getTypeURI().equals(CoreNS.Method.TYPE)) {
+			if (impl.getTypeURI().equals(CoreNS.Function.TYPE)) {
 				String methodURI= impl.internalGetURI();
 				for (WildInfo info : __wildInfo) {
 					if (MeteorAnnotationUtils.matches(info.wildURI, methodURI)) {
@@ -69,9 +69,9 @@ import com.googlecode.meteorframework.core.annotation.ProcessesAnnotations;
 		if (!(target instanceof Method))
 			return false;		
 		_handlerMethod= (Method)target;
-		_annotation= (Model)annotation;
+		_annotation= (ModelElement)annotation;
 		if (!Modifier.isAbstract(_handlerMethod.getModifiers())) {
-			List<String> advises= MeteorAnnotationUtils.getPropertyValues(_annotation, CoreNS.Method.advises);
+			List<String> advises= MeteorAnnotationUtils.getPropertyValues(_annotation, CoreNS.Function.decoratingMethods);
 			if (advises.isEmpty()) {
 				
 				Class<?> class1= _handlerMethod.getDeclaringClass();

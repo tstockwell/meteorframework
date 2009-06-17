@@ -2,8 +2,8 @@ package com.googlecode.meteorframework.core;
 
 import java.util.List;
 
-import com.googlecode.meteorframework.core.annotation.IsMethod;
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.IsFunction;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 import com.googlecode.meteorframework.core.annotation.SameAs;
 
 
@@ -12,7 +12,7 @@ import com.googlecode.meteorframework.core.annotation.SameAs;
  *  
  * @author Ted Stockwell
  */
-@Model public interface Provider 
+@ModelElement public interface Provider 
 extends Service
 {
 	/**
@@ -51,8 +51,8 @@ extends Service
 	 * @throws MeteorException if an instance of the given type cannot be 
 	 * instantiated. 
 	 */
-	@IsMethod public <T> T getInstance(TypeLiteral<T> type, BindingType... bindings);
-	@IsMethod public <T> T getInstance(Class<T> javaType, BindingType... bindings);
+	@IsFunction public <T> T getInstance(TypeLiteral<T> type, BindingType... bindings);
+	@IsFunction public <T> T getInstance(Class<T> javaType, BindingType... bindings);
 	
 	/**
 	 *	Creates a new instance of T.
@@ -95,8 +95,8 @@ extends Service
 	 * 		@Inject ServletRequest _request;
 	 * 
 	 */
-	@IsMethod public <T> void putInstance(T instance, TypeLiteral<T> type, BindingType... bindings);
-	@IsMethod public <T> void putInstance(T instance, Class<T> javaType, BindingType... bindings);
+	@IsFunction public <T> void putInstance(T instance, TypeLiteral<T> type, BindingType... bindings);
+	@IsFunction public <T> void putInstance(T instance, Class<T> javaType, BindingType... bindings);
 	
 	
 	/**

@@ -1,7 +1,7 @@
 package com.googlecode.meteorframework.test;
 
 import com.googlecode.meteorframework.core.Service;
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 
 /**
  * This subclass always returns the same value from the getName method.
@@ -9,11 +9,11 @@ import com.googlecode.meteorframework.core.annotation.Model;
  * @author Ted Stockwell
  *
  */
-@Model public interface CustomerSubclass extends Customer {
+@ModelElement public interface CustomerSubclass extends Customer {
 	
 	public static final String NAME= "97809870987adsfasdfasdf";
 	
-	@Model public interface Constructor extends Service {
+	@ModelElement public interface Constructor extends Service {
 		public CustomerSubclass create(String name);
 	}
 }

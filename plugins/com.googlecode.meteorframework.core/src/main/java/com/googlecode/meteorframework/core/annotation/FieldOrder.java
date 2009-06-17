@@ -12,7 +12,7 @@ import com.googlecode.meteorframework.core.CoreNS;
 @Documented
 @Retention(value=RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD, ElementType.TYPE, ElementType.PACKAGE})
-@EquivalentMetadata({CoreNS.Type.fieldOrder, "{$value}"})
+@EquivalentMetadata("<"+CoreNS.Type.fieldOrder+"> '{$value}'")
 public @interface FieldOrder 
 {
 	public String[] value();

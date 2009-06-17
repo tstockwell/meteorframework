@@ -12,7 +12,7 @@ import org.eclipse.pde.core.plugin.IPluginModelBase;
 import org.eclipse.pde.core.plugin.PluginRegistry;
 
 import com.googlecode.meteorframework.core.annotation.MeteorAnnotationUtils;
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 import com.sun.mirror.declaration.InterfaceDeclaration;
 import com.sun.mirror.declaration.MethodDeclaration;
 import com.sun.mirror.declaration.Modifier;
@@ -68,7 +68,7 @@ public class MeteorInfoBuilder {
 		while (!_classDeclarations.isEmpty()) {
 			InterfaceDeclaration classDeclaration= _classDeclarations.remove(0);
 			
-			if (classDeclaration.getAnnotation(Model.class) == null)
+			if (classDeclaration.getAnnotation(ModelElement.class) == null)
 				continue;
 			
 //			boolean isResource= false;
@@ -178,7 +178,7 @@ public class MeteorInfoBuilder {
 		
 		// write any nested classes
 		for (TypeDeclaration declaration : classDeclaration.getNestedTypes()) {
-			if (declaration.getAnnotation(Model.class) == null)
+			if (declaration.getAnnotation(ModelElement.class) == null)
 				continue;
 			if (declaration instanceof InterfaceDeclaration) {
 				writeClassNames(writer, (InterfaceDeclaration)declaration, prefix+"\t");

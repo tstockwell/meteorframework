@@ -9,10 +9,10 @@ import java.util.Set;
 import java.util.WeakHashMap;
 
 import com.googlecode.meteorframework.core.CoreNS;
+import com.googlecode.meteorframework.core.Function;
 import com.googlecode.meteorframework.core.InvocationContext;
 import com.googlecode.meteorframework.core.Meteor;
 import com.googlecode.meteorframework.core.MeteorException;
-import com.googlecode.meteorframework.core.Function;
 import com.googlecode.meteorframework.core.Property;
 import com.googlecode.meteorframework.core.Resource;
 import com.googlecode.meteorframework.core.Scope;
@@ -22,7 +22,7 @@ import com.googlecode.meteorframework.core.annotation.Decorator;
 import com.googlecode.meteorframework.core.annotation.Inject;
 import com.googlecode.meteorframework.core.annotation.IsSingleton;
 import com.googlecode.meteorframework.core.annotation.MeteorAnnotationUtils;
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 import com.googlecode.meteorframework.utils.Logging;
 
 /**
@@ -255,7 +255,7 @@ import com.googlecode.meteorframework.utils.Logging;
 		Class<?> javaType= type.getJavaType();
 		
 		// If not a Model class then do nothing (the class is probably a native Java type).
-		if (!javaType.isAnnotationPresent(Model.class))
+		if (!javaType.isAnnotationPresent(ModelElement.class))
 			return;
 		
 		// Add properties and methods from Java class
@@ -308,7 +308,7 @@ import com.googlecode.meteorframework.utils.Logging;
 		}
 		
 		type.setProperty(CoreNS.Type.declaredProperties, properties);
-		type.setProperty(CoreNS.Type.declaredMethods, methods);
+		type.setProperty(CoreNS.Type.declaredFunctions, methods);
 	}
 	
 	

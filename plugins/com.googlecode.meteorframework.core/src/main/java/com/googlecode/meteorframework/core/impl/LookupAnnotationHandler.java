@@ -5,7 +5,7 @@ import com.googlecode.meteorframework.core.MeteorException;
 import com.googlecode.meteorframework.core.Resource;
 import com.googlecode.meteorframework.core.Scope;
 import com.googlecode.meteorframework.core.annotation.Lookup;
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 import com.googlecode.meteorframework.core.annotation.ProcessesAnnotations;
 
 /**
@@ -14,7 +14,7 @@ import com.googlecode.meteorframework.core.annotation.ProcessesAnnotations;
  */
 @ProcessesAnnotations(Lookup.class)
 @SuppressWarnings("unchecked")
-@Model public class LookupAnnotationHandler extends InjectAnnotationHandler {
+@ModelElement public class LookupAnnotationHandler extends InjectAnnotationHandler {
 	
 	private String _uri;
 	

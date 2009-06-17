@@ -3,18 +3,18 @@ package com.googlecode.meteorframework.security;
 import java.util.Set;
 
 import com.googlecode.meteorframework.core.Service;
-import com.googlecode.meteorframework.core.annotation.IsMethod;
+import com.googlecode.meteorframework.core.annotation.IsFunction;
 import com.googlecode.meteorframework.core.annotation.IsReadOnly;
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 import com.googlecode.meteorframework.core.query.Selector;
 
 /**
  * An <code>AuthorizationContext</code> object provides information about the 
  * permissions granted to a User.
  */
-@Model public interface AuthorizationContext {
+@ModelElement public interface AuthorizationContext {
 	
-	@Model public interface Constructor extends Service {
+	@ModelElement public interface Constructor extends Service {
 		AuthorizationContext create(User user, Set<Permission<?>> permissions);
 	}
 	
@@ -44,7 +44,7 @@ import com.googlecode.meteorframework.core.query.Selector;
      * The User has permissions on an object that belongs to any of the sets 
      * of objects defined by the set of selectors.
      */
-    @IsMethod
+    @IsFunction
     public <T> Set<Selector<T>> getPermissionConstraints(T resource, ActionType securableAction);
 
 }

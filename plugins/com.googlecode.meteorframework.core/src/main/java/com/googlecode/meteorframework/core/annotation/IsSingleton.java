@@ -12,7 +12,7 @@ import com.googlecode.meteorframework.core.CoreNS;
 @Documented
 @Retention(value=RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE })
-@EquivalentMetadata({CoreNS.Type.singleton, "true"})
+@EquivalentMetadata("<"+CoreNS.Type.singleton+"> 'true'")
 public @interface IsSingleton 
 {
 }

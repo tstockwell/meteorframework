@@ -18,7 +18,7 @@ import com.googlecode.meteorframework.security.SecurityNS;
 @Documented
 @Retention(value=RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD, ElementType.TYPE})
-@EquivalentMetadata({SecurityNS.SecurableType.actions, "{$value}"})
+@EquivalentMetadata("<"+SecurityNS.SecurableType.actions+"> <{$value}>")
 public @interface CheckPermisson
 {
 	/**

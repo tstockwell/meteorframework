@@ -3,7 +3,6 @@ package com.googlecode.meteorframework.core;
 import java.util.Set;
 
 import com.googlecode.meteorframework.core.annotation.InverseOf;
-import com.googlecode.meteorframework.core.annotation.Model;
 
 
 /**
@@ -11,7 +10,10 @@ import com.googlecode.meteorframework.core.annotation.Model;
  * 
  * @param <T>  The type of object that this method returns.  Use java.lang.Void for void methods.
  */
-@Model public interface Function<T> extends Resource, ModelElement {
+@com.googlecode.meteorframework.core.annotation.ModelElement 
+public interface Function<T> 
+extends Resource, ModelElement 
+{
 	
 	/**
 	 * The set of Types to which this method belongs.
@@ -24,16 +26,10 @@ import com.googlecode.meteorframework.core.annotation.Model;
 	public abstract void setRange(Type<?> p_type);
 
 	/**
-	 * Denotes the Methods that this Method advises.
+	 * Denotes the Methods that decorate this function.
 	 */
-	@InverseOf(CoreNS.Function.advisedBy) 
-	public abstract Set<Function<T>> getAdvises();
-
-	/**
-	 * Denotes the Methods that advise this Method.
-	 */
-	@InverseOf(CoreNS.Function.advises) 
-	public abstract Set<Function<T>> getAdvisedBy();
+	@InverseOf(CoreNS.Method.decoratedFunctions) 
+	public abstract Set<Method<T>> getDecoratingMethods();
 
 	/**
 	 * Invoke this method.

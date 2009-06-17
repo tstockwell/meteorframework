@@ -12,7 +12,7 @@ import com.googlecode.meteorframework.core.CoreNS;
 @Documented
 @Retention(value=RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
-@EquivalentMetadata({CoreNS.Property.inverseOf, "{$value}"})
+@EquivalentMetadata("<"+CoreNS.Property.inverseOf+"> <{$value}>")
 public @interface InverseOf 
 {
 	public String value();

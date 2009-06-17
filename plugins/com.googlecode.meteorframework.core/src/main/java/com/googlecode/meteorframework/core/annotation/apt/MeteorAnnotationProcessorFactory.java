@@ -8,7 +8,7 @@ import java.util.Set;
 
 import org.eclipse.jdt.apt.core.env.EclipseAnnotationProcessorEnvironment;
 
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 import com.sun.mirror.apt.AnnotationProcessor;
 import com.sun.mirror.apt.AnnotationProcessorEnvironment;
 import com.sun.mirror.apt.AnnotationProcessorFactory;
@@ -24,7 +24,7 @@ implements AnnotationProcessorFactory
 
 	public Collection<String> supportedAnnotationTypes() {
 		ArrayList<String> annotations = new ArrayList<String>();
-		annotations.add( Model.class.getName() );
+		annotations.add( ModelElement.class.getName() );
 		return annotations;
 	}
 
@@ -32,7 +32,7 @@ implements AnnotationProcessorFactory
 		if (atds == null || atds.isEmpty())
 			return AnnotationProcessors.NO_OP;
 		for (AnnotationTypeDeclaration declaration : atds) {
-			if (declaration.getQualifiedName().equals(Model.class.getName())) {
+			if (declaration.getQualifiedName().equals(ModelElement.class.getName())) {
 				return new MeteorAnnotationProcessor( (EclipseAnnotationProcessorEnvironment)env );
 			}
 		}

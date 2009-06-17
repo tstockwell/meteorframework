@@ -1,12 +1,16 @@
 package com.googlecode.meteorframework.core;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
+import com.googlecode.meteorframework.core.binding.Formatted;
 import com.googlecode.meteorframework.utils.ArrayListSet;
 
 /**
@@ -17,7 +21,8 @@ import com.googlecode.meteorframework.utils.ArrayListSet;
  * 
  * @author ted stockwell
  */
-@Model public class BindingContext
+@SuppressWarnings("unchecked")
+@ModelElement public class BindingContext
 extends ArrayListSet<BindingType>
 {
 	private static final long	serialVersionUID	= 1L;
@@ -156,5 +161,18 @@ extends ArrayListSet<BindingType>
 	public boolean retainAll(Collection<?> c)
 	{
 		throw new UnsupportedOperationException();
+	}
+	
+	public <T> List<T> findInstances(Class<T> class1) 
+	{
+		if (_array == null)
+			return Collections.EMPTY_LIST;
+		ArrayList list= new ArrayList();
+		for (int i= 0; i < _array.length; i++)
+		{
+			if (((Resource)_array[i]).getType().isInstanceOf(class1))
+				list.add(_array[i]);
+		}
+		return list;
 	}
 }

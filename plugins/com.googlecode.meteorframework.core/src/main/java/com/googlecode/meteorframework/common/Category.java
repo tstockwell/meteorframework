@@ -4,7 +4,7 @@ import java.util.Set;
 
 import com.googlecode.meteorframework.core.Type;
 import com.googlecode.meteorframework.core.annotation.InverseOf;
-import com.googlecode.meteorframework.core.annotation.Model;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 
 
 /**
@@ -14,7 +14,7 @@ import com.googlecode.meteorframework.core.annotation.Model;
  * 
  * @author ted stockwell
  */
-@Model public interface Category<T>
+@ModelElement public interface Category<T>
 {
 	/**
 	 * The type of objects arranged by this category.
