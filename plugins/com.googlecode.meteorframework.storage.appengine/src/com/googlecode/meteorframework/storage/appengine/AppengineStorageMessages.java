@@ -1,6 +1,6 @@
 package com.googlecode.meteorframework.storage.appengine;
 
-import com.googlecode.meteorframework.core.annotation.DefaultValue;
+import com.googlecode.meteorframework.core.annotation.FormattedMessage;
 import com.googlecode.meteorframework.core.utils.Messages;
 
 public interface AppengineStorageMessages
