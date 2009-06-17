@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import com.googlecode.meteorframework.core.CoreNS;
+import com.googlecode.meteorframework.core.utils.TurtleReader;
+import com.googlecode.meteorframework.utils.Logging;
 import com.sun.mirror.declaration.MethodDeclaration;
 import com.sun.mirror.declaration.Modifier;
 
@@ -63,18 +65,26 @@ public class MeteorAnnotationUtils {
 		if (properties == null) {
 			//TODO - will need to expand this parsing facility
 			properties= new HashMap<String, List<String>>();
-			Setting[] settings= annotation.value();
+			Metadata[] settings= annotation.value();
 			if (settings != null) { 
-				for (Setting setting : settings) {
-					String uri= setting.property();
-					String value= setting.value();
-					if (uri != null && value != null) {
-						List<String> values= properties.get(uri);
-						if (values == null) {
-							values= new ArrayList<String>();
-							properties.put(uri, values);
+				for (Metadata setting : settings) {
+					String turtle= "meteor:model-annotation";
+					for (String string : setting.value())
+						turtle+= " "+string;
+					try {
+						TurtleReader reader= new TurtleReader(turtle);
+						List<TurtleReader.Statement> statements= reader.getStatements();
+						for (TurtleReader.Statement statement : statements)
+						{
+							List<String> values= properties.get(statement.predicate);
+							if (values == null) {
+								values= new ArrayList<String>();
+								properties.put(statement.predicate, values);
+							}
+							values.add(statement.object);
 						}
-						values.add(value);
+					} catch (Exception e) {
+						Logging.warning("Error parsing turtle-formatted metadata:"+turtle, e);
 					}
 				}
 			}

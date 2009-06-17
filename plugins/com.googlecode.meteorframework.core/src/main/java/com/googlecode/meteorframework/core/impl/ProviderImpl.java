@@ -62,11 +62,11 @@ implements Provider, Resource
 		DecoratorManager.injectDependencies(_scope, object, null, BindingContext.getBindingContext(bindings));
 	}
 	
-	@Override public <T> T createInstance(Class<T> javaType, BindingType... annotations)
+	@Override public <T> T createInstance(Class<T> javaType, BindingType... bindings)
 	{
 		if (javaType.isInterface()) {
 			InvocationContext ctx= Meteor.getInvocationContext();
-			BindingContext bindingContext= ctx.getFacets().union(annotations);
+			BindingContext bindingContext= ctx.getBindingContext().union(bindings);
 			Type type= DomainImpl.findType(_scope, javaType);
 			ObjectImpl resourceImpl= new ObjectImpl(_scope, type.getURI(), bindingContext);
 			resourceImpl.internalSetURI(Meteor.PROTOCOL+UUID.randomUUID());
@@ -121,7 +121,7 @@ implements Provider, Resource
 	@Override public <T> T findInstance(Class<T> javaType, BindingType... annotations)
 	{
 		InvocationContext ctx= Meteor.getInvocationContext();
-		BindingContext bindingContext= ctx.getFacets().union(annotations);
+		BindingContext bindingContext= ctx.getBindingContext().union(annotations);
 		T t= findInstance(javaType, bindingContext);
 		if (t != null)
 			return t;
@@ -168,7 +168,7 @@ implements Provider, Resource
 	@Override public <T> void putInstance(T instance, java.lang.Class<T> javaType, BindingType... annotations) 
 	{
 		InvocationContext ctx= Meteor.getInvocationContext();
-		BindingContext bindingContext= ctx.getFacets().union(annotations);
+		BindingContext bindingContext= ctx.getBindingContext().union(annotations);
 		putInstance(instance, javaType, bindingContext);
 	};
 	protected void putInstance(Object instance, java.lang.Class<?> javaType, BindingContext bindingContext) 
@@ -189,7 +189,7 @@ implements Provider, Resource
 	
 	public <T extends Service> T getInstance(Class<T> serviceClass, BindingType... annotations) {
 		InvocationContext ctx= Meteor.getInvocationContext();
-		BindingContext bindingContext= ctx.getFacets().union(annotations);
+		BindingContext bindingContext= ctx.getBindingContext().union(annotations);
 		T t= findInstance(serviceClass, annotations);
 		if (t == null) {
 			t= createInstance(serviceClass, annotations);

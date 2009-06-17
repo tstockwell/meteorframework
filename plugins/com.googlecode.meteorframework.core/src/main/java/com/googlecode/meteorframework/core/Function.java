@@ -11,13 +11,13 @@ import com.googlecode.meteorframework.core.annotation.Model;
  * 
  * @param <T>  The type of object that this method returns.  Use java.lang.Void for void methods.
  */
-@Model public interface Method<T> extends Resource, ModelElement {
+@Model public interface Function<T> extends Resource, ModelElement {
 	
 	/**
 	 * The set of Types to which this method belongs.
 	 * May be empty.
 	 */
-	@InverseOf(CoreNS.Type.declaredMethods) 
+	@InverseOf(CoreNS.Type.declaredFunctions) 
 	public abstract Set<Type<?>> getDomain();
 
 	public abstract Type<?> getRange();
@@ -26,14 +26,14 @@ import com.googlecode.meteorframework.core.annotation.Model;
 	/**
 	 * Denotes the Methods that this Method advises.
 	 */
-	@InverseOf(CoreNS.Method.advisedBy) 
-	public abstract Set<Method<T>> getAdvises();
+	@InverseOf(CoreNS.Function.advisedBy) 
+	public abstract Set<Function<T>> getAdvises();
 
 	/**
 	 * Denotes the Methods that advise this Method.
 	 */
-	@InverseOf(CoreNS.Method.advises) 
-	public abstract Set<Method<T>> getAdvisedBy();
+	@InverseOf(CoreNS.Function.advises) 
+	public abstract Set<Function<T>> getAdvisedBy();
 
 	/**
 	 * Invoke this method.

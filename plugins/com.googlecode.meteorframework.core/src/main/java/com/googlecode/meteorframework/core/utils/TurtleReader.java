@@ -12,6 +12,7 @@ import static com.googlecode.meteorframework.core.utils.TurtleGrammar.VERB;
 import java.io.IOException;
 import java.net.URL;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -24,6 +25,7 @@ import com.googlecode.meteorframework.parser.MatchResults;
 import com.googlecode.meteorframework.parser.node.AbstractNode;
 import com.googlecode.meteorframework.parser.node.Navigation;
 import com.googlecode.meteorframework.parser.util.Files;
+import com.sun.org.apache.bcel.internal.generic.GETSTATIC;
 
 
 /**
@@ -33,16 +35,36 @@ import com.googlecode.meteorframework.parser.util.Files;
  */
 public class TurtleReader
 {
+	
+	public static class Statement {
+		public String subject;
+		public String predicate;
+		public String object;
+		public Statement(String subject, String predicate, String object)
+		{
+			this.subject= subject;
+			this.predicate= predicate;
+			this.object= object;
+		}
+	}
 
 	static private final String COLON = ":";
 
-	AbstractNode _ast;
-	int _position;
-	HashMap<String, String> _prefixes = new HashMap<String, String>();
+	private AbstractNode _ast;
+	private int _position;
+	private HashMap<String, String> _prefixes = new HashMap<String, String>();
+	private List<Statement> _statements; 
 
 	public TurtleReader(URL url) throws IOException, ParseException
 	{
-		String input = Files.readAsString(url);
+		this(Files.readAsString(url), url);
+	}
+	public TurtleReader(String input) throws IOException, ParseException
+	{
+		this(input, null);
+	}
+	public TurtleReader(String input, URL url) throws IOException, ParseException
+	{
 		MatchResults results = TurtleGrammar.getMatcher().match(input);
 		for (AbstractNode ast : results.matches)
 			if (input.length() <= ast.end)
@@ -76,7 +98,9 @@ public class TurtleReader
 			column= end - pos;
 			line++;
 			
-			String msg= "Resource does not contain a valid Turtle document:" + url;
+			String msg= "Resource does not contain a valid Turtle document";
+			if (url != null)
+				msg+= ": " + url;
 			msg+= "\nError at line "+line+", column "+column;
 			msg+= "\n"+errorMsg;
 			throw new ParseException(msg, end);
@@ -84,6 +108,7 @@ public class TurtleReader
 		_ast = results.matches.get(0);
 
 		initializePrefixes();
+		_statements= createStatements();
 	}
 
 	private void initializePrefixes() throws ParseException
@@ -96,17 +121,16 @@ public class TurtleReader
 			_prefixes.put(nameNode.getText(), getURI(uriNode.getText()));
 		}
 	}
-
-	public void addMetadataToScope(Scope scope) throws ParseException
+	
+	protected List<Statement> createStatements() throws ParseException 
 	{
+		ArrayList<Statement> statements= new ArrayList<Statement>();
 		List<AbstractNode> triplesNodes = Navigation.findAllById(_ast, TRIPLES);
 		for (AbstractNode triplesNode : triplesNodes)
 		{
 			String subjectURI = getURI(Navigation.findById(triplesNode, SUBJECT).getText());
 			List<AbstractNode> valueNodes = Navigation.findAllById(triplesNode, PREDICATE_VALUES);
 
-			Resource resource = scope.findResourceByURI(subjectURI);
-			boolean addToRepository = false;
 			for (AbstractNode valueNode : valueNodes)
 			{
 				String predicate = Navigation.findById(valueNode, VERB).getText();
@@ -118,29 +142,47 @@ public class TurtleReader
 				{
 					String value = objectNode.getText();
 					String propertyURI = getURI(predicate);
-					Property<?> property = scope.findResourceByURI(propertyURI, Property.class);
-					if (property == null)
-						throw new ParseException("No such property:" + propertyURI, _position);
-
-					if (resource == null)
-					{
-						if (!CoreNS.Resource.type.equals(propertyURI))
-							throw new ParseException("Meteor N3 reader requires " +
-									CoreNS.Resource.type + 
-									" to be the first listed property", _position);
-
-						String typeURI = getURI(value);
-						Type<?> meteorType = scope.findResourceByURI(typeURI, Type.class);
-						if (meteorType == null)
-							throw new ParseException("No such type:" + typeURI, _position);
-						resource = (Resource) scope.getInstance(meteorType.getJavaType());
-						resource.setURI(subjectURI);
-						addToRepository = true;
-					}
-
-					resource.setProperty(getURI(predicate), getValue(value));
+					
+					statements.add(new Statement(subjectURI, propertyURI, value));
 				}
 			}
+		}
+		return statements;
+	}
+	public List<Statement> getStatements()  
+	{
+		return _statements;
+	}
+
+	public void addMetadataToScope(Scope scope) throws ParseException
+	{
+		List<Statement> statements= getStatements();
+		for (Statement statement : statements)
+		{
+
+			Property<?> property = scope.findResourceByURI(statement.predicate, Property.class);
+			if (property == null)
+				throw new ParseException("No such property:" + statement.predicate, _position);
+
+			Resource resource = scope.findResourceByURI(statement.subject);
+			boolean addToRepository = false;
+			if (resource == null)
+			{
+				if (!CoreNS.Resource.type.equals(statement.predicate))
+					throw new ParseException("Meteor N3 reader requires " +
+							CoreNS.Resource.type + 
+							" to be the first listed property", _position);
+
+				String typeURI = getURI(statement.object);
+				Type<?> meteorType = scope.findResourceByURI(typeURI, Type.class);
+				if (meteorType == null)
+					throw new ParseException("No such type:" + typeURI, _position);
+				resource = (Resource) scope.getInstance(meteorType.getJavaType());
+				resource.setURI(statement.subject);
+				addToRepository = true;
+			}
+
+			resource.setProperty(property, getValue(statement.object));
 
 			if (addToRepository)
 				scope.addResource(resource);

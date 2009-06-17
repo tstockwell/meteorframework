@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 @Documented
 @Retention(value=RetentionPolicy.RUNTIME)
 @Target({ElementType.ANNOTATION_TYPE})
-public @interface SemanticEquivalent
+public @interface EquivalentMetadata
 {
 	String[] value() default {};
 }

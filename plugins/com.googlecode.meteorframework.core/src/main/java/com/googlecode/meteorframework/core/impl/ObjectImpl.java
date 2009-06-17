@@ -11,6 +11,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import net.sf.cglib.proxy.Enhancer;
+import net.sf.cglib.proxy.MethodInterceptor;
+import net.sf.cglib.proxy.MethodProxy;
+
 import com.googlecode.meteorframework.core.BindingContext;
 import com.googlecode.meteorframework.core.CoreNS;
 import com.googlecode.meteorframework.core.Interceptor;
@@ -440,7 +444,7 @@ public class ObjectImpl implements Resource, Cloneable  {
 			_scope= this;
 		}
 		addRole(Resource.class, this);
-		setValue(CoreNS.Resource.facets, bindingContext);
+		setValue(CoreNS.Resource.bindingContext, bindingContext);
 		_uri= Meteor.PROTOCOL+UUID.randomUUID();
 	}
 	public ObjectImpl(Scope scope, String typeURI, BindingContext bindingContext) {
@@ -517,7 +521,7 @@ public class ObjectImpl implements Resource, Cloneable  {
 	}
 
 	@Override public BindingContext getBindingContext() {
-		return getProperty(CoreNS.Resource.facets);
+		return getProperty(CoreNS.Resource.bindingContext);
 	}
 
 	@Override public void addProperty(String propertyURI, Object value, Object... parameters)
@@ -546,11 +550,11 @@ public class ObjectImpl implements Resource, Cloneable  {
 		setProperty(ObjectImpl.getObjectImpl(property).internalGetURI(), value, parameters);
 	}
 	@Override public Type getType() {
-		return (Type)MethodDispatcher.invoke(CoreNS.Resource.getProperty, this, new Object[] { MeteorNS.Resource.type, new Object[0] });
+		return (Type)MethodDispatcher.invoke(CoreNS.Resource.getProperty, this, new Object[] { CoreNS.Resource.type, new Object[0] });
 	}
 	@Override public Set<String> getSameAs()
 	{
-		return (Set<String>)MethodDispatcher.invoke(CoreNS.Resource.getProperty, this, new Object[] { MeteorNS.Resource.sameAs, new Object[0] });
+		return (Set<String>)MethodDispatcher.invoke(CoreNS.Resource.getProperty, this, new Object[] { CoreNS.Resource.sameAs, new Object[0] });
 	}
 	@Override public <T> T getProperty(String propertyURI, Object... arguments) {
 		Object[] args= new Object[2];
@@ -607,7 +611,7 @@ public class ObjectImpl implements Resource, Cloneable  {
 		setProperty(CoreNS.Resource.type, javaType);
 	}
 	@Override public void setBindingContext(BindingContext bindingContext) {
-		setProperty(CoreNS.Resource.facets, bindingContext);
+		setProperty(CoreNS.Resource.bindingContext, bindingContext);
 	}
 	@Override public void setSameAs(Set<String> uris)
 	{

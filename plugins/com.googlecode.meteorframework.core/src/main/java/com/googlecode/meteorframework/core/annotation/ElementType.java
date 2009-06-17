@@ -11,7 +11,7 @@ import com.googlecode.meteorframework.core.CoreNS;
 @Documented
 @Retention(value=RetentionPolicy.RUNTIME)
 @Target({java.lang.annotation.ElementType.METHOD})
-@SemanticEquivalent({CoreNS.Resource.type, "{$value}"})
+@EquivalentMetadata({CoreNS.Resource.type, "{$value}"})
 public @interface ElementType 
 {
 	public String value();

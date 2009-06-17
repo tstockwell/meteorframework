@@ -2,7 +2,7 @@ package com.googlecode.meteorframework.core.impl;
 
 import com.googlecode.meteorframework.core.InvocationContext;
 import com.googlecode.meteorframework.core.Meteor;
-import com.googlecode.meteorframework.core.Method;
+import com.googlecode.meteorframework.core.Function;
 import com.googlecode.meteorframework.core.Scope;
 import com.googlecode.meteorframework.core.Type;
 import com.googlecode.meteorframework.core.annotation.Decorates;
@@ -14,11 +14,11 @@ import com.googlecode.meteorframework.core.annotation.Inject;
  * 
  * @author ted stockwell
  */
-@Decorator public abstract class MethodAdvice<T> implements Method<T>
+@Decorator public abstract class MethodAdvice<T> implements Function<T>
 {
 	
 	@Inject Scope _repository;
-	@Decorates Method<T> _self;
+	@Decorates Function<T> _self;
 	
 	@Override public Type<?> getRange() {
 		
@@ -40,9 +40,9 @@ import com.googlecode.meteorframework.core.annotation.Inject;
 		return ObjectImpl.getObjectImpl(objRange).internalCast(Type.class);
 	}
 
-	public static Method<?> createMethod(Scope scope, java.lang.reflect.Method javaMethod)
+	public static Function<?> createMethod(Scope scope, java.lang.reflect.Method javaMethod)
 	{
-		Method<?> method= scope.getInstance(Method.class);
+		Function<?> method= scope.getInstance(Function.class);
 		method.setURI(Meteor.getURIForMethod(javaMethod));
 		
 		// set range

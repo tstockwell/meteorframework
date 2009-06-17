@@ -97,7 +97,7 @@ import com.googlecode.meteorframework.core.annotation.Model;
 	@IsMethod 
 	public void addProperty(String propertyURI, Object value, Object...parameters);
 	
-	@ElementType(CoreNS.Method.TYPE) 
+	@ElementType(CoreNS.Function.TYPE) 
 	public void removeProperty(String propertyURI, Object value, Object...parameters);
 	
 	@IsMethod 

@@ -11,6 +11,6 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE, ElementType.METHOD, ElementType.PARAMETER, ElementType.PACKAGE})
 public @interface Model {
 	
-	Setting[] value() default {};
+	Metadata[] value() default {};
 
 }

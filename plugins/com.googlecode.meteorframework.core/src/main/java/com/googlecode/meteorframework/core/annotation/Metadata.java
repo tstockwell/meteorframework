@@ -9,13 +9,6 @@ import java.lang.annotation.Target;
 @Documented
 @Retention(value=RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE, ElementType.METHOD})
-public @interface Setting {
-
-	/**
-	 * a property URI
-	 */
-	String property();
-
-	String value() default "";
-	Class<?> javaClass() default Setting.class;
+public @interface Metadata {
+	String[] value();
 }

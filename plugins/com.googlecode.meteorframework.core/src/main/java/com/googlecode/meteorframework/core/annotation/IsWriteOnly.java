@@ -17,7 +17,7 @@ import com.googlecode.meteorframework.core.CoreNS;
 @Documented
 @Retention(value=RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
-@SemanticEquivalent({CoreNS.Property.writeOnly, "true"})
+@EquivalentMetadata({CoreNS.Property.writeOnly, "true"})
 public @interface IsWriteOnly 
 {
 }

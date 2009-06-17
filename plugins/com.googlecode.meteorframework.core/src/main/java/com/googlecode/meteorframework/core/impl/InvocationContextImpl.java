@@ -70,7 +70,7 @@ public class InvocationContextImpl implements InvocationContext {
 		if (receiver != null)
 			_bindingContext= _bindingContext.union((BindingContext)impl.getValue(CoreNS.Resource.bindingContext));
 		if (Meteor.isMeteorInvocation())
-			_bindingContext= _bindingContext.union(Meteor.getInvocationContext().getFacets());
+			_bindingContext= _bindingContext.union(Meteor.getInvocationContext().getBindingContext());
 		_interceptors= new ArrayList<Interceptor>();
 		for (Interceptor interceptor : interceptors) {
 			if (_bindingContext.isSuperSetOf(interceptor.getBindingContext()))
@@ -197,7 +197,7 @@ public class InvocationContextImpl implements InvocationContext {
 			}
 		}
 	}
-	@Override public BindingContext getFacets()
+	@Override public BindingContext getBindingContext()
 	{
 		return _bindingContext;
 	}
