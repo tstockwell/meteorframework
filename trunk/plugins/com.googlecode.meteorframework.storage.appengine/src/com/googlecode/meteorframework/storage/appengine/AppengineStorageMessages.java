@@ -6,7 +6,7 @@ import com.googlecode.meteorframework.core.utils.Messages;
 public interface AppengineStorageMessages
 extends Messages
 {
-	@Formatted("No such root entity:{0}")
+	@FormattedMessage("No such root entity:{0}")
 	String getNoSuchRootEntity(String entityName);
 
 }

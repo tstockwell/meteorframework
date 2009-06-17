@@ -9,7 +9,7 @@ import java.util.Map;
 import com.googlecode.meteorframework.core.CoreNS;
 import com.googlecode.meteorframework.core.Interceptor;
 import com.googlecode.meteorframework.core.MeteorMethodNotImplementedException;
-import com.googlecode.meteorframework.core.Method;
+import com.googlecode.meteorframework.core.Function;
 import com.googlecode.meteorframework.core.Resource;
 
 
@@ -24,7 +24,7 @@ public class MethodDispatcher {
 	static private Map<String, Map<String, ParameterTypeSpecializer>> _specializersByType= new HashMap<String, Map<String,ParameterTypeSpecializer>>();
 	
 
-	public static <T> T invoke(Method<T> p_method, Resource receiver, Object... arguments) {
+	public static <T> T invoke(Function<T> p_method, Resource receiver, Object... arguments) {
 		return (T)invoke(ObjectImpl.getObjectImpl(p_method).internalGetURI(), receiver, arguments);
 	}
 	public static Object invoke(String methodURI, Resource receiver, Object... arguments) {

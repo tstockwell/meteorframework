@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.googlecode.meteorframework.core.Interceptor;
-import com.googlecode.meteorframework.core.Method;
+import com.googlecode.meteorframework.core.Function;
 import com.googlecode.meteorframework.core.Resource;
 
 
@@ -190,7 +190,7 @@ public class ParameterTypeSpecializer extends BaseSpecializer {
 	
 	
 	
-	public void removeSpecializers(Method p_method) {
+	public void removeSpecializers(Function p_method) {
 		_specializersByParameterType.remove(ObjectImpl.getObjectImpl(p_method).internalGetURI());
 	}
 	public void addInterceptor(Interceptor p_interceptor) {

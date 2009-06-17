@@ -9,22 +9,23 @@ import com.googlecode.meteorframework.core.Scope;
 import com.googlecode.meteorframework.core.annotation.Model;
 import com.googlecode.meteorframework.core.annotation.ModelAnnotationHandler;
 import com.googlecode.meteorframework.core.annotation.ProcessesAnnotations;
-import com.googlecode.meteorframework.core.annotation.SemanticEquivalent;
-import com.googlecode.meteorframework.core.annotation.Setting;
+import com.googlecode.meteorframework.core.annotation.EquivalentMetadata;
+import com.googlecode.meteorframework.core.annotation.Metadata;
+import com.googlecode.meteorframework.core.utils.TurtleReader;
 import com.googlecode.meteorframework.utils.Logging;
 
-@ProcessesAnnotations(SemanticEquivalent.class)
+@ProcessesAnnotations(EquivalentMetadata.class)
 @Model 
 public class SemanticEquivalentAnnotationHandler implements ModelAnnotationHandler {
 	
 	public static class SemanticHandler implements ModelAnnotationHandler {
 		
-		private SemanticEquivalent _semanticEquivalent;
+		private EquivalentMetadata _semanticEquivalent;
 		private Object _annotation;
 		private String _targetURI;
 		private Scope _scope;
 		
-		public SemanticHandler(SemanticEquivalent semanticEquivalent) {
+		public SemanticHandler(EquivalentMetadata semanticEquivalent) {
 			_semanticEquivalent= semanticEquivalent;
 		}
 
@@ -49,29 +50,21 @@ public class SemanticEquivalentAnnotationHandler implements ModelAnnotationHandl
 					Logging.severe("Failed to add annotation metadata, resource not found: "+_targetURI);
 					return;
 				}
-				Setting[] settings= _semanticEquivalent.value();
-				for (Setting setting: settings) 
+
+				String[]  strings= _semanticEquivalent.value();
+				String turtle= _targetURI;
+				for (String string : strings)
 				{
-					String propertyURI= setting.property();
-					
-					String value= setting.value();
-					Object pvalue= value;
-					if (value.equals("{$value}") ) {
-						Method method= _annotation.getClass().getDeclaredMethod("value", (Class<?>[])null);
-						pvalue= method.invoke(_annotation, (Object[])null);
-					}
-					else if (value.contains("{$value}") ) {
-						Method method= _annotation.getClass().getDeclaredMethod("value", (Class<?>[])null);
-						Object object= method.invoke(_annotation, (Object[])null);
-						pvalue= value.replace("{$value}", object.toString());
-					}
-						
-					resource.setProperty(propertyURI, pvalue);
+					turtle+= " ";
+					turtle+= string;
 				}
+				
+				TurtleReader reader= new TurtleReader(turtle);
+				reader.addMetadataToScope(_scope);
 			} 
 			catch (Throwable e)
 			{
-				e.printStackTrace();
+				Logging.warning("Error while adding metadata from Java annoation", e);
 			}
 		}
 
@@ -86,9 +79,9 @@ public class SemanticEquivalentAnnotationHandler implements ModelAnnotationHandl
 	
 	public static class SemanticHandlerFactory implements ModelAnnotationHandler.Factory 
 	{
-		SemanticEquivalent _semanticEquivalent;
+		EquivalentMetadata _semanticEquivalent;
 		
-		public SemanticHandlerFactory(SemanticEquivalent semanticEquivalent)
+		public SemanticHandlerFactory(EquivalentMetadata semanticEquivalent)
 		{
 			_semanticEquivalent= semanticEquivalent;
 		}
@@ -107,7 +100,7 @@ public class SemanticEquivalentAnnotationHandler implements ModelAnnotationHandl
 	public boolean initialize(Scope repository, Object annotation, Object target) {
 		Class<?> annotationType= (Class<?>) target;
 		Meteor.registerModelAnnotationHandler(annotationType, 
-				new SemanticHandlerFactory((SemanticEquivalent)annotation));
+				new SemanticHandlerFactory((EquivalentMetadata)annotation));
 		return false;
 	}
 

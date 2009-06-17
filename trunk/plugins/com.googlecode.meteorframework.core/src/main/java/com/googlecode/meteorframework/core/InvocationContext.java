@@ -41,5 +41,5 @@ public interface InvocationContext {
 	 * that is the union of the receiver's  facet context 
 	 * and the facet context of the last invocation on the stack.  
 	 */
-	public BindingContext getFacets();
+	public BindingContext getBindingContext();
 }

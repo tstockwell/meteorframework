@@ -12,7 +12,7 @@ import com.googlecode.meteorframework.core.CoreNS;
 @Documented
 @Retention(value=RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
-@SemanticEquivalent({CoreNS.Type.extensionOf, "{$value}"})
+@EquivalentMetadata({CoreNS.Type.extensionOf, "{$value}"})
 public @interface ExtensionOf 
 {
 	public String value();

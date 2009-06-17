@@ -12,7 +12,7 @@ import com.googlecode.meteorframework.core.CoreNS;
 import com.googlecode.meteorframework.core.InvocationContext;
 import com.googlecode.meteorframework.core.Meteor;
 import com.googlecode.meteorframework.core.MeteorException;
-import com.googlecode.meteorframework.core.Method;
+import com.googlecode.meteorframework.core.Function;
 import com.googlecode.meteorframework.core.Property;
 import com.googlecode.meteorframework.core.Resource;
 import com.googlecode.meteorframework.core.Scope;
@@ -261,7 +261,7 @@ import com.googlecode.meteorframework.utils.Logging;
 		// Add properties and methods from Java class
 		Set<String> propertyURIs= new HashSet<String>();
 		Set<Property<?>> properties= new LinkedHashSet<Property<?>>();
-		Set<Method<?>> methods= new LinkedHashSet<Method<?>>();
+		Set<Function<?>> methods= new LinkedHashSet<Function<?>>();
 		java.lang.reflect.Method[] declaredMethods= javaType.getDeclaredMethods();
 		
 		for (int i = 0; i < declaredMethods.length; i++) {
@@ -272,7 +272,7 @@ import com.googlecode.meteorframework.utils.Logging;
 			
 			String uri= Meteor.getURIForMethod(javaMethod);
 			if (MeteorAnnotationUtils.isMeteorMethod(javaMethod)) {
-				Method<?> method= MethodAdvice.createMethod(repository, javaMethod);
+				Function<?> method= MethodAdvice.createMethod(repository, javaMethod);
 				methods.add(method);
 			}
 			else if (MeteorAnnotationUtils.isMeteorProperty(javaMethod)) {

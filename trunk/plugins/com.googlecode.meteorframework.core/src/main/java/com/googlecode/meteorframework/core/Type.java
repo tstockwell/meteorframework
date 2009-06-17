@@ -32,8 +32,8 @@ import com.googlecode.meteorframework.core.annotation.Model;
 	@InverseOf(CoreNS.Property.domain) 
 	public Set<Property<?>> getDeclaredProperties();
 
-	@InverseOf(CoreNS.Method.domain) 
-	public Set<Method<?>> getDeclaredMethods();
+	@InverseOf(CoreNS.Function.domain) 
+	public Set<Function<?>> getDeclaredFunctions();
 	
 	@IsMethod
 	public boolean isAssignableFrom(Type<? extends T> type);

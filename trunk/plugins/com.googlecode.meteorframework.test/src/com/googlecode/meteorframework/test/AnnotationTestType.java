@@ -7,10 +7,10 @@ import com.googlecode.meteorframework.core.Service;
 import com.googlecode.meteorframework.core.annotation.Decorator;
 import com.googlecode.meteorframework.core.annotation.Inject;
 import com.googlecode.meteorframework.core.annotation.Model;
-import com.googlecode.meteorframework.core.annotation.Setting;
+import com.googlecode.meteorframework.core.annotation.Metadata;
 
 //do not remove this annotation, it is used for testing purposes 
-@Model({@Setting(property=CoreNS.Resource.description, value=BootstrapTests.TEST_VALUE)})
+@Model({@Metadata({CoreNS.Resource.description, BootstrapTests.TEST_VALUE})})
 public interface AnnotationTestType extends Service
 {
 	

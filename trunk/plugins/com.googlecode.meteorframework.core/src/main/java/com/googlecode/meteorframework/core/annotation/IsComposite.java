@@ -12,7 +12,7 @@ import com.googlecode.meteorframework.core.CoreNS;
 @Documented
 @Retention(value=RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
-@SemanticEquivalent({CoreNS.Property.composite, "{$value}"})
+@EquivalentMetadata({CoreNS.Property.composite, "{$value}"})
 public @interface IsComposite 
 {
 	public String value() default "true";

@@ -12,7 +12,6 @@ Export-Package: net.sf.cglib.asm,
  net.sf.cglib.transform,
  net.sf.cglib.transform.impl,
  net.sf.cglib.util
-Bundle-ClassPath: .
 Import-Package: org.objectweb.asm,
  org.objectweb.asm.attrs,
  org.objectweb.asm.signature

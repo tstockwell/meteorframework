@@ -13,7 +13,7 @@ import com.googlecode.meteorframework.core.binding.BindingNS;
 @Documented
 @Retention(value=RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
-@SemanticEquivalent({
+@EquivalentMetadata({
 	CoreNS.Resource.bindingContext, "[", 
 		CoreNS.Resource.type, BindingNS.Formatted.TYPE, ";",
 		BindingNS.Formatted.format, "{$value}",

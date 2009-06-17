@@ -119,7 +119,7 @@ import com.googlecode.meteorframework.core.utils.ConversionService;
 
 		// get binding context and then remove interceptors that have any 
 		// binding not in the current context.
-		BindingContext bindingContext= ctx.getFacets();
+		BindingContext bindingContext= ctx.getBindingContext();
 		ArrayList<Interceptor> boundInterceptors= new ArrayList<Interceptor>();
 		for (Interceptor interceptor : interceptors) {
 			if (bindingContext.isSuperSetOf(interceptor.getBindingContext()))
@@ -128,7 +128,7 @@ import com.googlecode.meteorframework.core.utils.ConversionService;
 		interceptors= boundInterceptors;
 
 
-		InvocationContextImpl newCtx= new InvocationContextImpl(propertyURI, _self, parameters, interceptors, ctx.getFacets());
+		InvocationContextImpl newCtx= new InvocationContextImpl(propertyURI, _self, parameters, interceptors, ctx.getBindingContext());
 		Object result= newCtx.run();
 		return (T)result;
 	}
@@ -220,7 +220,7 @@ import com.googlecode.meteorframework.core.utils.ConversionService;
 
 		// get binding context and then remove interceptors that have any 
 		// binding not in the current context.
-		BindingContext bindingContext= ctx.getFacets();
+		BindingContext bindingContext= ctx.getBindingContext();
 		ArrayList<Interceptor> boundInterceptors= new ArrayList<Interceptor>();
 		for (Interceptor interceptor : interceptors) {
 			if (bindingContext.isSuperSetOf(interceptor.getBindingContext()))
@@ -228,7 +228,7 @@ import com.googlecode.meteorframework.core.utils.ConversionService;
 		}
 		interceptors= boundInterceptors;
 
-		InvocationContextImpl newCtx= new InvocationContextImpl(propertyURI, _self, new Object[] {value, parameters}, interceptors, ctx.getFacets());
+		InvocationContextImpl newCtx= new InvocationContextImpl(propertyURI, _self, new Object[] {value, parameters}, interceptors, ctx.getBindingContext());
 		newCtx.run();
 	}
 	
