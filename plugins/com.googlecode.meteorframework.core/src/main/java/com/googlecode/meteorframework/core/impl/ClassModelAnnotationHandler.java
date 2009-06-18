@@ -2,17 +2,17 @@ package com.googlecode.meteorframework.core.impl;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 import com.googlecode.meteorframework.core.Meteor;
+import com.googlecode.meteorframework.core.MeteorParseException;
 import com.googlecode.meteorframework.core.Namespace;
 import com.googlecode.meteorframework.core.Scope;
 import com.googlecode.meteorframework.core.Type;
 import com.googlecode.meteorframework.core.annotation.MeteorAnnotationUtils;
-import com.googlecode.meteorframework.core.annotation.ModelElement;
 import com.googlecode.meteorframework.core.annotation.ModelAnnotationHandler;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 import com.googlecode.meteorframework.core.annotation.ProcessesAnnotations;
 
 
@@ -81,14 +81,15 @@ import com.googlecode.meteorframework.core.annotation.ProcessesAnnotations;
 
 	@Override public void addAnnotationMetadata()
 	{
-		if (_javaType != null) {
-			Type type= DomainImpl.findType(_scope, _javaType);
-			Map<String, List<String>> annotationProperties= MeteorAnnotationUtils.getAllPropertyValues(_annotation);
-			for (Object propertyURI : annotationProperties.keySet()) {
-				List<String> values= annotationProperties.get(propertyURI);
-				for (String value : values)
-					type.setProperty((String)propertyURI, value);
+		String turtle= null;
+		try {
+			if (_javaType != null && 0 < _annotation.value().length()) {
+				Type type= DomainImpl.findType(_scope, _javaType);
+				turtle= "<"+type.getURI()+"> "+_annotation.value();
+				MeteorAnnotationUtils.addMetadata(_scope, turtle);
 			}
+		} catch (ParseException e) {
+			throw new MeteorParseException("Error parsing metadata: "+turtle, e);
 		}
 	}
 

@@ -1,16 +1,16 @@
 package com.googlecode.meteorframework.core.impl;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-
 
 import com.googlecode.meteorframework.core.Meteor;
 import com.googlecode.meteorframework.core.Resource;
 import com.googlecode.meteorframework.core.Scope;
-import com.googlecode.meteorframework.core.annotation.ModelElement;
-import com.googlecode.meteorframework.core.annotation.ModelAnnotationHandler;
-import com.googlecode.meteorframework.core.annotation.ProcessesAnnotations;
 import com.googlecode.meteorframework.core.annotation.EquivalentMetadata;
-import com.googlecode.meteorframework.core.annotation.Metadata;
+import com.googlecode.meteorframework.core.annotation.MeteorAnnotationUtils;
+import com.googlecode.meteorframework.core.annotation.ModelAnnotationHandler;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
+import com.googlecode.meteorframework.core.annotation.ProcessesAnnotations;
 import com.googlecode.meteorframework.core.utils.TurtleReader;
 import com.googlecode.meteorframework.utils.Logging;
 
@@ -51,20 +51,27 @@ public class SemanticEquivalentAnnotationHandler implements ModelAnnotationHandl
 					return;
 				}
 
-				String[]  strings= _semanticEquivalent.value();
-				String turtle= _targetURI;
-				for (String string : strings)
+				// get turtle metadata and replace all variables
+				String turtle= "<"+resource.getURI() + "> " + _semanticEquivalent.value();
+				turtle= turtle.trim();
+				if (!turtle.endsWith("."))
+					turtle+= ".";
+				for (Method method : ((Annotation)_annotation).annotationType().getDeclaredMethods())
 				{
-					turtle+= " ";
-					turtle+= string;
+					String value=""; 
+					Object object= method.invoke(_annotation, (Object[])null);
+					if (object != null)
+						value= object.toString();
+					String token= "{$"+method.getName()+"}";
+					while (turtle.contains(token))
+						turtle= turtle.replace(token, value);
 				}
 				
-				TurtleReader reader= new TurtleReader(turtle);
-				reader.addMetadataToScope(_scope);
+				MeteorAnnotationUtils.addMetadata(_scope, turtle);
 			} 
 			catch (Throwable e)
 			{
-				Logging.warning("Error while adding metadata from Java annoation", e);
+				Logging.warning("Error while adding metadata from Java annotation", e);
 			}
 		}
 
