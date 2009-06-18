@@ -4,8 +4,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import com.googlecode.meteorframework.core.CoreNS;
 import com.googlecode.meteorframework.core.Interceptor;
@@ -14,8 +12,8 @@ import com.googlecode.meteorframework.core.Resource;
 import com.googlecode.meteorframework.core.Scope;
 import com.googlecode.meteorframework.core.annotation.After;
 import com.googlecode.meteorframework.core.annotation.MeteorAnnotationUtils;
-import com.googlecode.meteorframework.core.annotation.ModelElement;
 import com.googlecode.meteorframework.core.annotation.ModelAnnotationHandler;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
 import com.googlecode.meteorframework.core.annotation.ProcessesAnnotations;
 
 
@@ -33,7 +31,6 @@ import com.googlecode.meteorframework.core.annotation.ProcessesAnnotations;
 	private java.lang.reflect.Method _handlerMethod;
 	private boolean _isDefaultImplementation= false;
 	private Scope _scope;
-	private ModelElement _annotation;
 	
 	
 	static class WildInfo { String wildURI; String typeURI; Interceptor interceptor; };
@@ -69,36 +66,24 @@ import com.googlecode.meteorframework.core.annotation.ProcessesAnnotations;
 		if (!(target instanceof Method))
 			return false;		
 		_handlerMethod= (Method)target;
-		_annotation= (ModelElement)annotation;
 		if (!Modifier.isAbstract(_handlerMethod.getModifiers())) {
-			List<String> advises= MeteorAnnotationUtils.getPropertyValues(_annotation, CoreNS.Function.decoratingMethods);
-			if (advises.isEmpty()) {
-				
-				Class<?> class1= _handlerMethod.getDeclaringClass();
-				_typeURIs= new String[] { Meteor.getURIForClass(class1) };
-				Method implementedMethod= _handlerMethod;
-				
-				// does method override another Model method?
-				_isDefaultImplementation= true;
-				try {
-					Method overriddenMethod= ReflectionUtils.getOverriddenMethod(_handlerMethod);
-					if (overriddenMethod != null) {
-						implementedMethod= overriddenMethod;
-						_isDefaultImplementation= false;
-					}
-				} 
-				catch (Throwable e) { 
+			Class<?> class1= _handlerMethod.getDeclaringClass();
+			_typeURIs= new String[] { Meteor.getURIForClass(class1) };
+			Method implementedMethod= _handlerMethod;
+
+			// does method override another Model method?
+			_isDefaultImplementation= true;
+			try {
+				Method overriddenMethod= ReflectionUtils.getOverriddenMethod(_handlerMethod);
+				if (overriddenMethod != null) {
+					implementedMethod= overriddenMethod;
+					_isDefaultImplementation= false;
 				}
-				
-				_methodURIs= new String[] { Meteor.getURIForMethod(implementedMethod) };
+			} 
+			catch (Throwable e) { 
 			}
-			else {			
-				_methodURIs= advises.toArray(new String[advises.size()]);
-				_typeURIs= new String[advises.size()];
-				String uri= Meteor.getURIForClass(_handlerMethod.getDeclaringClass().getSuperclass());
-				for (int i= 0; i < _typeURIs.length; i++)
-					_typeURIs[i]= uri;
-			}
+
+			_methodURIs= new String[] { Meteor.getURIForMethod(implementedMethod) };
 		}
 		return true;
 	}
@@ -140,26 +125,12 @@ import com.googlecode.meteorframework.core.annotation.ProcessesAnnotations;
 
 	@Override public void addAnnotationMetadata()
 	{
-		Map<String, List<String>> annotationProperties= MeteorAnnotationUtils.getAllPropertyValues(_annotation);
-		if (!annotationProperties.isEmpty()) {
-			Method implementedMethod= ReflectionUtils.getOverriddenMethod(_handlerMethod);
-			if (implementedMethod == null) 
-				implementedMethod= _handlerMethod;
-			String resourceURI= Meteor.getURIForMethod(implementedMethod);
-			
-			Resource resource= RepositoryImpl.findResourceByURI(_scope, resourceURI);
-			for (Object propertyURI : annotationProperties.keySet()) {
-				List<String> values= annotationProperties.get(propertyURI);
-				for (String value : values)
-					resource.setProperty((String)propertyURI, value);
-			}
-		}
+		// do nothing		
 	}
 
 
 	@Override public void addTypeDefinitions()
 	{
 		// TODO Auto-generated method stub
-		
 	}
 }

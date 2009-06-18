@@ -13,8 +13,8 @@ import com.googlecode.meteorframework.core.CoreNS;
 @Retention(value=RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD, ElementType.TYPE, ElementType.PACKAGE})
 @EquivalentMetadata("<"+CoreNS.Namespace.dependencies+"> <{$value}>")
-public @interface NamespaceDependency 
+public @interface NamespaceDependencies 
 {
-	public String value();
+	public String[] value();
 	
 }

@@ -23,9 +23,9 @@ import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 
 import com.googlecode.meteorframework.core.annotation.InjectionAnnotationHandler;
-import com.googlecode.meteorframework.core.annotation.MeteorAnnotationUtils;
-import com.googlecode.meteorframework.core.annotation.ModelElement;
 import com.googlecode.meteorframework.core.annotation.ModelAnnotationHandler;
+import com.googlecode.meteorframework.core.annotation.ModelElement;
+import com.googlecode.meteorframework.core.annotation.NamespaceDependencies;
 import com.googlecode.meteorframework.core.annotation.ProcessesAnnotations;
 import com.googlecode.meteorframework.utils.Logging;
 
@@ -91,19 +91,17 @@ implements MeteorMetadataProvider
 					
 					if (class1.getName().endsWith(".package-info")) {
 						java.lang.Package package1= class1.getPackage();
-						ModelElement modelAnnotation= package1.getAnnotation(ModelElement.class);
-						if (modelAnnotation != null) {
-							List<String> dependencies= MeteorAnnotationUtils.getPropertyValues(modelAnnotation, CoreNS.Namespace.dependencies);
-							if (!dependencies.isEmpty()) {
-								HashSet<String> packageNames= new HashSet<String>();
-								for (String packageURI : dependencies) {
-									String packageName= packageURI;
-									if (packageName.startsWith(Meteor.PROTOCOL))
-										packageName= packageName.substring(Meteor.PROTOCOL.length());
-									packageNames.add(packageName);
-								}
+						NamespaceDependencies namespaceDependencies= package1.getAnnotation(NamespaceDependencies.class);
+						if (namespaceDependencies != null)
+						{
+							HashSet<String> packageNames= packageDependencies.get(package1.getName());
+							if (packageNames == null)
+							{
+								packageNames= new HashSet<String>();
 								packageDependencies.put(package1.getName(), packageNames);
 							}
+							for (String packageName : namespaceDependencies.value())
+								packageNames.add(packageName);
 						}
 					}
 					

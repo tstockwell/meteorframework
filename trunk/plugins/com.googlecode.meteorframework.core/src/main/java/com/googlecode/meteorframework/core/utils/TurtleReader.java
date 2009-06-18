@@ -58,11 +58,11 @@ public class TurtleReader
 	{
 		this(Files.readAsString(url), url);
 	}
-	public TurtleReader(String input) throws IOException, ParseException
+	public TurtleReader(String input) throws ParseException
 	{
 		this(input, null);
 	}
-	public TurtleReader(String input, URL url) throws IOException, ParseException
+	public TurtleReader(String input, URL url) throws ParseException
 	{
 		MatchResults results = TurtleGrammar.getMatcher().match(input);
 		for (AbstractNode ast : results.matches)
