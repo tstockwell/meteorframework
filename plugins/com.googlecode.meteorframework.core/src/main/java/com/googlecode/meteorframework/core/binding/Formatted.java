@@ -9,8 +9,11 @@ import com.googlecode.meteorframework.core.annotation.ModelElement;
  * @author Ted Stockwell
  */
 @ModelElement
-public interface Formatted
+public class Formatted
 extends BindingType
 {
-	String getFormat();
+	String getFormat()
+	{
+		return (String)getProperty(BindingNS.Formatted.format);
+	}
 }

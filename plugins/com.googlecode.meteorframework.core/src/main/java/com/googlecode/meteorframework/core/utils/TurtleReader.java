@@ -197,7 +197,14 @@ public class TurtleReader
 			if (!value.endsWith("\""))
 				throw new ParseException("Unterminated literal", _position);
 			return value.substring(1, value.length() - 1);
-		} else if (value.startsWith("<"))
+		} 
+		else if (value.startsWith("\'"))
+		{
+			if (!value.endsWith("\'"))
+				throw new ParseException("Unterminated literal", _position);
+			return value.substring(1, value.length() - 1);
+		} 
+		else if (value.startsWith("<"))
 		{
 			if (!value.endsWith(">"))
 				throw new ParseException("Unterminated URI", _position);

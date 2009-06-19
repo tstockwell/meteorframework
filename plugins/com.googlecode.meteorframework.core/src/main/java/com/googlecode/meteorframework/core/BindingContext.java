@@ -8,9 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-
 import com.googlecode.meteorframework.core.annotation.ModelElement;
-import com.googlecode.meteorframework.core.binding.Formatted;
 import com.googlecode.meteorframework.utils.ArrayListSet;
 
 /**
@@ -98,6 +96,53 @@ extends ArrayListSet<BindingType>
 	public BindingContext union(BindingContext bindingContext)
 	{
 		if (bindingContext == null)
+			return this;
+		
+		// explicitly checking for subsets can avoid stack overflow 
+		// problems in method dispatch mechanism
+		Object[] types1= bindingContext.toArray();
+		Object[] types2= toArray();
+		boolean thisIsSubsetOfIncoming= true;
+		for (int i= types2.length; 0 < i--;)
+		{
+			Object type= types2[i];
+			boolean found= false;
+			for (int j= types1.length; 0 < j--;)
+			{
+				if (types1[j] == type)
+				{
+					found= true;
+					break;
+				}
+			}
+			if (!found)
+			{
+				thisIsSubsetOfIncoming= false;
+				break;
+			}
+		}
+		if (thisIsSubsetOfIncoming)
+			return bindingContext;
+		boolean incomingIsSubsetOfThis= true;
+		for (int i= types1.length; 0 < i--;)
+		{
+			Object type= types1[i];
+			boolean found= false;
+			for (int j= types2.length; 0 < j--;)
+			{
+				if (types2[j] == type)
+				{
+					found= true;
+					break;
+				}
+			}
+			if (!found)
+			{
+				incomingIsSubsetOfThis= false;
+				break;
+			}
+		}
+		if (incomingIsSubsetOfThis)
 			return this;
 		
 		ArrayListSet<BindingType> union= new ArrayListSet<BindingType>(this);

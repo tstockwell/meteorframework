@@ -25,13 +25,14 @@ public class MeteorInfoBuilder {
 	PackageDeclaration _declaration;
 	StringWriter _writer= new StringWriter();
 	PrintWriter _printWriter= new PrintWriter(_writer);
-	ArrayList<InterfaceDeclaration> _classDeclarations= new ArrayList<InterfaceDeclaration>();
+	ArrayList<TypeDeclaration> _classDeclarations= new ArrayList<TypeDeclaration>();
 	String _bundleName;
 
 	public MeteorInfoBuilder(EclipseAnnotationProcessorEnvironment env, PackageDeclaration packageDeclaration) {
 		_env= env;
 		_declaration= packageDeclaration;
 		_classDeclarations.addAll(_declaration.getInterfaces());
+		_classDeclarations.addAll(_declaration.getClasses());
 		IProject project= _env.getJavaProject().getProject();
 		IPluginModelBase modelBase= PluginRegistry.findModel(project);
 		if (modelBase == null)
@@ -66,7 +67,7 @@ public class MeteorInfoBuilder {
 
 		int classCount= 0;
 		while (!_classDeclarations.isEmpty()) {
-			InterfaceDeclaration classDeclaration= _classDeclarations.remove(0);
+			TypeDeclaration classDeclaration= _classDeclarations.remove(0);
 			
 			if (classDeclaration.getAnnotation(ModelElement.class) == null)
 				continue;
@@ -103,7 +104,7 @@ public class MeteorInfoBuilder {
 		return stringWriter.toString();
 	}
 
-	private void writeClassNames(PrintWriter writer, InterfaceDeclaration classDeclaration, String prefix) 
+	private void writeClassNames(PrintWriter writer, TypeDeclaration classDeclaration, String prefix) 
 	{
 		writer.println(prefix+"public static interface "+classDeclaration.getSimpleName()+" {");
 		
