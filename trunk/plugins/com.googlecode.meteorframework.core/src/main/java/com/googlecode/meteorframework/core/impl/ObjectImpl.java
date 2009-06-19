@@ -462,6 +462,7 @@ public class ObjectImpl implements Resource, Cloneable  {
 	//
 	
 	@Override public boolean equals(Object object) {
+		
 		try {
 			return (Boolean)MethodDispatcher.invoke(CoreNS.Resource.equals, this, new Object[] { object });
 		}

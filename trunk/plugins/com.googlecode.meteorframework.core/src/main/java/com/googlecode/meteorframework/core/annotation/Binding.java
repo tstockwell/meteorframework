@@ -17,5 +17,5 @@ import com.googlecode.meteorframework.core.CoreNS;
 public @interface Binding
 {
 	public Class<? extends BindingType> value(); 
-	public Metadata[] data() default {};
+	public String metadata() default "";
 }

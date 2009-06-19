@@ -11,7 +11,7 @@ import com.googlecode.meteorframework.core.annotation.ModelElement;
  */
 @ModelElement
 @IsSingleton
-public interface Testing
+public class Testing
 extends BindingType
 {
 }

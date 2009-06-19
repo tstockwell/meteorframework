@@ -10,7 +10,6 @@ import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.HashSet;
 
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -25,8 +24,8 @@ import com.sun.mirror.apt.AnnotationProcessorEnvironment;
 import com.sun.mirror.apt.Filer;
 import com.sun.mirror.declaration.AnnotationTypeDeclaration;
 import com.sun.mirror.declaration.Declaration;
-import com.sun.mirror.declaration.InterfaceDeclaration;
 import com.sun.mirror.declaration.PackageDeclaration;
+import com.sun.mirror.declaration.TypeDeclaration;
 
 public class MeteorAnnotationProcessor 
 implements AnnotationProcessor
@@ -49,11 +48,11 @@ implements AnnotationProcessor
 		HashSet<String> completed= new HashSet<String>();
 		for (Declaration declaration : declarations) {
 			
-			if ((declaration instanceof InterfaceDeclaration) == false) {
+			if ((declaration instanceof TypeDeclaration) == false) {
 				continue;
 			}
 			
-			InterfaceDeclaration classDeclaration= (InterfaceDeclaration)declaration;
+			TypeDeclaration classDeclaration= (TypeDeclaration)declaration;
 			PackageDeclaration packageDeclaration= classDeclaration.getPackage();
 			String packageName= packageDeclaration.getQualifiedName();
 			if (!completed.contains(packageName)) {
