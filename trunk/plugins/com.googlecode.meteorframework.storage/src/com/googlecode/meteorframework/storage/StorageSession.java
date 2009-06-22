@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.googlecode.meteorframework.core.MeteorNotFoundException;
 import com.googlecode.meteorframework.core.Resource;
+import com.googlecode.meteorframework.core.annotation.IsWriteOnce;
 import com.googlecode.meteorframework.core.annotation.ModelElement;
 import com.googlecode.meteorframework.core.query.Selector;
 
@@ -27,8 +28,9 @@ import com.googlecode.meteorframework.core.query.Selector;
 	/**
 	 * Returns the StorageService associated with this session.
 	 */
-	public StorageService getConnector();
-	
+	public StorageService getStorageService();
+	@IsWriteOnce
+	public void setStorageService(StorageService service);
 	
 
 
