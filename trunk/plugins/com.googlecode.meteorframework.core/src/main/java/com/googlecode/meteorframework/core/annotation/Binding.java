@@ -13,7 +13,7 @@ import com.googlecode.meteorframework.core.CoreNS;
 @Documented
 @Retention(value=RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD, ElementType.METHOD, ElementType.TYPE, ElementType.PARAMETER})
-@EquivalentMetadata("<"+CoreNS.ModelElement.bindings+"> <${value}>")
+@EquivalentMetadata("<"+CoreNS.ModelElement.bindings+"> <{$value}>")
 public @interface Binding
 {
 	public Class<? extends BindingType> value(); 

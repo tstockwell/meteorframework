@@ -20,20 +20,12 @@ implements AppengineStorageService, Resource
 	@Inject Scope _scope;
 	@Decorates AppengineStorageService _self;
 	
-	Scope _storageScope;
-	
-	@PostConstruct
-	public void postConstruct()
-	{
-		_storageScope= _scope.createScope();
-		_storageScope.putInstance(_datastoreService, DatastoreService.class);
-		_storageScope.putInstance(_self, AppengineStorageService.class);
-	}
-	
-	
 	@Override public StorageSession openSession() 
 	throws StorageException 
 	{
-		return _storageScope.createInstance(AppengineStorageSession.class);
+		AppengineStorageSession session= _scope.createPrototype(AppengineStorageSession.class);
+		session.setStorageService(_self);
+		_scope.actualize(session);
+		return session;
 	}
 }

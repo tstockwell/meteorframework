@@ -11,7 +11,6 @@ import com.googlecode.meteorframework.core.annotation.MeteorAnnotationUtils;
 import com.googlecode.meteorframework.core.annotation.ModelAnnotationHandler;
 import com.googlecode.meteorframework.core.annotation.ModelElement;
 import com.googlecode.meteorframework.core.annotation.ProcessesAnnotations;
-import com.googlecode.meteorframework.core.utils.TurtleReader;
 import com.googlecode.meteorframework.utils.Logging;
 
 @ProcessesAnnotations(EquivalentMetadata.class)
@@ -61,10 +60,17 @@ public class SemanticEquivalentAnnotationHandler implements ModelAnnotationHandl
 					String value=""; 
 					Object object= method.invoke(_annotation, (Object[])null);
 					if (object != null)
-						value= object.toString();
+					{
+						if (object instanceof Class)
+						{
+							value= Meteor.getURIForClass((Class<?>)object);
+						}
+						else
+							value= object.toString();
+					}
 					String token= "{$"+method.getName()+"}";
 					while (turtle.contains(token))
-						turtle= turtle.replace(token, value);
+						turtle= turtle.replace(token, value.toString());
 				}
 				
 				MeteorAnnotationUtils.addMetadata(_scope, turtle);

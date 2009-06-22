@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.PostConstruct;
+
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.EntityNotFoundException;
@@ -24,6 +26,7 @@ import com.googlecode.meteorframework.core.annotation.Inject;
 import com.googlecode.meteorframework.core.query.Selector;
 import com.googlecode.meteorframework.core.utils.ConversionService;
 import com.googlecode.meteorframework.storage.StorageException;
+import com.googlecode.meteorframework.storage.appengine.AppengineStorageService;
 import com.googlecode.meteorframework.storage.appengine.AppengineStorageSession;
 
 @Decorator public abstract class AppengineStorageSessionImpl 
@@ -31,9 +34,16 @@ implements AppengineStorageSession
 {
 	
 	private @Decorates AppengineStorageSession _self;;
-	private @Inject DatastoreService _datastoreService;
 	private @Inject ConversionService _conversionService;
 	private boolean _isClosed= false;
+	private AppengineStorageService _storageService;
+	private DatastoreService _datastoreService;
+	
+	@Override 
+	public void postConstruct() {
+		_storageService= ((Resource)_self.getStorageService()).castTo(AppengineStorageService.class);
+		_datastoreService= _storageService.getDatastoreService();
+	}
 	
 	@Override public void flush()
 	{

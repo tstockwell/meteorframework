@@ -25,6 +25,9 @@ public class SystemScopeBootstrap {
 	}
 	
 	static ObjectImpl __systemScopeImpl= new ObjectImpl((ObjectImpl)null, CoreNS.Scope.TYPE, null);
+	static {
+		__systemScopeImpl.setValue(CoreNS.Resource.bindingContext, BindingContext.getBindingContext());
+	}
 	static Scope __systemScope= __systemScopeImpl.internalCast(Scope.class);
 	
 	static private ArrayList<Class<? extends BindingType>> __cachedSystemBindings= new ArrayList<Class<? extends BindingType>>(); 

@@ -39,7 +39,7 @@ public class MethodDispatcher {
 		ObjectImpl impl= ObjectImpl.getObjectImpl(receiver);		
 		
 		/**
-		 * First lookup specializers for method in receiver iteself (that is look for 
+		 * First lookup specializers for method in receiver itself (that is look for 
 		 * decorators added directly to the object, if any.
 		 */
 		List<String> allTypes= impl.getAllMeteorTypeURIs();

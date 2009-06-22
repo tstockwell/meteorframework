@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import com.googlecode.meteorframework.core.BindingContext;
 import com.googlecode.meteorframework.core.BindingType;
+import com.googlecode.meteorframework.core.CoreNS;
 import com.googlecode.meteorframework.core.InvocationContext;
 import com.googlecode.meteorframework.core.Meteor;
 import com.googlecode.meteorframework.core.Provider;
@@ -64,13 +65,14 @@ implements Provider, Resource
 	
 	@Override public <T> T createInstance(Class<T> javaType, BindingType... bindings)
 	{
-		if (javaType.isInterface()) {
+		if (javaType.isInterface()) 
+		{
 			InvocationContext ctx= Meteor.getInvocationContext();
 			BindingContext bindingContext= ctx.getBindingContext().union(bindings);
 			Type type= DomainImpl.findType(_scope, javaType);
 			ObjectImpl resourceImpl= new ObjectImpl(_scope, type.getURI(), bindingContext);
 			resourceImpl.internalSetURI(Meteor.PROTOCOL+UUID.randomUUID());
-			resourceImpl.setType(type);
+			resourceImpl.setValue(CoreNS.Resource.type, type);
 			resourceImpl.postConstruct();
 	
 			return resourceImpl.castTo(javaType);
@@ -96,7 +98,7 @@ implements Provider, Resource
 		Object instance= findInstance(javaType, annotations);
 		
 		if (instance == null) {
-			instance= createInstance(javaType, annotations);
+			instance= _self.createInstance(javaType, annotations);
 			
 			/*
 			 * If type is singleton then cache the instance 
@@ -115,7 +117,7 @@ implements Provider, Resource
 		T instance= findInstance(rawType, annotations);
 		if (instance != null)
 			return instance;
-		return createInstance(rawType, annotations);
+		return _self.createInstance(rawType, annotations);
 	}
 	
 	@Override public <T> T findInstance(Class<T> javaType, BindingType... annotations)
@@ -192,7 +194,7 @@ implements Provider, Resource
 		BindingContext bindingContext= ctx.getBindingContext().union(annotations);
 		T t= findInstance(serviceClass, annotations);
 		if (t == null) {
-			t= createInstance(serviceClass, annotations);
+			t= _self.createInstance(serviceClass, annotations);
 			String typeURI= Meteor.getURIForClass(serviceClass);
 			ObjectImpl resourceImpl= ObjectImpl.getObjectImpl(t);
 			resourceImpl.internalSetURI(typeURI+".instance");
