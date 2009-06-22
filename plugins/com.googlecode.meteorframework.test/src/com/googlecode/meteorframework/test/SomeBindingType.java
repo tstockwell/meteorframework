@@ -6,7 +6,7 @@ import com.googlecode.meteorframework.core.annotation.ModelElement;
 
 @ModelElement
 @IsSingleton
-public interface SomeBindingType
+public class SomeBindingType
 extends BindingType
 {
 

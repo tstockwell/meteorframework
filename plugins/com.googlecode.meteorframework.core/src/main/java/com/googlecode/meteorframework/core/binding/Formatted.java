@@ -12,7 +12,7 @@ import com.googlecode.meteorframework.core.annotation.ModelElement;
 public class Formatted
 extends BindingType
 {
-	String getFormat()
+	public String getFormat()
 	{
 		return (String)getProperty(BindingNS.Formatted.format);
 	}

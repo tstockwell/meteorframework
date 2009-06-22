@@ -56,7 +56,8 @@ implements Resource
 {
 	private HashMap<String, Object> _properties= new HashMap<String, Object>();
 	
-	public BindingType(Scope scope) {
+	public BindingType() {
+		Scope scope= Meteor.getSystemScope();
 		setProperty(CoreNS.Resource.scope, scope);
 		setProperty(CoreNS.Resource.bindingContext, ((Resource)scope).getBindingContext());
 	}
