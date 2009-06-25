@@ -59,18 +59,12 @@ extends Resource, ModelElement
 	@InverseOf(CoreNS.Type.extensionOf) 
 	public Set<Type<? extends T>> getExtensions();
 	
-
-	
-	
 	/**
 	 * Denotes the Roles that this Type can play.
 	 */
+	@InverseOf(CoreNS.Role.playedBy)
 	public Set<Type<?>> getRolesPlayed();
-
-	/**
-	 * Denotes the Types that play this role.
-	 */
-	public Set<Type<?>> getPlayedBy();
+	
 	
 	/**
 	 * Indicates that only a single instance of this type should ever be created.

@@ -141,9 +141,19 @@ import com.googlecode.meteorframework.core.annotation.ModelElement;
 	/**
 	 * Returns all the roles of a given Type played by this object.
 	 */
-	public Set<Resource> getRoles(Type type);
-	public <T> Set<T> getRoles(Class<T> javaType);
-	public <T> T getRole(Class<T> javaType);
+	@IsFunction public <T> Set<T> getRoles(Type<T> type);
+	@IsFunction public <T> Set<T> getRoles(Class<T> javaType);
+	/**
+	 * A convenience method that returns the first available role of the given type.
+	 */
+	@IsFunction public <T> T getRole(Class<T> javaType);
+	@IsFunction public <T> T getRole(Type<T> javaType);
+	
+	/**
+	 * If this object is a role object then this property denotes the 
+	 * object that is playing this role.
+	 */
+	public Object getPlayedBy();
 	
 	public int hashCode();
 	public boolean equals(Object obj);
