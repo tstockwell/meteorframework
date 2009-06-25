@@ -72,7 +72,7 @@ import com.googlecode.meteorframework.core.annotation.ModelElement;
 	public void setProperty(String propertyURI, Object value, Object...parameters);
 	
 	@IsFunction 
-	public void setProperty(Property property, Object value, Object...parameters);
+	public <T> void setProperty(Property<T> property, T value, Object...parameters);
 	
 	/**
 	 * A convenient method that looks up the denoted property in the current 
@@ -152,8 +152,12 @@ import com.googlecode.meteorframework.core.annotation.ModelElement;
 	/**
 	 * If this object is a role object then this property denotes the 
 	 * object that is playing this role.
+	 * @return null if this object is not a role object
 	 */
-	public Object getPlayedBy();
+	public Resource getActor();
+	
+	public <T> T addRole(Class<T> roleClass);
+	public void removeRole(Object roleObject);
 	
 	public int hashCode();
 	public boolean equals(Object obj);

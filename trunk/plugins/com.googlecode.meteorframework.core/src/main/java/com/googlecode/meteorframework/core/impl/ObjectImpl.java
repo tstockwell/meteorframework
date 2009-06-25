@@ -509,6 +509,10 @@ public class ObjectImpl implements Resource, Cloneable  {
 		return getProperty(CoreNS.Resource.roles, javaType);
 	}
 
+	@Override public Resource getActor() {
+		return getProperty(CoreNS.Resource.actor);
+	}
+
 	@Override public void setRoles(Set<Resource> roles) {
 		setProperty(CoreNS.Resource.roles, roles);
 	}
