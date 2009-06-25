@@ -127,6 +127,16 @@ implements Resource
 	public <T> T getRole(Class<T> javaType) {
 		throw new UnsupportedOperationException();
 	}
+	
+	@Override
+	public <T> T getRole(Type<T> javaType) {
+		throw new UnsupportedOperationException();
+	}
+	
+	@Override
+	public Object getPlayedBy() {
+		throw new UnsupportedOperationException();
+	}
 
 	@Override
 	public Set<Resource> getRoles() {

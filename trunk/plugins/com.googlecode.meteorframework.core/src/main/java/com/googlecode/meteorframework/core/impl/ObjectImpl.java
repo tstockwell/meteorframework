@@ -543,8 +543,15 @@ public class ObjectImpl implements Resource, Cloneable  {
 
 	@Override public <T> T getRole(Class<T> javaType)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		Object[] args= new Object[1];
+		args[0]= javaType;
+		return (T)MethodDispatcher.invoke(CoreNS.Resource.getRole, this, args);
+	}
+	@Override public <T> T getRole(Type<T> type)
+	{
+		Object[] args= new Object[1];
+		args[0]= type.getJavaType();
+		return (T)MethodDispatcher.invoke(CoreNS.Resource.getRole, this, args);
 	}
 
 	@Override public void setProperty(Property property, Object value, Object... parameters) {
