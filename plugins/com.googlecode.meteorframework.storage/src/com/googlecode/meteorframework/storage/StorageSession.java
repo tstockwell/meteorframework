@@ -17,7 +17,7 @@ import com.googlecode.meteorframework.core.query.Selector;
  *  
  * @author Ted Stockwell
  */
-@ModelElement public interface StorageSession extends Resource 
+@ModelElement public interface StorageSession 
 {
 	public <T> T findByURI(Class<T> type, String uri)
 		throws MeteorNotFoundException;
@@ -31,6 +31,11 @@ import com.googlecode.meteorframework.core.query.Selector;
 	public StorageService getStorageService();
 	@IsWriteOnce
 	public void setStorageService(StorageService service);
+	
+	
+	public void attachResourceSet(ResourceSet resourceSet);
+	public ResourceSet detachResourceSet();
+	public ResourceSet getResourceSet();
 	
 
 
