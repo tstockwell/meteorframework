@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.annotation.PostConstruct;
-
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.EntityNotFoundException;
@@ -19,22 +17,27 @@ import com.google.appengine.api.datastore.Transaction;
 import com.googlecode.meteorframework.core.MeteorNotFoundException;
 import com.googlecode.meteorframework.core.Property;
 import com.googlecode.meteorframework.core.Resource;
+import com.googlecode.meteorframework.core.Scope;
 import com.googlecode.meteorframework.core.annotation.After;
 import com.googlecode.meteorframework.core.annotation.Decorates;
 import com.googlecode.meteorframework.core.annotation.Decorator;
 import com.googlecode.meteorframework.core.annotation.Inject;
 import com.googlecode.meteorframework.core.query.Selector;
 import com.googlecode.meteorframework.core.utils.ConversionService;
+import com.googlecode.meteorframework.storage.ResourceSet;
 import com.googlecode.meteorframework.storage.StorageException;
+import com.googlecode.meteorframework.storage.StorageNS;
 import com.googlecode.meteorframework.storage.appengine.AppengineStorageService;
 import com.googlecode.meteorframework.storage.appengine.AppengineStorageSession;
 
 @Decorator public abstract class AppengineStorageSessionImpl 
-implements AppengineStorageSession
+implements AppengineStorageSession, Resource
 {
 	
-	private @Decorates AppengineStorageSession _self;;
+	private @Decorates AppengineStorageSession _self;
 	private @Inject ConversionService _conversionService;
+	private @Inject Scope _scope; 
+	
 	private boolean _isClosed= false;
 	private AppengineStorageService _storageService;
 	private DatastoreService _datastoreService;
@@ -43,6 +46,18 @@ implements AppengineStorageSession
 	public void postConstruct() {
 		_storageService= ((Resource)_self.getStorageService()).castTo(AppengineStorageService.class);
 		_datastoreService= _storageService.getDatastoreService();
+		
+		ResourceSet resourceSet= _self.getResourceSet();
+		if (resourceSet == null)
+			_self.attachResourceSet(_scope.createInstance(ResourceSet.class));
+	}
+	
+	@Override
+	public void attachResourceSet(ResourceSet resourceSet) {
+		ResourceSet currentResourceSet= _self.getResourceSet();
+		if (currentResourceSet != null)
+			currentResourceSet.setStorageSession(null);
+		((Resource)_self).setProperty(StorageNS.StorageSession.resourceSet, resourceSet);
 	}
 	
 	@Override public void flush()
@@ -59,7 +74,9 @@ implements AppengineStorageSession
 		try 
 		{
 			checkClosed();
-			_self.flush();
+			
+			ResourceSet resourceSet= _self.get
+
 			Key key= KeyFactory.stringToKey(uri);
 			Entity entity= _datastoreService.get(key);
 			Resource resource= _conversionService.convert(entity, Resource.class);

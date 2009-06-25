@@ -134,8 +134,8 @@ implements Resource
 	}
 	
 	@Override
-	public Object getPlayedBy() {
-		throw new UnsupportedOperationException();
+	public Resource getActor() {
+		return getProperty(CoreNS.Resource.actor);
 	}
 
 	@Override

@@ -60,11 +60,16 @@ extends Resource, ModelElement
 	public Set<Type<? extends T>> getExtensions();
 	
 	/**
-	 * Denotes the Roles that this Type can play.
+	 * Denotes the Roles that instances of this Type can play.
 	 */
-	@InverseOf(CoreNS.Role.playedBy)
+	@InverseOf(CoreNS.Type.actorTypes)
 	public Set<Type<?>> getRolesPlayed();
 	
+	/**
+	 * The Types that can play this role. 
+	 */
+	@InverseOf(CoreNS.Type.rolesPlayed)
+	Set<Type<?>> getActorTypes();
 	
 	/**
 	 * Indicates that only a single instance of this type should ever be created.
