@@ -132,6 +132,16 @@ implements Resource
 	public <T> T getRole(Type<T> javaType) {
 		throw new UnsupportedOperationException();
 	}
+
+	@Override
+	public void removeRole(Object roleObject) {
+		throw new UnsupportedOperationException();
+	}
+	
+	@Override
+	public <T> T addRole(Class<T> roleClass) {
+		throw new UnsupportedOperationException();
+	}
 	
 	@Override
 	public Resource getActor() {

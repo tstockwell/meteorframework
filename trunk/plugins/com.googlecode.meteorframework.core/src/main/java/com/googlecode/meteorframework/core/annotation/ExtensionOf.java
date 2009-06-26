@@ -15,6 +15,6 @@ import com.googlecode.meteorframework.core.CoreNS;
 @EquivalentMetadata("<"+CoreNS.Type.extensionOf+"> <{$value}>")
 public @interface ExtensionOf 
 {
-	public String value();
+	public Class<?> value();
 	
 }

@@ -1,6 +1,7 @@
 package com.googlecode.meteorframework.core.query;
 
 import com.googlecode.meteorframework.core.Service;
+import com.googlecode.meteorframework.core.annotation.IsFunction;
 import com.googlecode.meteorframework.core.annotation.ModelElement;
 
 /**
@@ -17,7 +18,7 @@ import com.googlecode.meteorframework.core.annotation.ModelElement;
 	public Operator le();
 	public Operator ne();
 	
-	public Operator isNull();
+	@IsFunction public Operator isNull();
 	
 	public Operator or();
 	public Operator and();
