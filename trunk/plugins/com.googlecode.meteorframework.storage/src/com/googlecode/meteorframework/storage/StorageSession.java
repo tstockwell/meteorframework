@@ -1,5 +1,6 @@
 package com.googlecode.meteorframework.storage;
 
+import java.util.Collection;
 import java.util.List;
 
 import com.googlecode.meteorframework.core.MeteorNotFoundException;
@@ -29,19 +30,15 @@ import com.googlecode.meteorframework.core.query.Selector;
 	 * Returns the StorageService associated with this session.
 	 */
 	public StorageService getStorageService();
-	@IsWriteOnce
-	public void setStorageService(StorageService service);
+	@IsWriteOnce public void setStorageService(StorageService service);
 	
 	
-	public void attachResourceSet(ResourceSet resourceSet);
-	public ResourceSet detachResourceSet();
-	public ResourceSet getResourceSet();
-	
-
+	public void attachResource(Object resource);
+	public void attachResources(Collection<?> resources);
+	public Collection<Resource> detachAllResources();
 
 	/**
-	 * Rollback any transaction in progress and release all resource associated 
-	 * with this session.
+	 * Release all internal resources associated with this session.
 	 * This method MUST be called by an application when it is finished with 
 	 * a Session.
 	 */
@@ -59,9 +56,10 @@ import com.googlecode.meteorframework.core.query.Selector;
 	public void persist(Object resource) throws StorageException;
 
     /**
-     * Save all changes to persistent objects to the underlying system.
-     * If a transaction is active the transaction is committed.
+     * Persist all changes to the underlying storage system.
+     * If the underlying storage system is transactional then all changes are 
+     * persisted within a transaction.
      */
-    public void flush();
+    public void flush() throws StorageException;
 
 }

@@ -6,7 +6,8 @@ Bundle-Version: 1.0.0
 Export-Package: com.googlecode.meteorframework.storage,
  com.googlecode.meteorframework.storage.impl,
  com.googlecode.meteorframework.storage.impl.jdbc,
- com.googlecode.meteorframework.storage.jdbc
+ com.googlecode.meteorframework.storage.jdbc,
+ com.googlecode.meteorframework.storage.util
 Bundle-ActivationPolicy: lazy
 DynamicImport-Package: *
 Import-Package: com.googlecode.meteorframework.core,
