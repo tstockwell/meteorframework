@@ -592,6 +592,20 @@ public class ObjectImpl implements Resource, Cloneable  {
 		args[2]= parameters;
 		MethodDispatcher.invoke(CoreNS.Resource.removeProperty, this, args);
 	}
+	
+	@Override
+	public void removeRole(Object roleObject) {
+		Object[] args= new Object[1];
+		args[0]= roleObject;
+		MethodDispatcher.invoke(CoreNS.Resource.removeRole, this, args);
+	}
+	
+	@Override
+	public <T> T addRole(Class<T> roleClass) {
+		Object[] args= new Object[1];
+		args[0]= roleClass;
+		return (T) MethodDispatcher.invoke(CoreNS.Resource.addRole, this, args);
+	}
 
 
 	@Override public <T> Collection<T> getPropertyValues(String propertyURI)

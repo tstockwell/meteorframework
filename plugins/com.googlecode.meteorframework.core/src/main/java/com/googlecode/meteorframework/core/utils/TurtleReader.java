@@ -32,6 +32,7 @@ import com.googlecode.meteorframework.parser.util.Files;
  * 
  * @author ted stockwell
  */
+@SuppressWarnings("unchecked")
 public class TurtleReader
 {
 	
@@ -181,7 +182,7 @@ public class TurtleReader
 				addToRepository = true;
 			}
 
-			resource.setProperty(property, getValue(statement.object));
+			resource.setProperty((Property<Object>)property, getValue(statement.object));
 
 			if (addToRepository)
 				scope.addResource(resource);

@@ -3,6 +3,7 @@ package com.googlecode.meteorframework.core.annotation.apt;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 
 import org.eclipse.core.resources.IProject;
@@ -112,13 +113,9 @@ public class MeteorInfoBuilder {
 		writer.println(prefix+"\tpublic static final String TYPE = \"meteor:"+qualifiedClassName+"\";\n");
 		
 		boolean writeComment= false;
-		ArrayList<MethodDeclaration> methodDeclarations= new ArrayList<MethodDeclaration>(classDeclaration.getMethods());
-		while (!methodDeclarations.isEmpty()) {				
-			MethodDeclaration methodDeclaration= methodDeclarations.remove(0);
-			
-//			if (methodDeclaration.getAnnotation(Model.class) == null)
-//				continue;
-
+		HashSet<String> properties= new HashSet<String>(); 
+		for (MethodDeclaration methodDeclaration : classDeclaration.getMethods())
+		{
 			if (!MeteorAnnotationUtils.isMeteorProperty(methodDeclaration))
 				continue;
 
@@ -127,28 +124,24 @@ public class MeteorInfoBuilder {
 				writer.println(prefix+"\t// properties");
 				writeComment= true;
 			}
-			String propertyName= methodName.substring(3,4).toLowerCase()+methodName.substring(4);
-			writer.println(prefix+"\tpublic static final String "+propertyName+" = \"meteor:"+qualifiedClassName+"."+propertyName+"\";");
-
-			// remove the other get/set, if any
-			for (MethodDeclaration declaration : new ArrayList<MethodDeclaration>(methodDeclarations)) {
-				String simpleName= declaration.getSimpleName();
-				if ((simpleName.startsWith("add") || simpleName.startsWith("set") || simpleName.startsWith("get")) && declaration.getSimpleName().substring(3).equals(methodName.substring(3))) {
-					methodDeclarations.remove(declaration);
-				}
-				if (simpleName.startsWith("is") && declaration.getSimpleName().substring(2).equals(methodName.substring(2))) {
-					methodDeclarations.remove(declaration);
-				}
+			String propertyName= methodName.startsWith("is") ? 
+					methodName.substring(2,3).toLowerCase()+methodName.substring(3) :
+					methodName.substring(3,4).toLowerCase()+methodName.substring(4);
+					
+			if (!properties.contains(propertyName))
+			{
+				properties.add(propertyName);
+				
+				writer.println(prefix+"\tpublic static final String "+propertyName+" = \"meteor:"+qualifiedClassName+"."+propertyName+"\";");
 			}
 		}
 		if (writeComment)
 			writer.println();
 		
 		writeComment= false;
-		methodDeclarations= new ArrayList<MethodDeclaration>(classDeclaration.getMethods());
-		while (!methodDeclarations.isEmpty()) {				
-			MethodDeclaration methodDeclaration= methodDeclarations.remove(0);
-			
+		HashSet<String> methods= new HashSet<String>(); 
+		for (MethodDeclaration methodDeclaration : classDeclaration.getMethods())
+		{
 			if (!methodDeclaration.getModifiers().contains(Modifier.PUBLIC))
 				continue;
 			if (methodDeclaration.getModifiers().contains(Modifier.STATIC))
@@ -161,17 +154,14 @@ public class MeteorInfoBuilder {
 				continue;
 
 			String methodName= methodDeclaration.getSimpleName();
-			if (!writeComment) {
-				writer.println(prefix+"\t// methods");
-				writeComment= true;
-			}
-			writer.println(prefix+"\tpublic static final String "+methodName+" = \"meteor:"+qualifiedClassName+"."+methodName+"\";");
-
-			// remove methods with same name
-			for (MethodDeclaration declaration : new ArrayList<MethodDeclaration>(methodDeclarations)) {
-				String name= declaration.getSimpleName();
-				if (name.equals(methodName)) 
-					methodDeclarations.remove(declaration);
+			if (!methods.contains(methodName))
+			{
+				methods.add(methodName);
+				if (!writeComment) {
+					writer.println(prefix+"\t// methods");
+					writeComment= true;
+				}
+				writer.println(prefix+"\tpublic static final String "+methodName+" = \"meteor:"+qualifiedClassName+"."+methodName+"\";");
 			}
 		}
 		if (writeComment)

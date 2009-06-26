@@ -21,7 +21,8 @@ import com.googlecode.meteorframework.core.annotation.ModelElement;
  * @author Ted Stockwell
  */
 @SuppressWarnings("unchecked")
-@ModelElement public interface Resource {
+@ModelElement 
+public interface Resource {
 		
 	/**
 	 * Returns the scope from which this object was created.

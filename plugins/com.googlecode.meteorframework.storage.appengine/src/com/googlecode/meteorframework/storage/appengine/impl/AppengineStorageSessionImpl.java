@@ -14,21 +14,20 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Transaction;
+import com.googlecode.meteorframework.core.CoreNS;
 import com.googlecode.meteorframework.core.MeteorNotFoundException;
 import com.googlecode.meteorframework.core.Property;
 import com.googlecode.meteorframework.core.Resource;
-import com.googlecode.meteorframework.core.Scope;
 import com.googlecode.meteorframework.core.annotation.After;
 import com.googlecode.meteorframework.core.annotation.Decorates;
 import com.googlecode.meteorframework.core.annotation.Decorator;
 import com.googlecode.meteorframework.core.annotation.Inject;
 import com.googlecode.meteorframework.core.query.Selector;
 import com.googlecode.meteorframework.core.utils.ConversionService;
-import com.googlecode.meteorframework.storage.ResourceSet;
 import com.googlecode.meteorframework.storage.StorageException;
-import com.googlecode.meteorframework.storage.StorageNS;
 import com.googlecode.meteorframework.storage.appengine.AppengineStorageService;
 import com.googlecode.meteorframework.storage.appengine.AppengineStorageSession;
+import com.googlecode.meteorframework.storage.util.ResourceCache;
 
 @Decorator public abstract class AppengineStorageSessionImpl 
 implements AppengineStorageSession, Resource
@@ -36,7 +35,7 @@ implements AppengineStorageSession, Resource
 	
 	private @Decorates AppengineStorageSession _self;
 	private @Inject ConversionService _conversionService;
-	private @Inject Scope _scope; 
+	private @Inject ResourceCache _resourceSet;
 	
 	private boolean _isClosed= false;
 	private AppengineStorageService _storageService;
@@ -46,25 +45,40 @@ implements AppengineStorageSession, Resource
 	public void postConstruct() {
 		_storageService= ((Resource)_self.getStorageService()).castTo(AppengineStorageService.class);
 		_datastoreService= _storageService.getDatastoreService();
-		
-		ResourceSet resourceSet= _self.getResourceSet();
-		if (resourceSet == null)
-			_self.attachResourceSet(_scope.createInstance(ResourceSet.class));
 	}
 	
 	@Override
-	public void attachResourceSet(ResourceSet resourceSet) {
-		ResourceSet currentResourceSet= _self.getResourceSet();
-		if (currentResourceSet != null)
-			currentResourceSet.setStorageSession(null);
-		((Resource)_self).setProperty(StorageNS.StorageSession.resourceSet, resourceSet);
+	public void attachResources(Collection<?> resources) {
+		for (Object object : resources)
+		{
+			_resourceSet.attach(object, false);
+		}
 	}
 	
 	@Override public void flush()
 	{
-		for (Transaction transaction : _datastoreService.getActiveTransactions())
-		{
+		Transaction transaction= _datastoreService.beginTransaction();
+		boolean success= false;
+		try {
+			Collection<Resource> dirtyObjects= _resourceSet.getDirtyResources();
+			ArrayList<Entity> entities= new ArrayList<Entity>();
+			for (Resource resource : dirtyObjects)
+			{
+				Entity entity= convertResourceToEntity(resource);
+				entities.add(entity);
+			}
+			_datastoreService.put(transaction, entities);
+			
 			transaction.commit();
+			success= true;
+			_resourceSet.clearDirtyList();
+		}
+		finally 
+		{
+			if (!success)
+			{
+				transaction.rollback();
+			}
 		}
 	}
 
@@ -75,11 +89,14 @@ implements AppengineStorageSession, Resource
 		{
 			checkClosed();
 			
-			ResourceSet resourceSet= _self.get
+			Resource resource= _resourceSet.findByURI(uri);
+			if (resource != null)
+				return resource.castTo(javaType);
 
 			Key key= KeyFactory.stringToKey(uri);
 			Entity entity= _datastoreService.get(key);
-			Resource resource= _conversionService.convert(entity, Resource.class);
+			resource= convertEntityToResource(entity);
+			_resourceSet.attach(resource, false);
 			return resource.castTo(javaType);
 		} 
 		catch (EntityNotFoundException e) 
@@ -93,51 +110,26 @@ implements AppengineStorageSession, Resource
 	{
 		checkClosed();
 		_self.flush();
+
 		Query query= _conversionService.convert(criteria, Query.class);
 		Class<T> javaType= (Class<T>) criteria.getRange().getJavaType();
 		ArrayList<T> list= new ArrayList<T>();
 		for (Entity entity : _datastoreService.prepare(query).asIterable())
 		{
-			Resource resource= _conversionService.convert(entity, Resource.class);
+			String uri= (String)entity.getProperty(CoreNS.Resource.uRI);
+			Resource resource= _resourceSet.findByURI(uri);
+			if (resource == null)
+			{
+				resource= convertEntityToResource(entity);
+				_resourceSet.attach(resource, false);
+			}
 			list.add(resource.castTo(javaType));
 		}
 		return list;
 	}
 	
-//	@Override public void beginTransaction() throws StorageException {
-//		try {
-//			_connection.setAutoCommit(false);
-//		} catch (SQLException e) {
-//			throw new StorageException(e.getMessage(), e);
-//		}
-//		Meteor.proceed();		
-//	}
-//
-//	@Override public void commitTransaction() throws StorageException {
-//		try {
-//			_connection.commit();
-//		} catch (SQLException e) {
-//			throw new StorageException(e.getMessage(), e);
-//		}
-//		Meteor.proceed();		
-//	}
-//	
-//	@Override public void rollbackTransaction() throws StorageException {
-//		try {
-//			_connection.commit();
-//		} catch (SQLException e) {
-//			throw new StorageException(e.getMessage(), e);
-//		}
-//		Meteor.proceed();		
-//	}
-
 	@After @Override synchronized public void close() {
 		checkClosed();
-		_self.flush();
-		
-		Transaction transaction= _datastoreService.getCurrentTransaction();
-		if (transaction != null)
-			transaction.rollback();
 	}
 
 	/**
@@ -157,10 +149,21 @@ implements AppengineStorageSession, Resource
 	throws StorageException
 	{
 		checkClosed();
-		HashSet<String> completedURIs= new HashSet<String>();
-		persist(resource, completedURIs);
+		
+		/*
+		 * for now we just put the resource in the cache, it will be persisted 
+		 * when the session is flushed.
+		 */
+		_resourceSet.attach(resource, true);
 	}
 	
+	/**
+	 * This method navigates through the given resource and persists all the 
+	 * resources that are 'reachable' from the given resource.
+	 * All resource to persist are    
+	 * @param resource
+	 * @param completedURIs
+	 */
 	private void persist(Resource resource, HashSet<String> completedURIs) 
 	{
 		
@@ -204,4 +207,15 @@ implements AppengineStorageSession, Resource
 			throw new StorageException("Illegal method invocation, the storage session has already been closed.");
 	}
 	
+	
+	Resource convertEntityToResource(Entity entity)
+	{
+		
+	}
+	
+	
+	Entity convertResourceToEntity(Resource resource)
+	{
+		
+	}
 }
