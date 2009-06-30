@@ -6,6 +6,7 @@ import com.googlecode.meteorframework.core.Meteor;
 import com.googlecode.meteorframework.core.Scope;
 import com.googlecode.meteorframework.core.annotation.Decorator;
 import com.googlecode.meteorframework.core.annotation.Inject;
+import com.googlecode.meteorframework.storage.StorageException;
 import com.googlecode.meteorframework.storage.StorageService;
 import com.googlecode.meteorframework.storage.StorageServiceProvider;
 import com.googlecode.meteorframework.storage.appengine.AppengineStorageConfiguration;
@@ -28,9 +29,16 @@ implements StorageServiceProvider
 		if (!connectionURL.startsWith(AppengineStorageConfiguration.APPENGINE_STORAGE_PROTOCOL))
 			return (StorageService)Meteor.proceed();
 
+		// check for cached connection
 		StorageService storageService= __connectors.get(connectionURL);
 		if (storageService != null)
 			return storageService;
+		
+		if (connectionURL.length() <= AppengineStorageConfiguration.APPENGINE_STORAGE_PROTOCOL.length())
+			throw new StorageException("A root entity must be specified.");
+		
+		// every connection must specify a root entity.
+		String rootName= connectionURL.substring(beginIndex)
 
 		storageService= _scope.createPrototype(AppengineStorageService.class);
 		storageService.setConnectionURL(connectionURL);
