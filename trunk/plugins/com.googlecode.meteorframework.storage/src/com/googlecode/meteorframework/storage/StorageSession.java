@@ -47,7 +47,7 @@ import com.googlecode.meteorframework.core.query.Selector;
 	/**
 	 * Removes a resource from the data store.
 	 */
-	public void delete(String uri) throws StorageException;
+	public void delete(Object resource) throws StorageException;
 
 	/**
 	 * Adds a previously unpersisted object to the data store.
