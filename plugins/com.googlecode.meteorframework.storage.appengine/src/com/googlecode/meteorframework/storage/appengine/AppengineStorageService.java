@@ -1,6 +1,7 @@
 package com.googlecode.meteorframework.storage.appengine;
 
 import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.Key;
 import com.googlecode.meteorframework.core.annotation.ModelElement;
 import com.googlecode.meteorframework.storage.StorageService;
 
@@ -31,4 +32,5 @@ public interface AppengineStorageService
 extends StorageService
 {
 	public DatastoreService getDatastoreService();
+	public Key getRootKey();
 }

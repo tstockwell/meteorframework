@@ -25,6 +25,7 @@ import com.googlecode.meteorframework.core.annotation.Inject;
 import com.googlecode.meteorframework.core.query.Selector;
 import com.googlecode.meteorframework.core.utils.ConversionService;
 import com.googlecode.meteorframework.storage.StorageException;
+import com.googlecode.meteorframework.storage.appengine.AppengineEntity;
 import com.googlecode.meteorframework.storage.appengine.AppengineStorageService;
 import com.googlecode.meteorframework.storage.appengine.AppengineStorageSession;
 import com.googlecode.meteorframework.storage.util.ResourceCache;
@@ -40,18 +41,20 @@ implements AppengineStorageSession, Resource
 	private boolean _isClosed= false;
 	private AppengineStorageService _storageService;
 	private DatastoreService _datastoreService;
+	private Key _rootKey;
 	
 	@Override 
 	public void postConstruct() {
 		_storageService= ((Resource)_self.getStorageService()).castTo(AppengineStorageService.class);
 		_datastoreService= _storageService.getDatastoreService();
+		_rootKey= _storageService.getRootKey();
 	}
 	
 	@Override
 	public void attachResources(Collection<?> resources) {
 		for (Object object : resources)
 		{
-			_resourceSet.attach(object, false);
+			_resourceSet.attach((Resource)object, false);
 		}
 	}
 	
@@ -69,9 +72,18 @@ implements AppengineStorageSession, Resource
 			}
 			_datastoreService.put(transaction, entities);
 			
+			Collection<Resource> deletedObjects= _resourceSet.getDeletedResources();
+			ArrayList<Key> deletedKeys= new ArrayList<Key>();
+			for (Resource resource : deletedObjects)
+			{
+				AppengineEntity entity= resource.castTo(AppengineEntity.class);
+				deletedKeys.add(entity.getKey());
+			}
+			_datastoreService.delete(transaction, deletedKeys);
+			
 			transaction.commit();
 			success= true;
-			_resourceSet.clearDirtyList();
+			_resourceSet.clear();
 		}
 		finally 
 		{
@@ -135,11 +147,11 @@ implements AppengineStorageSession, Resource
 	/**
 	 * Removes a resource from the data store.
 	 */
-	@Override synchronized public void delete(String uri) 
+	@Override synchronized public void delete(Object resource) 
 	throws StorageException 
 	{
 		checkClosed();
-		_datastoreService.delete(KeyFactory.stringToKey(uri));
+		_resourceSet.deleted((Resource)resource);
 	}
 
 	/**
@@ -149,6 +161,14 @@ implements AppengineStorageSession, Resource
 	throws StorageException
 	{
 		checkClosed();
+		
+		AppengineEntity appengineEntity= resource.castTo(AppengineEntity.class);
+		Key key= appengineEntity.getKey();
+		if (key != null)
+		{
+			key= KeyFactory.createKey(_rootKey, resource.getType().getURI(), resource.getURI());
+			appengineEntity.setKey(key);
+		}
 		
 		/*
 		 * for now we just put the resource in the cache, it will be persisted 
