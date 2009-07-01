@@ -12,6 +12,7 @@ import com.googlecode.meteorframework.core.Resource;
 import com.googlecode.meteorframework.core.annotation.After;
 import com.googlecode.meteorframework.core.annotation.Decorates;
 import com.googlecode.meteorframework.core.annotation.Decorator;
+import com.googlecode.meteorframework.storage.StorageException;
 
 /**
  * An in-memory cache of Meteor Resources.
@@ -31,10 +32,14 @@ public class ResourceCache {
 	private Map<String, ChangeTracker> _trackers = new LinkedHashMap<String, ChangeTracker>();
     	
 	/** 
-	 * Ordered list of resources to flush and purge. 
-     * NEEDED to maintain the Order of the flushing for foreign key updates.
+	 * URI's of changed resources. 
      */
-	private ArrayList<String> _dirtyResources = new ArrayList<String>();
+	private HashSet<String> _dirtyResources = new HashSet<String>();
+	
+	/** 
+	 * URI's of deleted resources. 
+     */
+	private HashSet<String> _deletedResources = new HashSet<String>();
    
 	@Decorator
 	abstract static public class ChangeTracker 
@@ -75,10 +80,10 @@ public class ResourceCache {
 	 * Any reachable resources that are already attached are not 'reattached' 
 	 * nor marked as dirty.  
 	 */
-	public void attach(Object object, boolean isDirty)
+	public void attach(Resource object, boolean isDirty)
 	{
 		ArrayList<Resource> todo= new ArrayList<Resource>();
-		todo.add((Resource)object);
+		todo.add(object);
 		while (!todo.isEmpty())
 		{
 			Resource resource= todo.remove(0);
@@ -175,9 +180,16 @@ public class ResourceCache {
 			set.add(_resources.get(uri));
 		return set;
 	}
+	public Set<Resource> getDeletedResources() {
+		HashSet<Resource> set= new HashSet<Resource>();
+		for (String uri: _deletedResources)
+			set.add(_resources.get(uri));
+		return set;
+	}
 
-	public void clearDirtyList() {
+	public void clear() {
 		_dirtyResources.clear();
+		_deletedResources.clear();
 	}
     
    /** Remove all records from cache and update list. */
@@ -191,7 +203,46 @@ public class ResourceCache {
    	public void destroy() {
         purge();
 	}
+
+	public void deleted(Resource object) {
+		ArrayList<Resource> todo= new ArrayList<Resource>();
+		todo.add(object);
+		while (!todo.isEmpty())
+		{
+			Resource resource= todo.remove(0);
+			if (internalDeleted(resource))
+			{
+				// find all reachable resources and add them to list
+				for (Property<?> property : resource.getContainedProperties())
+				{
+					if (!property.isReference())
+						continue;
+					if (property.isTemporal())
+						continue;
+					if (!property.isComposite())
+						continue;
+
+					Object value= resource.getProperty(property);
+					if (property.isMany())
+					{
+						todo.addAll((Collection)value);
+					}
+					else
+						todo.add((Resource)value);
+				}
+			}
+		}
+	}
     
+	protected boolean internalDeleted(Resource resource) {
+		String uri= resource.getURI();
+		if (!_resources.containsKey(uri))
+			_resources.put(uri, resource);
+		if (_deletedResources.contains(uri))
+			return false;
+		_deletedResources.add(uri);
+		return true;
+	}
 
     
 }
