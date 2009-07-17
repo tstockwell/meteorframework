@@ -8,7 +8,7 @@ import com.googlecode.meteorframework.storage.StorageException;
 
 /**
  * Encodes numbers as strings in such a way that the lexicographic order of the 
- * encoded strings is that same as the natural order of the original numbers.
+ * encoded strings is the same as the natural order of the original numbers.
  * The length of an encoded number is only slightly larger than the length 
  * of its original number.
  * Also, there is no limit to the size of numbers which may be encoded.
