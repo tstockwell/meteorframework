@@ -14,6 +14,7 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Transaction;
+import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.googlecode.meteorframework.core.CoreNS;
 import com.googlecode.meteorframework.core.MeteorNotFoundException;
 import com.googlecode.meteorframework.core.Property;
@@ -97,24 +98,20 @@ implements AppengineStorageSession, Resource
 	@Override synchronized public <T> T findByURI(Class<T> javaType, String uri)
 	throws MeteorNotFoundException
 	{
-		try 
-		{
 			checkClosed();
 			
 			Resource resource= _resourceSet.findByURI(uri);
 			if (resource != null)
 				return resource.castTo(javaType);
 
-			Key key= KeyFactory.stringToKey(uri);
-			Entity entity= _datastoreService.get(key);
+			Query query= new Query(CoreNS.Resource.TYPE);
+			query.addFilter(CoreNS.Resource.uRI, FilterOperator.EQUAL, uri);
+			Entity entity= _datastoreService.prepare(query).asSingleEntity();
+			if (entity == null)
+				throw new MeteorNotFoundException(uri);
 			resource= convertEntityToResource(entity);
 			_resourceSet.attach(resource, false);
 			return resource.castTo(javaType);
-		} 
-		catch (EntityNotFoundException e) 
-		{
-			throw new MeteorNotFoundException(uri);
-		}
 	}
 	
 	@Override synchronized public <T> List<T> list(Selector<T> criteria) 
