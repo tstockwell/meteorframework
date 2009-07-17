@@ -342,4 +342,24 @@ extends BaseMeteorTest
 		String msg= "The range of a multi-valued property should be the value type, not the container type";
 		assertEquals(msg, BindingType.class, facetsProperty.getRange().getJavaType());
 	}
+	
+	
+	/**
+	 * Properties with defaults should be populated when the resource is 
+	 * created so that if the getContainedProperties method is called the 
+	 * default values are returned. 
+	 */
+	public void testInitializationOfDefaultProperties()
+	{
+		Customer customer= _scope.createInstance(Customer.class);
+		Set<Property<?>> containedProperties= customer.getContainedProperties();
+		
+		Property defaultedProperty= _scope.findResourceByURI(TestNS.Customer.propertyWithADefaultValue, Property.class);
+		assertTrue(containedProperties.contains(defaultedProperty));
+		assertEquals("A property with a default value was not initialized when resource was created", DESCRIPTION, customer.getProperty(defaultedProperty));
+		
+		Property mixedInProperty= _scope.findResourceByURI(ExtensionNS.CustomerExtension.somePropertyWithADefaultValue, Property.class);
+		assertTrue(containedProperties.contains(mixedInProperty));
+		assertEquals("A Mixed-in property with a default value was not initialized when resource was created", CustomerExtension.DEFAULT_VALUE, customer.getProperty(mixedInProperty));
+	}
 }
