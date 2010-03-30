@@ -1,7 +1,6 @@
 package com.googlecode.meteorframework.core.binding;
 
 import com.googlecode.meteorframework.core.JavaMeteorMetadataProvider;
-import com.googlecode.meteorframework.core.Scope;
 import com.googlecode.meteorframework.core.annotation.Generated;
 
 @Generated public class BindingNS extends JavaMeteorMetadataProvider {
