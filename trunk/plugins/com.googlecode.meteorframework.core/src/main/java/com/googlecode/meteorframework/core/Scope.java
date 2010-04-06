@@ -13,7 +13,7 @@ import com.googlecode.meteorframework.core.annotation.SameAs;
  * A scope is capable of creating new objects, looking up existing 
  * objects in the scope, and providing metadata about the types of objects 
  * in its domain.  
- * Meteor Resources created within the scope have access to the other resource 
+ * Meteor Resources created within a scope have access to the other resource 
  * and services within the scope.
  * 
  * Scopes may be nested.  Nested scopes are used to implement transient 
@@ -23,7 +23,7 @@ import com.googlecode.meteorframework.core.annotation.SameAs;
  * that scope are discarded. 
  * 
  * A scope may be associated with a set of binding annotations.
- * Binding annotations affect the behavior of the scope and the resource 
+ * Binding annotations affect the behavior of the scope and the resources 
  * within the scope's domain by causing method invocations to be bound to 
  * different sets of interceptors depending on the bindings.  
  * Nested scopes are usually created with just a single annotation but the systenm 

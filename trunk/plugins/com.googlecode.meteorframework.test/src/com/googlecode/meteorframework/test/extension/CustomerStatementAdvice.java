@@ -22,7 +22,7 @@ implements CustomerStatement
 		 * statement title to an unflattering custom title.
 		 */
 		@Override public CustomerStatement create(Customer customer) {		
-			CustomerStatement statement= (CustomerStatement)Meteor.proceed();
+			CustomerStatement statement= Meteor.proceed();
 			statement.setTitle(getCustomTitle(customer));
 			return statement;
 		}

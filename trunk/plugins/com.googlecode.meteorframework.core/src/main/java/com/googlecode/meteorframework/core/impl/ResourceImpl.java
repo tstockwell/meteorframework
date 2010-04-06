@@ -518,7 +518,7 @@ import com.googlecode.meteorframework.core.utils.ConversionService;
 	
 	@Override public String getLabel()
 	{
-		String label= (String)Meteor.proceed();
+		String label= Meteor.proceed();
 		if (label == null)
 			return _self.getURI();
 		return label;

@@ -6,6 +6,8 @@ import com.googlecode.meteorframework.core.annotation.InverseOf;
 
 
 /**
+ * Defines methods and properties common to all properties.
+ * 
  * @author Ted Stockwell
  *
  * @param <T> The type of objects associated with this properties range.
@@ -55,6 +57,20 @@ extends Resource, ModelElement
 	public boolean isWriteOnce();
 	
 	/**
+	 * Indicates that a property has a fixed number of allowable values.
+	 */
+	public void setEnum(boolean value);
+	public boolean getEnum();
+	public boolean isEnum();
+	
+	/**
+	 * If this property is an enumerated property then this property denotes the 
+	 * allowable values.
+	 */
+	public Set<T> getEnums();
+	public void setEnums(Set<T> enums);
+	
+	/**
 	 * Indicates if a property is multivalued.
 	 * In Meteor multivalued properties return a Collection object that 
 	 * contains all the propery values. 
@@ -64,7 +80,7 @@ extends Resource, ModelElement
 	public boolean isMany();
 	
 	/**
-	 * Indicates if a multivalued property si ordered.
+	 * Indicates if a multivalued property is ordered.
 	 * In Meteor ordered multivalued properties return a List object that 
 	 * contains all the propery values. 
 	 */

@@ -34,6 +34,6 @@ implements Messages
 			if (pattern != null)
 				return MessageFormat.format(pattern, parameters);
 		}
-		return (String)Meteor.proceed();
+		return Meteor.proceed();
 	}
 }

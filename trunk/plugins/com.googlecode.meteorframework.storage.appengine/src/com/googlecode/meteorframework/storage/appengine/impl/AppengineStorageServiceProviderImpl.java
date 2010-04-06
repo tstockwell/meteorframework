@@ -26,7 +26,7 @@ implements StorageServiceProvider
 
 	@Override synchronized public StorageService getStorageService(String connectionURL) {
 		if (!connectionURL.startsWith(AppengineStorageConfiguration.APPENGINE_STORAGE_PROTOCOL))
-			return (StorageService)Meteor.proceed();
+			return Meteor.proceed();
 
 		// check for cached connection
 		StorageService storageService= __connectors.get(connectionURL);
