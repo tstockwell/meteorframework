@@ -93,7 +93,7 @@ import com.truemesh.squiggle.criteria.OR;
 			return new NOT(_self.createCriteria(select, restrictions.get(0)));
 			
 		}
-		return (Criteria)Meteor.proceed();
+		return Meteor.proceed();
 	}
 	
 	protected Table addJoinForRestriction(SelectQuery select, Restriction restriction, String propertyURI)

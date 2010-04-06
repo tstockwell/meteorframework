@@ -26,7 +26,7 @@ implements StorageServiceProvider
 
 	@Override synchronized public StorageService getStorageService(String connectionURL) {
 		if (!connectionURL.startsWith(TripleStoreConfiguration.TRIPLESTORE_PROTOCOL))
-			return (StorageService)Meteor.proceed();
+			return Meteor.proceed();
 
 		StorageService storageService= __connectors.get(connectionURL);
 		if (storageService != null)
