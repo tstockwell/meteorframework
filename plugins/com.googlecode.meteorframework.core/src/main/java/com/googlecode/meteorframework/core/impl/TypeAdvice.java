@@ -70,7 +70,7 @@ import com.googlecode.meteorframework.utils.Logging;
 	public Set<Property<?>> getDeclaredProperties()
 	{
 		// sort declared properties by fieldOrder
-		Set<Property<?>> properties= (Set<Property<?>>) Meteor.proceed();
+		Set<Property<?>> properties= Meteor.proceed();
 		if (properties == null) // can be null early in boot process
 			return Collections.EMPTY_SET;
 		List<Property<?>> fieldOrder= _self.getFieldOrder();

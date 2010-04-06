@@ -166,8 +166,9 @@ public class Meteor {
 		return fieldName;
 	}
 
-	public static final Object proceed() {
-		return getInvocationContext().proceed();
+	@SuppressWarnings("unchecked")
+	public static final <T> T proceed() {
+		return (T)getInvocationContext().proceed();
 	}
 
 	public static String getURIForPackage(Package pkg) {

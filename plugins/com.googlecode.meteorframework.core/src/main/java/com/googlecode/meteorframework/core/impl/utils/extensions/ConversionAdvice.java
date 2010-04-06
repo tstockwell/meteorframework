@@ -19,7 +19,6 @@ import com.googlecode.meteorframework.core.utils.ConversionService;
  * @author Ted Stockwell
  *
  */
-@SuppressWarnings("unchecked")
 @Decorator public abstract class ConversionAdvice implements ConversionService {
 	
 	@Inject Scope _scope;
@@ -50,7 +49,7 @@ import com.googlecode.meteorframework.core.utils.ConversionService;
 		Type<T> type= _scope.findType(javaType);
 		if (type != null)
 			return type;
-		return (Type<T>)Meteor.proceed();
+		return Meteor.proceed();
 	}
 	
 	public <T extends BindingType> T convert(String resourceURI, Class<T> javaType) {
@@ -68,7 +67,7 @@ import com.googlecode.meteorframework.core.utils.ConversionService;
 		catch (Throwable t) {
 		}
 		
-		return (T) Meteor.proceed();
+		return Meteor.proceed();
 	}
 	
 	public Boolean convert(String value, Class<Boolean> javaType) {

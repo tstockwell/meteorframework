@@ -16,7 +16,7 @@ implements Provider
 	@Binding(Testing.class)
 	public Credentials getInstance(Class<Credentials> class1)
 	{
-		Credentials credentials= (Credentials)Meteor.proceed();
+		Credentials credentials= Meteor.proceed();
 		credentials.setLoginID("test");
 		credentials.setPassword("test");
 		return credentials;
