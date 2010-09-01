@@ -2,6 +2,18 @@ package sat;
 
 import java.util.NoSuchElementException;
 
+enum State {
+	BEGINS_WITH_NOT,
+	BEGINS_WITH_STAR,
+	NO_MORE_FORMULAS
+}
+
+enum Next {
+	THERE_IS_NOT_A_NEXT, 
+	THERE_IS_A_NEXT,
+	NEED_TO_CHECK
+}
+
 /**
  * Creates new formulas of a specified length by assembling 
  * the new formulas using previously created formulas in the 
@@ -13,12 +25,17 @@ public class FormulaConstructor implements ResultIterator<Formula> {
 	int _formulaLength;
 	int _leftSize= 0;
 	int _rightSize= 0;
-	int _state= 0; // 0 == generating formulas that being with ~, 1 == generating formulas that begin with *. >1 no more formulas.
 	ResultIterator<Formula> _leftIterator;
 	ResultIterator<Formula> _rightIterator;
 	Formula _leftFormula= null;
 	Formula _rightFormula= null;
-	int _hasNext= -1;
+
+	State _state= State.BEGINS_WITH_NOT; 
+	
+	// -1 == need to check if there is a next
+	//  1 == it is already known that there is a next
+	//  0 == it is already known that there NOT a next 
+	int _hasNext= -1; 
 	
 	/**
 	 * Creates a FormulaConstructor that will bypass formulas 
@@ -49,13 +66,13 @@ public class FormulaConstructor implements ResultIterator<Formula> {
 	}
 
 	public boolean hasNext() {
-		if (_hasNext < 0) {
-			if (_state == 0) {
+		while (_hasNext < 0) {
+			if (_state == State.BEGINS_WITH_NOT) {
 				if (_rightIterator.hasNext()) { 
 					_hasNext= 1;
 				}
 				else {
-					_state= 1;
+					_state= State.BEGINS_WITH_STAR;
 					_rightIterator.close();
 					_rightSize= _formulaLength - 2;
 					_leftSize= 1;
@@ -73,7 +90,7 @@ public class FormulaConstructor implements ResultIterator<Formula> {
 						_hasNext= 0;
 				}
 			}
-			else if (_state == 1) {
+			else if (_state == State.BEGINS_WITH_STAR) {
 				if (_rightIterator.hasNext()) {
 					_hasNext= 1;
 				}
@@ -100,11 +117,11 @@ public class FormulaConstructor implements ResultIterator<Formula> {
 				else 
 					_hasNext= 0;
 			}
-			else if (_state == 2)
+			else if (_state == State.NO_MORE_FORMULAS)
 				_hasNext= 0;
 		}
 		if (_hasNext == 0)
-			_state= 2;
+			_state= State.NO_MORE_FORMULAS;
 		return (_hasNext == 0) ? false : true;
 	}
 
@@ -115,9 +132,9 @@ public class FormulaConstructor implements ResultIterator<Formula> {
 				throw new NoSuchElementException();
 		_hasNext= -1;
 		
-		if (_state == 0) 
+		if (_state == State.BEGINS_WITH_NOT) 
 			return new Formula(Formula.NEGATION, _rightIterator.next());
-		if (_state == 1) 
+		if (_state == State.BEGINS_WITH_STAR) 
 			return new Formula(Formula.IF_THEN, _leftFormula, _rightIterator.next());
 		throw new NoSuchElementException();
 	}
