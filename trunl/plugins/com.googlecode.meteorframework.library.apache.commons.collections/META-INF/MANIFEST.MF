@@ -1,0 +1,35 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Collections Plug-in
+Bundle-SymbolicName: com.googlecode.meteorframework.library.apache.commons.collections
+Bundle-Version: 3.1.0
+Bundle-ClassPath: commons-collections-3.1.jar
+Export-Package: org.apache.commons.collections;uses:="org.apache.commons.collections.keyvalue,new org.apache.commons.collections",
+ org.apache.commons.collections.bag;uses:="org.apache.commons.collections,org.apache.commons.collections.collection,org.apache.commons.collections.set",
+ org.apache.commons.collections.bidimap;
+  uses:="org.apache.commons.collections.iterators,
+   org.apache.commons.collections.keyvalue,
+   org.apache.commons.collections.map,
+   org.apache.commons.collections,
+   org.apache.commons.collections.collection",
+ org.apache.commons.collections.buffer;uses:="org.apache.commons.collections,org.apache.commons.collections.collection",
+ org.apache.commons.collections.collection;uses:="org.apache.commons.collections",
+ org.apache.commons.collections.comparators;uses:="org.apache.commons.collections",
+ org.apache.commons.collections.functors;uses:="new org.apache.commons.collections.functors,org.apache.commons.collections",
+ org.apache.commons.collections.iterators;uses:="org.apache.commons.collections",
+ org.apache.commons.collections.keyvalue;uses:="org.apache.commons.collections",
+ org.apache.commons.collections.list;
+  uses:="org.apache.commons.collections.iterators,
+   org.apache.commons.collections,
+   new org.apache.commons.collections.list,
+   org.apache.commons.collections.collection",
+ org.apache.commons.collections.map;
+  uses:="org.apache.commons.collections.iterators,
+   org.apache.commons.collections.keyvalue,
+   org.apache.commons.collections,
+   org.apache.commons.collections.set",
+ org.apache.commons.collections.set;
+  uses:="org.apache.commons.collections.iterators,
+   new org.apache.commons.collections.set,
+   org.apache.commons.collections,
+   org.apache.commons.collections.collection"
