@@ -26,7 +26,7 @@ public class RuleGenerator {
 			
 			Formula formula = _formulaGenerator.getStartingFormula();
 
-			while (!_commandLine.isShutdown()) {
+			while (formula != null && !_commandLine.isShutdown()) {
 
 				processFormula(formula);
 				formula = _formulaGenerator.getNextWellFormedFormula();
@@ -54,12 +54,8 @@ public class RuleGenerator {
 
 	private void processFormula(Formula formula) {
 		
-		ReductionRule reductionRule= null;
-		if (formulaIsSoLongThatItIsGuaranteedToBeReducable(formula)) {
-			System.out.println("!!!!!! The Rule Database is Complete !!!");
-			_commandLine.shutDown();
-		} 
-		else if ((reductionRule= formulaCanBeReduced(formula)) == null) {
+		ReductionRule reductionRule= formulaCanBeReduced(formula);
+		if (reductionRule== null) {
 			boolean isCanonical= isCanonicalFormula(formula);
 			if (isCanonical) {
 				System.out.println(formula+" is canonical");
@@ -85,12 +81,6 @@ public class RuleGenerator {
 		return formula.length() <= length; 
 	}
 
-	private boolean formulaIsSoLongThatItIsGuaranteedToBeReducable(Formula formula) {
-		int maxLength= _database.getLengthOfLongestCanonicalFormula();
-		if (maxLength <= 0) // we don't know the length of longest formula yet
-			return false;
-		return (maxLength*2+1) < formula.length();
-	}
 
 	private ReductionRule formulaCanBeReduced(Formula formula) {
 		Iterator<Formula> formulaIterator= formula.getLeftSidedDeepestFirstIterator();
