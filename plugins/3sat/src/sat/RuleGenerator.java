@@ -58,16 +58,19 @@ public class RuleGenerator {
 		if (reductionRule== null) {
 			boolean isCanonical= isCanonicalFormula(formula);
 			if (isCanonical) {
-				System.out.println(formula+" is canonical");
+				System.out.println(formula+" is canonical.  Truth table: "+formula.getTruthTable());
 			}
-			else 
-				System.out.println(formula+" is reducable");
+			else {
+				reductionRule= new ReductionRule(formula, _database.findCanonicalFormula(formula));
+				System.out.println("Found a new reduction rule: "+reductionRule);
+			}
 			formula.setCanonical(isCanonical);
 			_database.addFormula(formula);
 		}
 		else {
 			if (reductionRule.formula.length() == reductionRule.reduction.length()) {
-				//System.out.println(formula+" is isomorphic to "+reductionRule.reduction);
+				System.out.println("***** WARNING ****\nEncountered a reduction rule where the left and right sides have the same length");
+				System.exit(1);
 			}
 			else
 				System.out.println(formula+" can be reduced using rule "+reductionRule);
@@ -81,7 +84,10 @@ public class RuleGenerator {
 		return formula.length() <= length; 
 	}
 
-
+	/*
+	 * A formula can be reduced if it contains a substitution instance of 
+	 * a previously generated non-canonical formula.
+	 */
 	private ReductionRule formulaCanBeReduced(Formula formula) {
 		Iterator<Formula> formulaIterator= formula.getLeftSidedDeepestFirstIterator();
 		while (formulaIterator.hasNext()) {
@@ -89,8 +95,8 @@ public class RuleGenerator {
 			ResultIterator<Formula> reducableFormulas = _database.getAllNonCanonicalFormulas(subformula.length());
 			while (reducableFormulas.hasNext()) {
 				Formula reducableFormula= reducableFormulas.next();
-				if (subformula.isInstanceOf(reducableFormula))
-					return new ReductionRule(subformula, reducableFormula);
+				if (subformula.isInstanceOf(reducableFormula)) 
+					return new ReductionRule(reducableFormula, _database.findCanonicalFormula(reducableFormula));
 			}
 		}
 		return null;

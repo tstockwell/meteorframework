@@ -80,9 +80,9 @@ public class RuleDatabase {
 
 				s.execute("create table FORMULA(" +
 						"ID int NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), " +
-						"FORMULA long varchar NOT NULL, " +
+						"FORMULA varchar(32672) NOT NULL, " +
 						"LENGTH int NOT NULL, " +
-						"TRUTHVALUE long varchar NOT NULL, " +
+						"TRUTHVALUE varchar(32672) NOT NULL, " +
 						"CANONICAL int not NULL, " +
 						"PRIMARY KEY (ID)" +
 						")");
@@ -363,6 +363,31 @@ public class RuleDatabase {
 		if (length == null)
 			return -1;
 		return length;
+	}
+
+	/**
+	 * Finds the canonical form of the given formula.
+	 */
+	public Formula findCanonicalFormula(Formula formula) {
+		try {
+			String sql= "SELECT * FROM FORMULA WHERE TRUTHVALUE = '"+formula.getTruthTable()+"' AND CANONICAL=1";
+			Statement s = _connection.createStatement();
+			ResultSet resultSet= null;		
+			try {
+				resultSet= s.executeQuery(sql);
+				if (resultSet.next()) 
+					return Formula.parseFormula(resultSet.getString("FORMULA"));
+				return null;
+			}
+			finally {
+				try { resultSet.close(); } catch (Throwable t) { }
+				try { s.close(); } catch (Throwable t) { }
+			}
+		} 
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
 	}
 
 }
