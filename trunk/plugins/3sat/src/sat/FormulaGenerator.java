@@ -6,8 +6,8 @@ import java.util.List;
 
 /**
  * Enumerates all formulas that need to be processed by the RuleGenerator application.
- * Creates new formulas by assembling the new formulas using previously 
- * created formulas in the formula database.
+ * Creates new formulas by assembling formulas from previously 
+ * created canonical formulas in the formula database.
  * 
  * @author Ted Stockwell
  */
@@ -65,6 +65,12 @@ public class FormulaGenerator {
 			while (nextConstructor == null) {
 				_currentLength++;
 				System.out.println("The formulas lengths have been increased to "+_currentLength);
+				
+				if (_database.lengthOfLongestPossibleNonReducableFormula() < _currentLength) {
+					System.out.println("!!!!!! The Rule Database is Complete !!!");
+					return null;
+				} 
+				
 				FormulaConstructor fc= new FormulaConstructor(_database, _currentLength);
 				if (fc.hasNext())
 					nextConstructor= fc;

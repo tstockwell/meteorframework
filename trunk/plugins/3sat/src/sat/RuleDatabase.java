@@ -210,6 +210,19 @@ public class RuleDatabase {
 		return _lengthOfLongestCanonical;
 	}
 
+	/**
+	 * Formulas longer than this length are guaranteed to be reducable with rules,
+	 * generated from previous formulas. 
+	 * Therefore processing can stop when formulas get this long.
+	 */
+	public int lengthOfLongestPossibleNonReducableFormula() {
+		int maxLength= getLengthOfLongestCanonicalFormula();
+		if (maxLength <= 0) // we don't know the length of longest formula yet
+			return Integer.MAX_VALUE;
+		return maxLength*2+1;
+	}
+	
+
 	public ResultIterator<Formula> findCanonicalFormulasByLength(int size) {
 		List<Formula> formulas= _canonicalFormulasByLength.get(size);
 		if (formulas == null) {
