@@ -24,7 +24,7 @@ public class Formula {
 	 * Can't be more than 26 because we use letters to represent variables (for readability).
 	 * Should not be less than 1.
 	 */
-	public static final int MAX_VARIABLES= 3; 
+	public static final int MAX_VARIABLES= 2; 
 	
 	// operators
 	public static final char IF_THEN= '*';
