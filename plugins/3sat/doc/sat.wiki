@@ -1,0 +1,79 @@
+= A Deterministic, Polynomial-time, Algorithm For Propositional Theorem Proving =
+
+Author: Ted Stockwell [emorning@yahoo.com]
+
+== Abstract ==
+
+This document describes a deterministic, polynomial-time, algorithm that can identify tautological propositional formulas.  
+The algorithm itself is quite simple, it consists of a (large) set of reduction rules that denote valid substitutions that, when applied to a given propositional formula, produce a shortened formula that is equivalent to the original. 
+The algorithm repeatedly scans a formula for instances of these reduction rules and makes appropriate substitutions, each time reducing the length of the formula.  If a formula cannot be reduced to the single symbol 'T' then the formula is not tautological.
+The majority of this document is devoted to proving that the given set of reduction rules is complete, that is, that the given set of reduction rules can reduce all tautological formula in our chosen propositional calculus.
+
+== A Propositional Calculus ==
+
+A propositional calculus is a formal system in which formulas of a formal language may be interpreted as representing propositions [1]. 
+A system of inference rules and axioms allows certain formulas to be derived, called theorems; which may be interpreted as true propositions. 
+There are many possible formal systems of propositional calculus, depending on the set of symbols used in formulas, the set of starting axioms, and the inference rules.  In this section we describe a particular propositional system, a system that will eventually lend itself to the automatic derivation of reduction rules.
+
+For our purposes we start with the minimal propositional system discovered by Jan Lukasiewicz [2].  This system uses:
+ * a set of variables (a, b, c, ...).
+ * two logical operators, negation (~) and implication (->).
+ * A set of axioms that is all substitution instances of the following formulas:
+ 	 * P->(Q->P)
+ 	 * (P->(Q->R))->((P->Q)->(P->R))
+ 	 * (~P->~Q)->(Q->P)
+ * One inference rule, modus ponens.  That is from P and P->Q infer Q.
+ 
+Note that the axioms in this system are substitution instances of tautologies with no more than three variables. 
+For our purposes we extend the set of axioms of this system to include all substitution instances of any tautological formula of three variables or less.  So for instance, all substitution instances of this formula...
+	P->P
+...are also axioms in our system.
+We take this step of generalizing the set of axioms because it will eventually make it possible to automatically deduce all the possible reduction rules for the system.  
+
+We also extend the system by adding two additional symbols, T and F.
+These symbols represent the values true and false.
+We add these symbols so that we can create an algorithm that can reduce tautological formulas to a single symbol, T, and all contradictory formulas to a single symbol, F. 
+
+== A Theorem Proving Algorithm For The Propositional Calculus ==
+
+The set of valid theorems of the previously described propositional calculus will be the set of tautological formulas [?].   
+A theorem proving algorithm is a process that can recognize these tautological formulas.  
+We have taken a specific approach to designing a theorem proving algorithm for the previously described calculus.  Note that the calculus has only one inference rule, modus ponens, from P and P->Q infer Q.   
+The algorithm describes in this document was designed to have the following properties:
+  * it would repeatedly reduce a formula by using rules that describe valid substitutions, where each valid substitution reduces the length of the formula.
+  * if a formula is a tautology then the formula will be reduced to the single symbol, T.
+  * it would provably recognize any axiom in our calculus.
+  * it would be designed to always reduce the left side of an implication 
+  as much as possible before reducing the right side of the implication.
+  
+Theorem 1.
+An algorithm with the properties described above will be able to recognize any theorem in the calculus.  
+
+Proof.
+Suppose we have two formulas that belong to the set of axioms in our system, P, and P->Q.  Our proposed algorithm would reduce both P and P->Q to T.  Since the proposed algorithm always fully reduces the left side of an implication before reducing the right side, our proposed algorithm would also reduce P->Q to T->Q before finally reducing it to T.  Finally, our proposed algorithm must therefore be able to reduce Q to T, otherwise it would not be able to reduce T->Q to T.   
+
+ 
+ 	 
+ 	 
+
+
+There are
+
+Let , where ?, O, ?, ? are defined as follows:
+
+The alpha set ?, is a finite set of symbols that is large enough to supply the needs of a given discussion, for example: 
+ 
+Of the three connectives for conjunction, disjunction, and implication (, , and ), one can be taken as primitive and the other two can be defined in terms of it and negation (). Indeed, all of the logical connectives can be defined in terms of a sole sufficient operator. The biconditional () can of course be defined in terms of conjunction and implication, with  defined as .
+Adopting negation and implication as the two primitive operations of a propositional calculus is tantamount to having the omega set  partition as follows:
+
+An axiom system discovered by Jan Lukasiewicz formulates a propositional calculus in this language as follows. The axioms are all substitution instances of:
+
+The rule of inference is modus ponens (i.e. from p and , infer q). Then  is defined as , and  is defined as . 
+  
+
+The algorithm solves propositional formulas written in reverse polish notation that use only two operators, negation 
+*~aa ==> a
+
+
+[1] http://en.wikipedia.org/wiki/Propositional_calculus
+[2] http://en.wikipedia.org/wiki/Jan_%C5%81ukasiewicz
