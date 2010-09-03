@@ -271,7 +271,7 @@ public class RuleDatabase {
 				s.execute(sql);
 				int formulaLength= formula.length();
 				if (formula.isCanonical()) {
-					if (_lengthOfLongestCanonical < formulaLength) {
+					if (_lengthOfLongestCanonical == null || _lengthOfLongestCanonical < formulaLength) {
 						_lengthOfLongestCanonical= formula.length();
 						System.out.println("The length of the longest canonical formula is "+_lengthOfLongestCanonical);
 					}

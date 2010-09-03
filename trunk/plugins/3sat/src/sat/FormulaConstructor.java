@@ -186,7 +186,7 @@ public class FormulaConstructor implements ResultIterator<Formula> {
 		public Formula next() {
 			if (!hasNext())
 				throw new NoSuchElementException();
-			return new Formula(Formula.IF_THEN, _leftIterator.next());
+			return new Formula(Formula.IF_THEN, _rightFormula, _leftIterator.next());
 		}
 
 		public void remove() {
