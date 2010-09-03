@@ -29,8 +29,9 @@ public class TruthTable {
 		char[] truthValues= new char[MAX_TRUTH_VALUES];
 		for (int i= 0; i < MAX_TRUTH_VALUES; i++) {
 			String v= Integer.toString(i, 2);
-			if (v.length() < MAX_TRUTH_VALUES) 
-				v= __zeropad.substring(0, MAX_TRUTH_VALUES - v.length()) + v;
+			int l= Formula.MAX_VARIABLES - v.length();
+			if (0 < l) 
+				v= __zeropad.substring(0, l) + v;
 			truthValues[i]= builder.evaluate(v) ? '1' : '0';
 		}
 		_booleanString= new String(truthValues);
