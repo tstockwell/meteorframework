@@ -4,41 +4,58 @@ Author: Ted Stockwell [emorning@yahoo.com]
 
 == Abstract ==
 
-This document describes a deterministic, polynomial-time, algorithm that can identify tautological propositional formulas.  
+This document describes a deterministic, polynomial-time, algorithm that can recognize tautological propositional formulas.  
 The algorithm itself is quite simple, it consists of a (large) set of reduction rules that denote valid substitutions that, when applied to a given propositional formula, produce a shortened formula that is equivalent to the original. 
 The algorithm repeatedly scans a formula for instances of these reduction rules and makes appropriate substitutions, each time reducing the length of the formula.  If a formula cannot be reduced to the single symbol 'T' then the formula is not tautological.
 The majority of this document is devoted to proving that the given set of reduction rules is complete, that is, that the given set of reduction rules can reduce all tautological formula in our chosen propositional calculus.
 
-== A Propositional Calculus ==
+== System L, a Propositional Calculus ==
 
 A propositional calculus is a formal system in which formulas of a formal language may be interpreted as representing propositions [1]. 
 A system of inference rules and axioms allows certain formulas to be derived, called theorems; which may be interpreted as true propositions. 
-There are many possible formal systems of propositional calculus, depending on the set of symbols used in formulas, the set of starting axioms, and the inference rules.  In this section we describe a particular propositional system, a system that will eventually lend itself to the automatic derivation of reduction rules.
+There are many possible formal systems of propositional calculus, depending on the set of symbols used in formulas, the set of starting axioms, and the inference rules.  In this section we describe a particular propositional system, a system that will eventually lend itself to the automatic derivation of reduction rules, we will refer this particular system as system L.
 
-For our purposes we start with the minimal propositional system discovered by Jan Lukasiewicz [2].  This system uses:
+For our purposes we define L as the minimal propositional system discovered by Jan Lukasiewicz [2].  This system uses:
  * a set of variables (a, b, c, ...).
  * two logical operators, negation (~) and implication (->).
  * A set of axioms that is all substitution instances of the following formulas:
  	 * P->(Q->P)
  	 * (P->(Q->R))->((P->Q)->(P->R))
  	 * (~P->~Q)->(Q->P)
- * One inference rule, modus ponens.  That is from P and P->Q infer Q.
+ * One inference rule, modus ponens; if P is a therem and and P->Q then Q is also a theorem.
  
 Note that the axioms in this system are substitution instances of tautologies with no more than three variables. 
-For our purposes we extend the set of axioms of this system to include all substitution instances of any tautological formula of three variables or less.  So for instance, all substitution instances of this formula...
+For our purposes we extend the set of axioms in L to include all substitution instances of any tautological formula of three variables or less.  So for instance, all substitution instances of this formula...
 	P->P
 ...are also axioms in our system.
 We take this step of generalizing the set of axioms because it will eventually make it possible to automatically deduce all the possible reduction rules for the system.  
 
-We also extend the system by adding two additional symbols, T and F.
+We also extend L by adding two additional symbols, T and F.
 These symbols represent the values true and false.
 We add these symbols so that we can create an algorithm that can reduce tautological formulas to a single symbol, T, and all contradictory formulas to a single symbol, F. 
 
-== A Theorem Proving Algorithm For The Propositional Calculus ==
+== A Theorem Proving Algorithm For System L ==
 
-The set of valid theorems of the previously described propositional calculus will be the set of tautological formulas [?].   
+The set of valid theorems of L will be the set of tautological formulas in L [?].   
 A theorem proving algorithm is a process that can recognize these tautological formulas.  
-We have taken a specific approach to designing a theorem proving algorithm for the previously described calculus.  Note that the calculus has only one inference rule, modus ponens, from P and P->Q infer Q.   
+
+The process of designing a theorem proving algorithm for the previously described calculus starts by noting that the calculus has only one inference rule, modus ponens.  
+If our goal is to design an algorithm that recognizes all theorems in system L then modus ponens shows us how we should design such an alorithm.  We should design such an algortithm such that if the algorithm recognises all theorems that are instances of some forms P and P->Q, then the algorithm will be guaranteed to also recognise Q.  If such an algorithm can recognise all the axioms in L then it is trivial to show that such an algorithm can recognise all theorems in L.
+
+== Theorem 1 ==
+Let A be an algorithm that can recognise all the axioms in system L.
+Further, let A be an algorithm that is guaranteed to be able to recognise formula Q if it can also recognise formulas P and P->Q.
+Then A is an algorithm that can recognise all theorems in L.
+
+== Proof ==
+By definition the 
+
+
+
+One way to design such an algorithm would be to design an algorithm that repeatedly applies rules to the formulas that result in shortening the formula such that if a forumula was a tautology then the formula would eventually be reduced to T.  Further we would design the algorithm such that it would always reduce the antecedent in an implication before reducing the consequence.
+
+
+Our goal is to design an algorithm such that we can take advantage of modus ponens in order to prove Further, note that if we could design an alorithm that worked by systematically reducing formulas and always reduced the left side with the following properties 
 The algorithm describes in this document was designed to have the following properties:
   * it would repeatedly reduce a formula by using rules that describe valid substitutions, where each valid substitution reduces the length of the formula.
   * if a formula is a tautology then the formula will be reduced to the single symbol, T.
