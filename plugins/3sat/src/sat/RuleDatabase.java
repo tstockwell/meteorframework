@@ -38,14 +38,14 @@ public class RuleDatabase {
 	{
 		if (LIST_FORMULA_LENGTHS.equals(args[0])) {
 			RuleDatabase database= new RuleDatabase();
-			database.getLengthOfCanonicalFormulas(new TruthTable("0"));
+			database.getLengthOfCanonicalFormulas(TruthTable.create(0));
 			HashMap<TruthTable, Integer> lengths= database._lengthOfCanonicalFormulas;
 			System.out.println("TRUTH VALUE   LENGTH");
 			System.out.println("-----------   ------");
-			for (int truthValue= 0; truthValue <= 255; truthValue++) {
+			for (int truthValue= 0; truthValue < TruthTable.MAX_TRUTH_TABLES; truthValue++) {
 				String t= "           "+truthValue;
 				t= t.substring(t.length()-11);
-				Integer length= lengths.get(truthValue);
+				Integer length= lengths.get(TruthTable.create(truthValue));
 				if (length == null) {
 					System.out.println(t+"   *unknown*");
 				}
@@ -348,7 +348,7 @@ public class RuleDatabase {
 				Statement s = _connection.createStatement();
 				ResultSet resultSet= s.executeQuery(sql);
 				while (resultSet.next()) {
-					TruthTable tt= new TruthTable(resultSet.getString("TRUTHVALUE"));
+					TruthTable tt= TruthTable.create(resultSet.getString("TRUTHVALUE"));
 					if (!lengths.containsKey(tt))
 						lengths.put(tt, resultSet.getInt("LENGTH"));
 				}

@@ -112,7 +112,7 @@ public class Formula {
 	
 	public TruthTable getTruthTable() {
 		if (_truthTable == null) {
-			_truthTable= new TruthTable(new TruthTable.Builder() {
+			_truthTable= TruthTable.create(new TruthTable.Builder() {
 				public boolean evaluate(String values) {
 					return Formula.this.evaluate(values);
 				}

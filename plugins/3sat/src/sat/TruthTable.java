@@ -1,12 +1,13 @@
 package sat;
 
-import java.math.BigInteger;
+import java.util.HashMap;
 
 
 
 public class TruthTable {
 	
 	public static final int MAX_TRUTH_VALUES= 1 << Formula.MAX_VARIABLES;
+	public static final long MAX_TRUTH_TABLES= (long)Math.pow(2, MAX_TRUTH_VALUES);
 	
 	private static String __zeropad; 
 	static {
@@ -16,25 +17,43 @@ public class TruthTable {
 		__zeropad= new String(pad);
 	}
 	
+	private static final HashMap<String, TruthTable> __tables= new HashMap<String, TruthTable>();
+	static {
+		for (int i= 0; i < MAX_TRUTH_TABLES; i++) {
+			String s= toTruthTableString(i);
+			__tables.put(s, new TruthTable(toTruthTableString(i)));
+		}
+	}
+	public static final String toTruthTableString(int i) {
+			String s= Integer.toString(i, 2);
+			int l= Formula.MAX_VARIABLES - s.length();
+			if (0 < l) 
+				s= __zeropad.substring(0, l) + s;
+			return s;
+	}
+	
 	public static interface Builder {
 		boolean evaluate(String booleanString);
 	}
 	
 	String _booleanString="";
 	
-	public TruthTable(String booleanString) {
+	private TruthTable(String booleanString) {
 		_booleanString= booleanString;
 	}
-	public TruthTable(Builder builder) {
+	public static TruthTable create(Builder builder) {
 		char[] truthValues= new char[MAX_TRUTH_VALUES];
 		for (int i= 0; i < MAX_TRUTH_VALUES; i++) {
-			String v= Integer.toString(i, 2);
-			int l= Formula.MAX_VARIABLES - v.length();
-			if (0 < l) 
-				v= __zeropad.substring(0, l) + v;
+			String v= toTruthTableString(i);
 			truthValues[i]= builder.evaluate(v) ? '1' : '0';
 		}
-		_booleanString= new String(truthValues);
+		return __tables.get(new String(truthValues));
+	}
+	public static TruthTable create(String booleanString) {
+		return __tables.get(booleanString);
+	}
+	public static TruthTable create(int i) {
+		return __tables.get(toTruthTableString(i));
 	}
 	
 	@Override
