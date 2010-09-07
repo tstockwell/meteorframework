@@ -1,0 +1,6 @@
+? Every tautology in L is a substitution instance of a tautology with no more than 3 variables.
+A, A->B ==> B
+
+1) c->(b->(a->T)), axiom C->(B->(A->T)) 
+2) (c->(b->(a->T)))->(d->(c->(b->(a->T)))), axiom A->(B->A)
+3) d->(c->(b->(a->T))), MP(1,2) 
