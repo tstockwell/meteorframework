@@ -26,7 +26,7 @@ public class TruthTable {
 	}
 	public static final String toTruthTableString(int i) {
 			String s= Integer.toString(i, 2);
-			int l= Formula.MAX_VARIABLES - s.length();
+			int l= MAX_TRUTH_VALUES - s.length();
 			if (0 < l) 
 				s= __zeropad.substring(0, l) + s;
 			return s;
@@ -44,7 +44,10 @@ public class TruthTable {
 	public static TruthTable create(Builder builder) {
 		char[] truthValues= new char[MAX_TRUTH_VALUES];
 		for (int i= 0; i < MAX_TRUTH_VALUES; i++) {
-			String v= toTruthTableString(i);
+			String v= Integer.toString(i, 2);
+			int l= Formula.MAX_VARIABLES - v.length();
+			if (0 < l) 
+				v= __zeropad.substring(0, l) + v;
 			truthValues[i]= builder.evaluate(v) ? '1' : '0';
 		}
 		return __tables.get(new String(truthValues));
