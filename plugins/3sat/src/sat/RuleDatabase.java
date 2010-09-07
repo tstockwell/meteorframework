@@ -14,6 +14,11 @@ import java.util.Properties;
 
 import org.apache.derby.jdbc.EmbeddedDriver;
 
+/**
+ * An API for accessing the rule database.
+ * @author Ted Stockwell
+ *
+ */
 public class RuleDatabase {
 	
 	public static final String LIST_FORMULA_LENGTHS= "-listFormulaLengths";
@@ -33,30 +38,6 @@ public class RuleDatabase {
 	HashMap<Integer, List<Formula>> _allNonCanonicalFormulasByLength= new HashMap<Integer, List<Formula>>();
 	
 	
-	public static void main(String[] args)
-	throws Exception
-	{
-		if (LIST_FORMULA_LENGTHS.equals(args[0])) {
-			RuleDatabase database= new RuleDatabase();
-			database.getLengthOfCanonicalFormulas(TruthTable.create(0));
-			HashMap<TruthTable, Integer> lengths= database._lengthOfCanonicalFormulas;
-			System.out.println("TRUTH VALUE   LENGTH");
-			System.out.println("-----------   ------");
-			for (int truthValue= 0; truthValue < TruthTable.MAX_TRUTH_TABLES; truthValue++) {
-				String t= "           "+truthValue;
-				t= t.substring(t.length()-11);
-				Integer length= lengths.get(TruthTable.create(truthValue));
-				if (length == null) {
-					System.out.println(t+"   *unknown*");
-				}
-				else {
-					String l= "      "+length;
-					l= l.substring(l.length()-6);
-					System.out.println(t+"   "+l);
-				}
-			}
-		}
-	}
 	
 	public RuleDatabase() throws SQLException {
 		connect();
@@ -87,7 +68,7 @@ public class RuleDatabase {
 						"PRIMARY KEY (ID)" +
 						")");
 				s.execute("CREATE INDEX formula_index_1 ON FORMULA (LENGTH, ID)");
-//				s.execute("CREATE INDEX formula_index_2 ON FORMULA (TRUTHVALUE, ID)");
+				s.execute("CREATE INDEX formula_index_2 ON FORMULA (TRUTHVALUE)");
 //				s.execute("CREATE INDEX formula_index_3 ON FORMULA (TRUTHVALUE, CANONICAL)");
 				s.execute("CREATE INDEX formula_index_4 ON FORMULA (CANONICAL, LENGTH, ID)");
 				
@@ -133,7 +114,7 @@ public class RuleDatabase {
 
 	public List<Formula> getCanonicalFormulas(TruthTable truthTable) {
 		try {
-			String sql= "SELECT * FROM FORMULA WHERE TRUTHVALUE = '"+truthTable+"' ORDER BY ID ASC";
+			String sql= "SELECT * FROM FORMULA WHERE TRUTHVALUE = '"+truthTable+"' AND CANONICAL=1 ORDER BY ID ASC";
 			Statement s = _connection.createStatement();
 			ResultSet resultSet= null;		
 			try {
@@ -378,6 +359,46 @@ public class RuleDatabase {
 				if (resultSet.next()) 
 					return Formula.parseFormula(resultSet.getString("FORMULA"));
 				return null;
+			}
+			finally {
+				try { resultSet.close(); } catch (Throwable t) { }
+				try { s.close(); } catch (Throwable t) { }
+			}
+		} 
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
+
+	public long countNonCanonicalFormulas() {
+		try {
+			String sql= "SELECT COUNT(*) as count FROM FORMULA WHERE CANONICAL = 0";
+			Statement s = _connection.createStatement();
+			ResultSet resultSet= null;		
+			try {
+				(resultSet= s.executeQuery(sql)).next();
+				return resultSet.getLong(1);
+			}
+			finally {
+				try { resultSet.close(); } catch (Throwable t) { }
+				try { s.close(); } catch (Throwable t) { }
+			}
+		} 
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
+
+	public long countCanonicalFormulas() {
+		try {
+			String sql= "SELECT COUNT(*) as count FROM FORMULA WHERE CANONICAL = 1";
+			Statement s = _connection.createStatement();
+			ResultSet resultSet= null;		
+			try {
+				(resultSet= s.executeQuery(sql)).next();
+				return resultSet.getLong(1);
 			}
 			finally {
 				try { resultSet.close(); } catch (Throwable t) { }
