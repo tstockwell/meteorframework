@@ -48,11 +48,29 @@ Further, let A be an algorithm that is guaranteed to be able to recognise formul
 Then A is an algorithm that can recognise all theorems in L.
 
 == Proof ==
-By definition the 
+TBC
 
+In this document we will develop a theorem proving algorithm that works as follows:
+    
+  * The algorithm will apply production rules to formulas, where each rule produces a shorter formula that is logically equivalent to the original.  
+  * The algorithm will repeatedly apply production rules until there is no equivalent shorter forumala.  
+  * The algorithm will always reduce the anticedent of an implication before reducing the consequent.
+  * Finally, we will then show that there is a fixed set of reduction rules that are guaranteed to reduce all axioms in system L to T when the rules are applied as described above.
+  
+An algorithm as described above will, by definition, be able to recognise all the axioms in system L.
+Also, given theorems P and P->Q, if the proposed algorithm recognises P and P->Q then it will be guaranteed to be able to recognise Q.
 
+== Theorem 2 == 
+Given theorems P and P->Q, if the proposed algorithm recognises P and P->Q then it will be guaranteed to be able to recognise Q.
 
-One way to design such an algorithm would be to design an algorithm that repeatedly applies rules to the formulas that result in shortening the formula such that if a forumula was a tautology then the formula would eventually be reduced to T.  Further we would design the algorithm such that it would always reduce the antecedent in an implication before reducing the consequence.
+== Proof == 
+
+Since the proposed algorithm always fully reduces the antecedent of an implication before reducing the consequent, our proposed algorithm would also reduce P->Q to T->Q before finally reducing it to T.  Finally, our proposed algorithm must therefore be able to reduce Q to T, otherwise it would not be able to reduce T->Q to T.   Since the algorithm always reduces the anticedent of an implication before reducing the consequent, if the alorithm can recognise the theorems P and P-Q then it must be be to also recognise Q.
+    
+  * We will design our algorithm to always reduce the anticedent of an implication before reducing the consequent.
+    
+
+One way to design such a algorithm that meets the criteria required to satisfy Theorem 1 would be to design an algorithm that repeatedly applies production rules to formulas, where each rule produces a shorter formula that is equivalent to the original.  The algorithm would repeatedly apply production rules until there is no equivalent shorter forumala.  Tautological forumulas would eventually be reduced to T.  Further we would design the algorithm such that it would always reduce the antecedent in an implication before reducing the consequence.  
 
 
 Our goal is to design an algorithm such that we can take advantage of modus ponens in order to prove Further, note that if we could design an alorithm that worked by systematically reducing formulas and always reduced the left side with the following properties 
