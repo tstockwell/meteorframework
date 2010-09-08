@@ -1,4 +1,14 @@
-? Every tautology in L is a substitution instance of a tautology with no more than 3 variables.
+
+Prove that only tautological instances <= in length to twice the length of the longest canonical forumla + 1 ineed be considered.
+
+Prove that rule set, when applied depth first to antecendents, will reduce any substitution instance of tautology with 3 or fewer variables.
+    * Need list of tautologies 
+    
+Prove that the only way to reduce T->A to T is to reduce A to T.
+
+
+-------------------------
+? NOT every tautology in L is a substitution instance of a tautology with no more than 3 variables.
 A, A->B ==> B
 
 1) c->(b->(a->T)), axiom C->(B->(A->T)) 

@@ -35,7 +35,7 @@ public class RuleDatabase {
 	Integer _lengthOfLongestCanonical= null;
 	HashMap<TruthTable, Integer> _lengthOfCanonicalFormulas= null;
 	HashMap<Integer, List<Formula>> _canonicalFormulasByLength= new HashMap<Integer, List<Formula>>();
-	HashMap<Integer, List<Formula>> _allNonCanonicalFormulasByLength= new HashMap<Integer, List<Formula>>();
+	//HashMap<Integer, List<Formula>> _allNonCanonicalFormulasByLength= new HashMap<Integer, List<Formula>>();
 	
 	
 	
@@ -264,16 +264,6 @@ public class RuleDatabase {
 					}
 					formulas.add(formula);
 				}
-				else {
-					for (int l= formulaLength; 0 < l; l--) {
-						List<Formula> formulas= _allNonCanonicalFormulasByLength.get(l);
-						if (formulas == null) {
-							formulas= new ArrayList<Formula>();
-							_allNonCanonicalFormulasByLength.put(l, formulas);
-						}
-						formulas.add(formula);
-					}
-				}
 			}
 			finally {
 				try { s.close(); } catch (Throwable t) { }
@@ -286,39 +276,41 @@ public class RuleDatabase {
 	}
 
 	public ResultIterator<Formula> getAllNonCanonicalFormulas(int maxLength) {
-		List<Formula> formulas= _allNonCanonicalFormulasByLength.get(maxLength);
-		if (formulas == null) {
 			try {
 				String sql= "SELECT * FROM FORMULA WHERE CANONICAL = 0 AND LENGTH <= "+maxLength;
 				Statement s = _connection.createStatement();
-				ResultSet resultSet= s.executeQuery(sql);
-				List<Formula> list= new ArrayList<Formula>();
-				while (resultSet.next()) {
-					list.add(Formula.parseFormula(resultSet.getString("FORMULA")));
-				}
-				formulas= list;
-				_allNonCanonicalFormulasByLength.put(maxLength, formulas);
+				final ResultSet resultSet= s.executeQuery(sql);
+				return new ResultIterator<Formula>() {
+					private Boolean _next;
+					public void close() {
+						try { resultSet.close(); } catch (SQLException x) { throw new RuntimeException(x); }
+					}
+					public boolean hasNext() {
+						try {
+							if (_next == null) 
+								_next= resultSet.next();							
+							return _next;
+						}
+						catch (SQLException x) { throw new RuntimeException(x); }
+					}
+					public Formula next() {
+						try {
+							if (_next == null)
+								resultSet.next();
+							_next= null;
+							return Formula.parseFormula(resultSet.getString("FORMULA"));
+						}
+						catch (SQLException x) { throw new RuntimeException(x); }
+					}
+					public void remove() {
+						throw new UnsupportedOperationException();
+					}
+				};
 			} 
 			catch (SQLException e) {
 				e.printStackTrace();
 				throw new RuntimeException(e);
 			}
-		}
-		final Iterator<Formula> results= formulas.iterator();
-		return new ResultIterator<Formula>() {
-			public void close() {
-				// do nothing
-			}
-			public boolean hasNext() {
-				return results.hasNext();
-			}
-			public Formula next() {
-				return results.next();
-			}
-			public void remove() {
-				throw new UnsupportedOperationException();
-			}
-		};
 	}
 
 	public int getLengthOfCanonicalFormulas(TruthTable truthTable) {
