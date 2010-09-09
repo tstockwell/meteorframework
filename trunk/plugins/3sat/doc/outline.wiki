@@ -1,4 +1,14 @@
 
+Prove that if a->(b->c) is reducable then (a->b)->(a->c) is reducable.
+Same as proving that if b->c is reducable then (a->b)->(a->c) is reducable.
+
+Proof:
+Suppose no subformula of (a->b)->(a->c) is reducable.
+Our set of reduction rules contains the rule  (a->b)->(a->c) ==> a->(b->c).
+Hence (a->b)->(a->c) will alsways be reduced.
+
+---------------------------------------------------------------------
+
 Prove that only tautological instances <= in length to twice the length of the longest canonical forumla + 1 ineed be considered.
 
 Prove that rule set, when applied depth first to antecendents, will reduce any substitution instance of tautology with 3 or fewer variables.
