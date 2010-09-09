@@ -55,6 +55,20 @@ public class DatabaseReport {
 			System.out.println("-----------   ------   ------");
 		}
 		System.out.println("Total Canonical Formula Count="+database.countCanonicalFormulas());
+		System.out.println("Total Non-Canonical Formula Count="+database.countNonCanonicalFormulas());
+		
+		if (Formula.MAX_VARIABLES < 3) {
+			System.out.println();
+			System.out.println("Reduction Rules");
+			System.out.println("=====================================");
+			ResultIterator<Formula> nonCanonicalFormulas= database.getAllNonCanonicalFormulas();
+			long count= 0;
+			while (nonCanonicalFormulas.hasNext()) {
+				Formula formula= nonCanonicalFormulas.next();
+				System.out.println(new ReductionRule(formula, database.findCanonicalFormula(formula)));
+				count++;
+			}
+		}
 		
 		
 	}
