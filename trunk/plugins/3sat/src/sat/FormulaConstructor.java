@@ -59,7 +59,7 @@ public class FormulaConstructor implements ResultIterator<Formula> {
 		// skip formulas until we're at the starting formula
 		if (startingFormula != null) {
 			Formula f;
-			while ((f= next()).toString().equals(startingFormula.toString()) == false) {
+			while ((f= next()).getFormulaText().equals(startingFormula.getFormulaText()) == false) {
 				System.out.println("Skipping formula:"+f);
 			}
 		}
@@ -127,7 +127,7 @@ public class FormulaConstructor implements ResultIterator<Formula> {
 		public Formula next() {
 			if (!_formulas.hasNext())
 				throw new NoSuchElementException();
-			return new Formula(Formula.NEGATION, _formulas.next());
+			return Formula.createNegation(_formulas.next());
 		}
 		
 		@Override
@@ -186,7 +186,7 @@ public class FormulaConstructor implements ResultIterator<Formula> {
 		public Formula next() {
 			if (!hasNext())
 				throw new NoSuchElementException();
-			return new Formula(Formula.IF_THEN, _rightFormula, _leftIterator.next());
+			return Formula.createImplication(_rightFormula, _leftIterator.next());
 		}
 
 		public void remove() {

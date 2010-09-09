@@ -97,7 +97,7 @@ public class RuleDatabase {
 				resultSet= s.executeQuery(sql);
 				if (resultSet.next()) {
 					String formula= resultSet.getString("FORMULA");
-					return Formula.parseFormula(formula);
+					return Formula.create(formula);
 				}
 			}
 			finally {
@@ -122,7 +122,7 @@ public class RuleDatabase {
 				ArrayList<Formula> list= new ArrayList<Formula>();
 				while (resultSet.next()) {
 					String formula= resultSet.getString("FORMULA");
-					list.add(Formula.parseFormula(formula));
+					list.add(Formula.create(formula));
 				}
 				return list;
 			}
@@ -213,7 +213,7 @@ public class RuleDatabase {
 				ResultSet resultSet= s.executeQuery(sql);
 				List<Formula> list= new ArrayList<Formula>();
 				while (resultSet.next()) {
-					list.add(Formula.parseFormula(resultSet.getString("FORMULA")));
+					list.add(Formula.create(resultSet.getString("FORMULA")));
 				}
 				formulas= list;
 				_canonicalFormulasByLength.put(size, formulas);
@@ -243,7 +243,7 @@ public class RuleDatabase {
 	public void addFormula(Formula formula) {
 		try {
 			String sql= "INSERT INTO FORMULA (FORMULA, LENGTH, TRUTHVALUE, CANONICAL) VALUES ('"+
-						formula.toString()+"',"+
+						formula.getFormulaText()+"',"+
 						formula.length()+","+
 						"'"+formula.getTruthTable()+"',"+
 						(formula.isCanonical()?1:0)+")";
@@ -298,7 +298,7 @@ public class RuleDatabase {
 							if (_next == null)
 								resultSet.next();
 							_next= null;
-							return Formula.parseFormula(resultSet.getString("FORMULA"));
+							return Formula.create(resultSet.getString("FORMULA"));
 						}
 						catch (SQLException x) { throw new RuntimeException(x); }
 					}
@@ -349,7 +349,7 @@ public class RuleDatabase {
 			try {
 				resultSet= s.executeQuery(sql);
 				if (resultSet.next()) 
-					return Formula.parseFormula(resultSet.getString("FORMULA"));
+					return Formula.create(resultSet.getString("FORMULA"));
 				return null;
 			}
 			finally {

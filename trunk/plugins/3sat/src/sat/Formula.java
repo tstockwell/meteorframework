@@ -1,9 +1,15 @@
 package sat;
 
+import java.io.Serializable;
+import java.lang.ref.Reference;
+import java.lang.ref.ReferenceQueue;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Stack;
+import java.util.TreeMap;
 
 /**
  * Represents a propositional formula in Polish notation using only...
@@ -18,8 +24,10 @@ import java.util.Stack;
  *  
  * @author Ted Stockwell
  */
-public class Formula {
-	
+public class Formula implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * Can't be more than 26 because we use letters to represent variables (for readability).
 	 * Should not be less than 1.
@@ -34,11 +42,23 @@ public class Formula {
 	public static final Formula TRUE= new Formula('T');
 	public static final Formula FALSE= new Formula('F');
 	
+	
+	transient final static private Map<String, Reference<Formula>> __cache= new TreeMap<String, Reference<Formula>>(); 
+	transient final static private ReferenceQueue<Formula> __referenceQueue= new ReferenceQueue<Formula>();
+	private static class FormulaReference extends WeakReference<Formula> {
+		String _string;
+		public FormulaReference(Formula referent) {
+			super(referent, __referenceQueue);
+			_string= referent._string;
+		}
+	}
+	
 	// variables
 	public static final Formula[] VARIABLES= new Formula[MAX_VARIABLES];
 	static {
 		for (int i= 0; i < MAX_VARIABLES; i++) {
-			VARIABLES[i]= new Formula((char)('a'+i));
+			Formula f= VARIABLES[i]= new Formula((char)('a'+i));
+			__cache.put(f.getFormulaText(), new FormulaReference(f));
 		}
 	}
 	
@@ -47,12 +67,40 @@ public class Formula {
 	char _operator= 0;
 	Formula _left;
 	Formula _right;
-	String _id;
 	
 	String _string;
 	private boolean _canonical;
+	
+	public static Formula create(String path) {
+		Formula formula= null;
+		synchronized (__cache) {
+			Reference<Formula> ref= __cache.get(path);
+			if (ref == null || (formula= ref.get()) == null) {
+				formula= parse(path);
+				__cache.put(path, new FormulaReference(formula));
+			}
+		}
+		
+		// clean up expired references
+		FormulaReference ref;
+		while ((ref= (FormulaReference)__referenceQueue.poll()) != null) {
+			synchronized (__cache) {
+				__cache.remove(ref._string);
+			}
+		}
+		
+		return formula;
+	}
+	
+	public static Formula createNegation(Formula right) {
+		return create(NEGATION+right._string);
+	}
+	
+	public static Formula createImplication(Formula antecedent, Formula consequent) {
+		return create(IF_THEN+antecedent._string+consequent._string);
+	}
 
-	static Formula parseFormula(String formula) {
+	private static Formula parse(String formula) {
 		Stack<Formula> stack= new Stack<Formula>();
 		char[] symbols= formula.toCharArray();
 		for (int i = symbols.length; 0 < i--;) {
@@ -84,7 +132,7 @@ public class Formula {
 		return formula2;
 	}
 	
-	public Formula(char operator, Formula left, Formula right) {
+	private Formula(char operator, Formula left, Formula right) {
 		if (operator != IF_THEN)
 			throw new RuntimeException("Invalid operator");
 		if (left == null)
@@ -96,7 +144,7 @@ public class Formula {
 		_right= right;
 		_string= IF_THEN+left._string+right._string; 
 	}
-	public Formula(char operator, Formula right) {
+	private Formula(char operator, Formula right) {
 		if (operator != NEGATION)
 			throw new RuntimeException("Invalid operator");
 		if (right == null)
@@ -108,6 +156,10 @@ public class Formula {
 	private Formula(char variable) {
 		_variable= variable;
 		_string= ""+_variable;
+	}
+	
+	private Object readResolve() {
+		return create(_string);
 	}
 	
 	public TruthTable getTruthTable() {
@@ -236,27 +288,24 @@ public class Formula {
 	
 	@Override
 	public String toString() {
+		return getFormulaText()+"("+getTruthTable()+")";
+	}
+	
+	public String getFormulaText() {
 		if (_string == null) {
 			if (_variable != 0) {
 				_string= new String(new char[] { _variable });
 			}
 			else if (_operator == NEGATION) {
-				_string= NEGATION+_right.toString();
+				_string= NEGATION+_right.getFormulaText();
 			}
 			else if (_operator == IF_THEN) { 
-				_string= IF_THEN+_left.toString()+_right.toString();
+				_string= IF_THEN+_left.getFormulaText()+_right.getFormulaText();
 			}
 			else
 				throw new IllegalStateException();
 		}
 		return _string;
-	}
-	
-	public String getId() {
-		return _id;
-	}
-	public void setId(String id) {
-		_id= id;
 	}
 
 	public void setCanonical(boolean canonical) {
@@ -305,7 +354,7 @@ public class Formula {
 		if ((obj instanceof Formula) == false)
 			return false;
 			
-		return toString().equals(((Formula)obj).toString());
+		return getFormulaText().equals(((Formula)obj).getFormulaText());
 	}
 
 
