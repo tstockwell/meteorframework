@@ -312,6 +312,43 @@ public class RuleDatabase {
 				throw new RuntimeException(e);
 			}
 	}
+	public ResultIterator<Formula> getAllNonCanonicalFormulas() {
+		try {
+			String sql= "SELECT * FROM FORMULA WHERE CANONICAL = 0 ORDER BY LENGTH ASC";
+			Statement s = _connection.createStatement();
+			final ResultSet resultSet= s.executeQuery(sql);
+			return new ResultIterator<Formula>() {
+				private Boolean _next;
+				public void close() {
+					try { resultSet.close(); } catch (SQLException x) { throw new RuntimeException(x); }
+				}
+				public boolean hasNext() {
+					try {
+						if (_next == null) 
+							_next= resultSet.next();							
+						return _next;
+					}
+					catch (SQLException x) { throw new RuntimeException(x); }
+				}
+				public Formula next() {
+					try {
+						if (_next == null)
+							resultSet.next();
+						_next= null;
+						return Formula.create(resultSet.getString("FORMULA"));
+					}
+					catch (SQLException x) { throw new RuntimeException(x); }
+				}
+				public void remove() {
+					throw new UnsupportedOperationException();
+				}
+			};
+		} 
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+}
 
 	public int getLengthOfCanonicalFormulas(TruthTable truthTable) {
 		if (_lengthOfCanonicalFormulas == null) {
