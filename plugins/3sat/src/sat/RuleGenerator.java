@@ -74,11 +74,11 @@ public class RuleGenerator {
 			_database.addFormula(formula);
 		}
 		else {
-			if (reductionRule.formula.length() == reductionRule.reduction.length()) {
-				System.out.println("***** WARNING ****\nEncountered a reduction rule where the left and right sides have the same length");
-				System.exit(1);
-			}
-			else
+//			if (reductionRule.formula.length() == reductionRule.reduction.length()) {
+//				System.out.println("***** WARNING ****\nEncountered a reduction rule where the left and right sides have the same length");
+//				System.exit(1);
+//			}
+//			else
 				System.out.println(formula+" can be reduced using rule "+reductionRule);
 		}
 	}
@@ -87,7 +87,11 @@ public class RuleGenerator {
 		int length= _database.getLengthOfCanonicalFormulas(formula.getTruthTable());
 		if (length < 0) // no canonical formulas in database
 			return true;
-		return formula.length() <= length; 
+
+		// we only return true for the FIRST formula that satisifies a given truth table
+		// since we want ONLY ONE forumala to be the normal form for a given truth table.
+		//return formula.length() <= length;
+		return false; 
 	}
 
 	/*

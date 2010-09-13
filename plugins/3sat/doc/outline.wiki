@@ -1,13 +1,4 @@
 
-Prove that if a->(b->c) is reducable then (a->b)->(a->c) is reducable.
-Same as proving that if b->c is reducable then (a->b)->(a->c) is reducable.
-
-Proof:
-Suppose no subformula of (a->b)->(a->c) is reducable.
-Our set of reduction rules contains the rule  (a->b)->(a->c) ==> a->(b->c).
-Hence (a->b)->(a->c) will alsways be reduced.
-
----------------------------------------------------------------------
 
 Prove that only tautological instances <= in length to twice the length of the longest canonical forumla + 1 ineed be considered.
 
@@ -18,9 +9,17 @@ Prove that the only way to reduce T->A to T is to reduce A to T.
 
 
 -------------------------
-? NOT every tautology in L is a substitution instance of a tautology with no more than 3 variables.
-A, A->B ==> B
 
-1) c->(b->(a->T)), axiom C->(B->(A->T)) 
-2) (c->(b->(a->T)))->(d->(c->(b->(a->T)))), axiom A->(B->A)
-3) d->(c->(b->(a->T))), MP(1,2) 
+Create reduction rule set
+
+-----------------------
+
+Use Knuth-Bendix algorithm to prove that rule set is confluent.
+
+-----------------------
+
+Define System S.
+
+-----------------------
+
+Use induction of # of steps in proof to show that all theorems are reducable.
