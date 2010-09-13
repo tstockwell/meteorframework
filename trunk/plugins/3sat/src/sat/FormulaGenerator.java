@@ -66,7 +66,7 @@ public class FormulaGenerator {
 				_currentLength++;
 				System.out.println("The formulas lengths have been increased to "+_currentLength);
 				
-				if (_database.lengthOfLongestPossibleNonReducableFormula() < _currentLength) {
+				if (TruthTable.MAX_TRUTH_TABLES <= _database.countCanonicalFormulas() && _database.lengthOfLongestPossibleNonReducableFormula() < _currentLength) {
 					System.out.println("!!!!!! The Rule Database is Complete !!!");
 					return null;
 				} 
