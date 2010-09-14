@@ -15,13 +15,11 @@ import java.util.TreeMap;
  * Represents a propositional formula in Polish notation using only...
  * 	...the symbols 'T' and 'F' for TRUE and FALSE.
  *  ...the symbols 'a', 'b', 'c', ...., 'z' for variables.
- *  ...the symbol '*' for the -> operator (aka the if-then operator).
  *  ...the symbol '~' for the negation operator 
- * 
- * This class cannot handle formulas with more than 26 variables so it is 
- * not useful outside the context of this package.
- * The maximum # of supported variables is configurable  
+ *  ...the symbol '*' for the implication operator (aka the if-then operator, most often written as ->).
  *  
+ *  Use the static Formula.create* methods to create instances of formulas.
+ * 
  * @author Ted Stockwell
  */
 public class Formula implements Serializable {
@@ -29,20 +27,21 @@ public class Formula implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Can't be more than 26 because we use letters to represent variables (for readability).
+	 * Can't be more than 4 until other parts of the program are refactored to 
+	 * support larger truth tables and such.  
+	 * Can't be more than 26 without abandoning the use of letters to represent 
+	 * variables.
 	 * Should not be less than 1.
 	 */
-	public static final int MAX_VARIABLES= 3; 
+	public static final int MAX_VARIABLES= 2; 
 	
 	// operators
 	public static final char IF_THEN= '*';
 	public static final char NEGATION= '~';
 	
-	// constants
-	public static final Formula TRUE= new Formula('T');
-	public static final Formula FALSE= new Formula('F');
-	
-	
+	/*
+	 * For efficiency we (weakly) cache the formulas.
+	 */
 	transient final static private Map<String, Reference<Formula>> __cache= new TreeMap<String, Reference<Formula>>(); 
 	transient final static private ReferenceQueue<Formula> __referenceQueue= new ReferenceQueue<Formula>();
 	private static class FormulaReference extends WeakReference<Formula> {
@@ -53,23 +52,30 @@ public class Formula implements Serializable {
 		}
 	}
 	
+	// constants
+	transient public static final Formula TRUE= new Formula('T');
+	transient public static final Formula FALSE= new Formula('F');
+	
 	// variables
-	public static final Formula[] VARIABLES= new Formula[MAX_VARIABLES];
+	transient public static final Formula[] VARIABLES= new Formula[MAX_VARIABLES];
 	static {
+		__cache.put(TRUE.getFormulaText(), new FormulaReference(TRUE));
+		__cache.put(FALSE.getFormulaText(), new FormulaReference(FALSE));
 		for (int i= 0; i < MAX_VARIABLES; i++) {
 			Formula f= VARIABLES[i]= new Formula((char)('a'+i));
 			__cache.put(f.getFormulaText(), new FormulaReference(f));
 		}
 	}
 	
-	TruthTable _truthTable;
-	char _variable= 0;
-	char _operator= 0;
-	Formula _left;
-	Formula _right;
+	private String _string;
 	
-	String _string;
-	private boolean _canonical;
+	transient private boolean _canonical;
+	transient private TruthTable _truthTable;
+	transient private char _variable= 0;
+	transient private char _operator= 0;
+	transient private Formula _left;
+	transient private Formula _right;
+	
 	
 	public static Formula create(String path) {
 		Formula formula= null;
@@ -158,6 +164,9 @@ public class Formula implements Serializable {
 		_string= ""+_variable;
 	}
 	
+	/**
+	 * Called by JRE when deserializing a formula...
+	 */
 	private Object readResolve() {
 		return create(_string);
 	}
@@ -351,11 +360,106 @@ public class Formula implements Serializable {
 	
 	@Override
 	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
 		if ((obj instanceof Formula) == false)
 			return false;
 			
 		return getFormulaText().equals(((Formula)obj).getFormulaText());
 	}
 
+
+	/**
+	 * Unifies this formula with the given formula and returns the 
+	 * most general unifying substitution.
+	 * @return null if the two formulas cannot be unified.
+	 * 		 	else returns a Map with variables as keys. 
+	 */
+	public Substitution unify(Formula z) {
+		if (_variable == 'T' || _variable == 'F') { 
+			if (_variable == z._variable)
+				return Substitution.EMPTY;
+			return null;
+		}
+		else if (z._variable == 'T' || z._variable == 'F') {
+			return null;
+		}
+		else if (_variable != 0) {
+			if (0 <= z.getFormulaText().indexOf(_variable))
+				return null;
+			return new Substitution(_variable, z);
+		}
+		else if (z._variable != 0) {
+			if (0 <= getFormulaText().indexOf(z._variable))
+				return null;
+			return new Substitution(z._variable, this);
+		}
+		else if (_operator == NEGATION) {
+			if (_operator != NEGATION)
+				return null;
+			return _right.unify(z._right);
+		}
+		else if (_operator == IF_THEN) {
+			if (_operator != IF_THEN)
+				return null;
+			Substitution s= _left.unify(z._left);
+			if (s == null)
+				return null;
+			Substitution t= _right.substitute(s).unify(z._right.substitute(s));
+			if (t == null)
+				return null;
+			return s.union(t);
+		}
+		else
+			throw new RuntimeException("Unexpected error during unification of "+this + " and " + z ); 
+		
+		/*
+
+		Pseudocode for unification algorithm from 
+		http://www.michaelbeeson.com/research/otter-lambda/index.php?include=Unification
+
+		unify(t,s) { 
+		if t is a variable x then 
+		   if s contains x return fail;
+		   else return [x:s]; 
+
+		if s is a variable x then 
+		   if t contains x return fail;
+		   else return [x:t]; 
+
+		if either t or s is a constant then return [] if they are identical and fail if not; 
+
+		if t and s do not have the same main symbol f and the same number of arguments then return fail;
+		σ = []; // the empty substitution 
+		n = number of arguments of t;
+		for(i=1, i ≤ n; i++) 
+		  { τ = unify(arg(i,t)σ, arg(i,s)σ);
+		    σ = στ
+		  } 
+		}
+
+		*/
+		
+		
+	}
+	
+	/**
+	 * Creates a new formula by making the given substitutions into this formula.
+	 */
+	public Formula substitute(Substitution substitution) {
+		if (_operator == IF_THEN) { 
+			return createImplication(_left.substitute(substitution), _right.substitute(substitution));
+		}
+		else if (_operator == NEGATION) {
+			return createNegation(_right.substitute(substitution));
+		}
+		else if (_variable == 'T' || _variable == 'F') { 
+			return this;
+		}
+		Formula f= substitution.getFormula(_variable);
+		if (f != null)
+			return f;
+		return this;
+	}
 
 }
