@@ -74,11 +74,11 @@ public class RuleGenerator {
 			_database.addFormula(formula);
 		}
 		else {
-//			if (reductionRule.formula.length() == reductionRule.reduction.length()) {
-//				System.out.println("***** WARNING ****\nEncountered a reduction rule where the left and right sides have the same length");
-//				System.exit(1);
-//			}
-//			else
+			if (reductionRule.formula.length() == reductionRule.reduction.length()) {
+				System.out.println("***** WARNING ****\nEncountered a reduction rule where the left and right sides have the same length");
+				System.exit(1);
+			}
+			else
 				System.out.println(formula+" can be reduced using rule "+reductionRule);
 		}
 	}
@@ -87,11 +87,7 @@ public class RuleGenerator {
 		int length= _database.getLengthOfCanonicalFormulas(formula.getTruthTable());
 		if (length < 0) // no canonical formulas in database
 			return true;
-
-		// we only return true for the FIRST formula that satisifies a given truth table
-		// since we want ONLY ONE forumala to be the normal form for a given truth table.
-		//return formula.length() <= length;
-		return false; 
+		return formula.length() <= length; 
 	}
 
 	/*
@@ -119,16 +115,21 @@ public class RuleGenerator {
 			}
 		}
 		
-		ResultIterator<Formula> reducableFormulas = _database.getAllNonCanonicalFormulas(formula.length());
-		while (reducableFormulas.hasNext()) {
-			Formula reducableFormula= reducableFormulas.next();
-			if (formula.isInstanceOf(reducableFormula)) { 
-				ReductionRule rule= new ReductionRule(reducableFormula, _database.findCanonicalFormula(reducableFormula));
-				if (MAX_CACHED_RULES < _recentReductionRules.size())
-					_recentReductionRules.remove(_recentReductionRules.size()-1);
-				_recentReductionRules.add(0, rule);
-				return rule;
+		ResultIterator<Formula> reducableFormulas = _database.getAllNonCanonicalFormulasByDescendingLength();
+		try {
+			while (reducableFormulas.hasNext()) {
+				Formula reducableFormula= reducableFormulas.next();
+				if (formula.isInstanceOf(reducableFormula)) { 
+					ReductionRule rule= new ReductionRule(reducableFormula, _database.findCanonicalFormula(reducableFormula));
+					if (MAX_CACHED_RULES < _recentReductionRules.size())
+						_recentReductionRules.remove(_recentReductionRules.size()-1);
+					_recentReductionRules.add(0, rule);
+					return rule;
+				}
 			}
+		}
+		finally {
+			reducableFormulas.close();
 		}
 		return null;
 	}
