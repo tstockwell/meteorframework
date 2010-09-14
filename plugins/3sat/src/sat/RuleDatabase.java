@@ -70,7 +70,8 @@ public class RuleDatabase {
 				s.execute("CREATE INDEX formula_index_1 ON FORMULA (LENGTH, ID)");
 				s.execute("CREATE INDEX formula_index_2 ON FORMULA (TRUTHVALUE)");
 //				s.execute("CREATE INDEX formula_index_3 ON FORMULA (TRUTHVALUE, CANONICAL)");
-				s.execute("CREATE INDEX formula_index_4 ON FORMULA (CANONICAL, LENGTH, ID)");
+				s.execute("CREATE INDEX formula_index_4 ON FORMULA (CANONICAL, ID)");
+				s.execute("CREATE INDEX formula_index_5 ON FORMULA (CANONICAL, LENGTH)");
 				
 
 //				s.execute("create table RULE(" +
@@ -312,7 +313,7 @@ public class RuleDatabase {
 				throw new RuntimeException(e);
 			}
 	}
-	public ResultIterator<Formula> getAllNonCanonicalFormulas() {
+	public ResultIterator<Formula> getAllNonCanonicalFormulasByAscendingLength() {
 		try {
 			String sql= "SELECT * FROM FORMULA WHERE CANONICAL = 0 ORDER BY LENGTH ASC";
 			Statement s = _connection.createStatement();
@@ -433,6 +434,44 @@ public class RuleDatabase {
 				try { resultSet.close(); } catch (Throwable t) { }
 				try { s.close(); } catch (Throwable t) { }
 			}
+		} 
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
+
+	public ResultIterator<Formula> getAllNonCanonicalFormulasByDescendingLength() {
+		try {
+			String sql= "SELECT * FROM FORMULA WHERE CANONICAL = 0 ORDER BY LENGTH DESC";
+			Statement s = _connection.createStatement(ResultSet.TYPE_FORWARD_ONLY, Connection.TRANSACTION_READ_UNCOMMITTED);
+			final ResultSet resultSet= s.executeQuery(sql);
+			return new ResultIterator<Formula>() {
+				private Boolean _next;
+				public void close() {
+					try { resultSet.close(); } catch (SQLException x) { throw new RuntimeException(x); }
+				}
+				public boolean hasNext() {
+					try {
+						if (_next == null) 
+							_next= resultSet.next();							
+						return _next;
+					}
+					catch (SQLException x) { throw new RuntimeException(x); }
+				}
+				public Formula next() {
+					try {
+						if (_next == null)
+							resultSet.next();
+						_next= null;
+						return Formula.create(resultSet.getString("FORMULA"));
+					}
+					catch (SQLException x) { throw new RuntimeException(x); }
+				}
+				public void remove() {
+					throw new UnsupportedOperationException();
+				}
+			};
 		} 
 		catch (SQLException e) {
 			e.printStackTrace();

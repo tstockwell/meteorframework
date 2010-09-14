@@ -76,6 +76,7 @@ public class ServerCommandLineInterface
     {
         commands.put("shutdown", _shutdownCommand);
         commands.put("sh", _shutdownCommand);
+        commands.put("q", _shutdownCommand);
         commands.put("help", _helpCommand);
         commands.put("h", _helpCommand);
         commands.put("?", _helpCommand);
