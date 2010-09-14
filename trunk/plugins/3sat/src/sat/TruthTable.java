@@ -1,13 +1,14 @@
 package sat;
 
-import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 
 
 public class TruthTable {
 	
 	public static final int MAX_TRUTH_VALUES= 1 << Formula.MAX_VARIABLES;
-	public static final long MAX_TRUTH_TABLES= (long)Math.pow(2, MAX_TRUTH_VALUES);
+	public static final int MAX_TRUTH_TABLES= 1 << MAX_TRUTH_VALUES;
 	
 	private static String __zeropad; 
 	static {
@@ -17,29 +18,31 @@ public class TruthTable {
 		__zeropad= new String(pad);
 	}
 	
-	private static final HashMap<String, TruthTable> __tables= new HashMap<String, TruthTable>();
+	private static final String[] _truthTableStrings= new String[MAX_TRUTH_TABLES];
 	static {
 		for (int i= 0; i < MAX_TRUTH_TABLES; i++) {
-			String s= toTruthTableString(i);
-			__tables.put(s, new TruthTable(toTruthTableString(i)));
-		}
-	}
-	public static final String toTruthTableString(int i) {
 			String s= Integer.toString(i, 2);
 			int l= MAX_TRUTH_VALUES - s.length();
 			if (0 < l) 
 				s= __zeropad.substring(0, l) + s;
-			return s;
+			_truthTableStrings[i]= s;
+		}
+	}
+	
+	private static final Map<String, TruthTable> __tables= new TreeMap<String, TruthTable>();
+	static {
+		for (int i= 0; i < MAX_TRUTH_TABLES; i++) 
+			__tables.put(_truthTableStrings[i], new TruthTable(i));
 	}
 	
 	public static interface Builder {
 		boolean evaluate(String booleanString);
 	}
 	
-	String _booleanString="";
+	private int _truthTable; 
 	
-	private TruthTable(String booleanString) {
-		_booleanString= booleanString;
+	private TruthTable(int truthTable) {
+		_truthTable= truthTable;
 	}
 	public static TruthTable create(Builder builder) {
 		char[] truthValues= new char[MAX_TRUTH_VALUES];
@@ -56,23 +59,23 @@ public class TruthTable {
 		return __tables.get(booleanString);
 	}
 	public static TruthTable create(int i) {
-		return __tables.get(toTruthTableString(i));
+		return __tables.get(_truthTableStrings[i]);
 	}
 	
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof TruthTable) 
-			return ((TruthTable)obj)._booleanString.equals(_booleanString);
+			return ((TruthTable)obj)._truthTable == _truthTable;
 		return false;			
 	}
 	
 	@Override
 	public int hashCode() {
-		return _booleanString.hashCode();
+		return _truthTable;
 	}
 	
 	public String toString() {
-		return _booleanString;
+		return _truthTableStrings[_truthTable];
 	}
 	
 }

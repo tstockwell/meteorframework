@@ -23,7 +23,6 @@ import java.util.StringTokenizer;
  * 
  * @author ted stockwell
  */
-@SuppressWarnings("unchecked")
 public class ServerCommandLineInterface 
 {
     
@@ -47,8 +46,8 @@ public class ServerCommandLineInterface
                 return;
             }
 
-            HashSet set= new HashSet(commands.values());
-            for (Iterator i= set.iterator(); i.hasNext();)
+            HashSet<Command> set= new HashSet<Command>(commands.values());
+            for (Iterator<Command> i= set.iterator(); i.hasNext();)
                 out.println(_prompt+((Command)i.next()).help());
         }
         public String description() {
@@ -72,7 +71,7 @@ public class ServerCommandLineInterface
         }
     };
     
-    Map commands= new HashMap();
+	Map<String, Command> commands= new HashMap<String, Command>();
     {
         commands.put("shutdown", _shutdownCommand);
         commands.put("sh", _shutdownCommand);
@@ -118,7 +117,7 @@ public class ServerCommandLineInterface
                 if (readLine == null)
                 	continue;
                 StringTokenizer tokenizer= new StringTokenizer(readLine, " \t");
-                List l= new ArrayList();
+                List<String> l= new ArrayList<String>();
                 for (; tokenizer.hasMoreTokens();)
                     l.add(tokenizer.nextToken());
                 if (l.size() <= 0)
