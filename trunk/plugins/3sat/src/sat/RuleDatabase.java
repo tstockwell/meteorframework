@@ -454,7 +454,7 @@ public class RuleDatabase {
 				public boolean hasNext() {
 					try {
 						if (_next == null) 
-							_next= resultSet.next();							
+							_next= resultSet.next() ? Boolean.TRUE : Boolean.FALSE;							
 						return _next;
 					}
 					catch (SQLException x) { throw new RuntimeException(x); }

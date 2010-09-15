@@ -26,8 +26,17 @@ public class DatabaseReport {
 		/* 
 		 * Count # of rules
 		 */
-		long nonCanonicalFormulaCount= database.countNonCanonicalFormulas();
-		System.out.println("Non-Canonical formula count= "+nonCanonicalFormulaCount);
+		System.out.println("Total Canonical Formula Count="+database.countCanonicalFormulas());
+		System.out.println("Total Non-Canonical Formula Count="+database.countNonCanonicalFormulas());
+		
+		int tt= 0;
+		for (int truthValue= 0; truthValue < TruthTable.MAX_TRUTH_TABLES; truthValue++) {
+			TruthTable truthTable= TruthTable.create(truthValue);
+			if (0 < database.getLengthOfCanonicalFormulas(truthTable))
+				tt++;
+		}
+		System.out.println("Have found forumlas for "+tt+" of "+TruthTable.MAX_TRUTH_TABLES+ " truth tables");
+		System.out.println("Length of longest canonical forumla="+database.getLengthOfLongestCanonicalFormula());
 		System.out.println();
 		
 		
@@ -62,8 +71,6 @@ public class DatabaseReport {
 			}
 			System.out.println("-----------   ------   ------");
 		}
-		System.out.println("Total Canonical Formula Count="+database.countCanonicalFormulas());
-		System.out.println("Total Non-Canonical Formula Count="+database.countNonCanonicalFormulas());
 		
 		if (showReductionRules) {
 			System.out.println();
