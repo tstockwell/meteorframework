@@ -1,8 +1,6 @@
 package sat;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This class generates production rules for reducing propositional statements.
@@ -19,9 +17,6 @@ public class RuleGenerator {
 	private RuleDatabase _database;
 	private FormulaGenerator _formulaGenerator;
 	private ServerCommandLineInterface _commandLine;
-
-	static final int MAX_CACHED_RULES= 8;
-	public static List<ReductionRule> _recentReductionRules= new ArrayList<ReductionRule>(); 
 
 	public void run() {
 
@@ -97,39 +92,54 @@ public class RuleGenerator {
 	 */
 	private ReductionRule formulaCanBeReduced(Formula formula) {
 		
-		/* an optimization...
-		 * 	very often a recently used reduction rule can be used to reduce the 
-		 *  current formula, so we first check the last fews rules used before 
-		 *  hitting the database...
-		 */
-		for (int i= _recentReductionRules.size(); 0 < i--;) {
-			ReductionRule rule= _recentReductionRules.get(i);
-			if (formula.isInstanceOf(rule.formula)) {
-				if (0 < i) {
-					_recentReductionRules.remove(i);
-					_recentReductionRules.add(0, rule);
-				}
-				return rule;
-			}
-		}
-		
-		ResultIterator<Formula> reducableFormulas = _database.getAllNonCanonicalFormulasByDescendingLength();
+		RuleDatabase.Navigator navigator= _database.getNonCanonicalFormulaNavigator();
 		try {
-			while (reducableFormulas.hasNext()) {
-				Formula reducableFormula= reducableFormulas.next();
-				if (formula.isInstanceOf(reducableFormula)) { 
-					ReductionRule rule= new ReductionRule(reducableFormula, _database.findCanonicalFormula(reducableFormula));
-					if (MAX_CACHED_RULES < _recentReductionRules.size())
-						_recentReductionRules.remove(_recentReductionRules.size()-1);
-					_recentReductionRules.add(0, rule);
-					return rule;
-				}
+			while (navigator.hasNext()) {
+				Formula reducableFormula= navigator.next();
+				int i= formula.isInstanceOf(reducableFormula);
+				if (i < 0) 
+					return new ReductionRule(reducableFormula, _database.findCanonicalFormula(reducableFormula));
+				navigator.advanceFromPosition(i);
 			}
 		}
 		finally {
-			reducableFormulas.close();
+			navigator.close();
 		}
 		return null;
+		
+//		/* an optimization...
+//		 * 	very often a recently used reduction rule can be used to reduce the 
+//		 *  current formula, so we first check the last fews rules used before 
+//		 *  hitting the database...
+//		 */
+//		for (int i= _recentReductionRules.size(); 0 < i--;) {
+//			ReductionRule rule= _recentReductionRules.get(i);
+//			if (formula.isInstanceOf(rule.formula)) {
+//				if (0 < i) {
+//					_recentReductionRules.remove(i);
+//					_recentReductionRules.add(0, rule);
+//				}
+//				return rule;
+//			}
+//		}
+//		
+//		ResultIterator<Formula> reducableFormulas = _database.getAllNonCanonicalFormulasByDescendingLength();
+//		try {
+//			while (reducableFormulas.hasNext()) {
+//				Formula reducableFormula= reducableFormulas.next();
+//				if (formula.isInstanceOf(reducableFormula)) { 
+//					ReductionRule rule= new ReductionRule(reducableFormula, _database.findCanonicalFormula(reducableFormula));
+//					if (MAX_CACHED_RULES < _recentReductionRules.size())
+//						_recentReductionRules.remove(_recentReductionRules.size()-1);
+//					_recentReductionRules.add(0, rule);
+//					return rule;
+//				}
+//			}
+//		}
+//		finally {
+//			reducableFormulas.close();
+//		}
+//		return null;
 	}
 
 	private void shutdown() {

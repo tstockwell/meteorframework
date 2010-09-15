@@ -3,6 +3,7 @@ package sat;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -14,6 +15,7 @@ import java.util.Properties;
 
 import org.apache.derby.jdbc.EmbeddedDriver;
 
+
 /**
  * An API for accessing the rule database.
  * @author Ted Stockwell
@@ -21,6 +23,56 @@ import org.apache.derby.jdbc.EmbeddedDriver;
  */
 public class RuleDatabase {
 	
+	public class Navigator {
+		
+		ResultSet _resultSet;
+		private Boolean _next;
+		
+		public Navigator() {
+			try {
+				_selectCanonical.setString(1, "");
+				_resultSet= _selectCanonical.executeQuery();
+			} catch (SQLException e) {
+				throw new RuntimeException(e);
+			}
+		}
+
+		public boolean hasNext() {
+			try {
+				if (_next == null) 
+					_next= _resultSet.next() ? Boolean.TRUE : Boolean.FALSE;							
+				return _next;
+			}
+			catch (SQLException x) { throw new RuntimeException(x); }
+		}
+
+		public Formula next() {
+			try {
+				if (_next == null)
+					_resultSet.next();
+				_next= null;
+				return Formula.create(_resultSet.getString("FORMULA"));
+			}
+			catch (SQLException x) { throw new RuntimeException(x); }
+		}
+
+		public void close() {
+			try { _resultSet.close(); } catch (SQLException x) { throw new RuntimeException(x); }
+		}
+
+		public void advanceFromPosition(int i) {
+			try {
+				String formula= _resultSet.getString("FORMULA").substring(0, i+1)+((char)0x7F);
+				_resultSet.close();
+				_selectCanonical.setString(1, formula);
+				_resultSet= _selectCanonical.executeQuery();
+			} catch (SQLException e) {
+				throw new RuntimeException(e);
+			}
+		}
+
+	}
+
 	public static final String LIST_FORMULA_LENGTHS= "-listFormulaLengths";
 
 	public String framework = "embedded";
@@ -38,10 +90,14 @@ public class RuleDatabase {
 	//HashMap<Integer, List<Formula>> _allNonCanonicalFormulasByLength= new HashMap<Integer, List<Formula>>();
 	
 	
+	private PreparedStatement _selectCanonical;
 	
 	public RuleDatabase() throws SQLException {
 		connect();
 		createIfNecessary();		
+		
+		String sql= "SELECT FORMULA FROM FORMULA WHERE CANONICAL = 0 AND ? < FORMULA ORDER BY FORMULA";
+		_selectCanonical= _connection.prepareStatement(sql, ResultSet.TYPE_FORWARD_ONLY, Connection.TRANSACTION_READ_UNCOMMITTED);
 	}
 
 	private void connect() throws SQLException {
@@ -67,11 +123,10 @@ public class RuleDatabase {
 						"CANONICAL int not NULL, " +
 						"PRIMARY KEY (ID)" +
 						")");
-				s.execute("CREATE INDEX formula_index_1 ON FORMULA (LENGTH, ID)");
-				s.execute("CREATE INDEX formula_index_2 ON FORMULA (TRUTHVALUE)");
-//				s.execute("CREATE INDEX formula_index_3 ON FORMULA (TRUTHVALUE, CANONICAL)");
-				s.execute("CREATE INDEX formula_index_4 ON FORMULA (CANONICAL, ID)");
-				s.execute("CREATE INDEX formula_index_5 ON FORMULA (CANONICAL, LENGTH)");
+				s.execute("CREATE INDEX formula_index_1 ON FORMULA (LENGTH, CANONICAL, TRUTHVALUE)");
+				s.execute("CREATE INDEX formula_index_2 ON FORMULA (TRUTHVALUE, CANONICAL, LENGTH)");
+				s.execute("CREATE INDEX formula_index_3 ON FORMULA (FORMULA, CANONICAL, LENGTH, TRUTHVALUE)");
+				s.execute("CREATE INDEX formula_index_4 ON FORMULA (CANONICAL, LENGTH, TRUTHVALUE)");
 				
 
 //				s.execute("create table RULE(" +
@@ -313,9 +368,9 @@ public class RuleDatabase {
 				throw new RuntimeException(e);
 			}
 	}
-	public ResultIterator<Formula> getAllNonCanonicalFormulasByAscendingLength() {
+	public ResultIterator<Formula> getAllNonCanonicalFormulas() {
 		try {
-			String sql= "SELECT * FROM FORMULA WHERE CANONICAL = 0 ORDER BY LENGTH ASC";
+			String sql= "SELECT * FROM FORMULA WHERE CANONICAL = 0 ORDER BY FORMULA";
 			Statement s = _connection.createStatement();
 			final ResultSet resultSet= s.executeQuery(sql);
 			return new ResultIterator<Formula>() {
@@ -441,42 +496,44 @@ public class RuleDatabase {
 		}
 	}
 
-	public ResultIterator<Formula> getAllNonCanonicalFormulasByDescendingLength() {
-		try {
-			String sql= "SELECT * FROM FORMULA WHERE CANONICAL = 0 ORDER BY LENGTH DESC";
-			Statement s = _connection.createStatement(ResultSet.TYPE_FORWARD_ONLY, Connection.TRANSACTION_READ_UNCOMMITTED);
-			final ResultSet resultSet= s.executeQuery(sql);
-			return new ResultIterator<Formula>() {
-				private Boolean _next;
-				public void close() {
-					try { resultSet.close(); } catch (SQLException x) { throw new RuntimeException(x); }
-				}
-				public boolean hasNext() {
-					try {
-						if (_next == null) 
-							_next= resultSet.next() ? Boolean.TRUE : Boolean.FALSE;							
-						return _next;
-					}
-					catch (SQLException x) { throw new RuntimeException(x); }
-				}
-				public Formula next() {
-					try {
-						if (_next == null)
-							resultSet.next();
-						_next= null;
-						return Formula.create(resultSet.getString("FORMULA"));
-					}
-					catch (SQLException x) { throw new RuntimeException(x); }
-				}
-				public void remove() {
-					throw new UnsupportedOperationException();
-				}
-			};
-		} 
-		catch (SQLException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
+//	public ResultIterator<Formula> getAllNonCanonicalFormulasByDescendingLength() {
+//		try {
+//			final ResultSet resultSet= _selectCanonicalDescending.executeQuery();
+//			return new ResultIterator<Formula>() {
+//				private Boolean _next;
+//				public void close() {
+//					try { resultSet.close(); } catch (SQLException x) { throw new RuntimeException(x); }
+//				}
+//				public boolean hasNext() {
+//					try {
+//						if (_next == null) 
+//							_next= resultSet.next() ? Boolean.TRUE : Boolean.FALSE;							
+//						return _next;
+//					}
+//					catch (SQLException x) { throw new RuntimeException(x); }
+//				}
+//				public Formula next() {
+//					try {
+//						if (_next == null)
+//							resultSet.next();
+//						_next= null;
+//						return Formula.create(resultSet.getString("FORMULA"));
+//					}
+//					catch (SQLException x) { throw new RuntimeException(x); }
+//				}
+//				public void remove() {
+//					throw new UnsupportedOperationException();
+//				}
+//			};
+//		} 
+//		catch (SQLException e) {
+//			e.printStackTrace();
+//			throw new RuntimeException(e);
+//		}
+//	}
+
+	public Navigator getNonCanonicalFormulaNavigator() {
+		return new Navigator();
 	}
 
 }
