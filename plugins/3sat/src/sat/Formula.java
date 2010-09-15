@@ -33,7 +33,7 @@ public class Formula implements Serializable {
 	 * variables.
 	 * Should not be less than 1.
 	 */
-	public static final int MAX_VARIABLES= 2; 
+	public static final int MAX_VARIABLES= 3; 
 	
 	// operators
 	public static final char IF_THEN= '*';
