@@ -76,7 +76,7 @@ public class DatabaseReport {
 			System.out.println();
 			System.out.println("Reduction Rules");
 			System.out.println("=====================================");
-			ResultIterator<Formula> nonCanonicalFormulas= database.getAllNonCanonicalFormulasByAscendingLength();
+			ResultIterator<Formula> nonCanonicalFormulas= database.getAllNonCanonicalFormulas();
 			long count= 0;
 			while (nonCanonicalFormulas.hasNext()) {
 				Formula formula= nonCanonicalFormulas.next();

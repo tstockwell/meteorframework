@@ -75,6 +75,7 @@ public class Formula implements Serializable {
 	transient private char _operator= 0;
 	transient private Formula _left;
 	transient private Formula _right;
+	transient private int _length;
 	
 	
 	public static Formula create(String path) {
@@ -149,6 +150,7 @@ public class Formula implements Serializable {
 		_left= left;
 		_right= right;
 		_string= IF_THEN+left._string+right._string; 
+		_length= left.length()+right.length()+1;
 	}
 	private Formula(char operator, Formula right) {
 		if (operator != NEGATION)
@@ -158,10 +160,12 @@ public class Formula implements Serializable {
 		_operator= operator;
 		_right= right;
 		_string= NEGATION+right._string; 
+		_length= right.length()+1;
 	}
 	private Formula(char variable) {
 		_variable= variable;
 		_string= ""+_variable;
+		_length= 1;
 	}
 	
 	/**
@@ -197,13 +201,7 @@ public class Formula implements Serializable {
 	}
 
 	public int length() {
-		if (_variable != 0) 			
-			return 1;
-		if (_operator == NEGATION) 
-			return _right.length()+1;
-		if (_operator == IF_THEN) 
-			return _left.length()+_right.length()+1;
-		throw new IllegalStateException();
+		return _length;
 	}
 
 	public Iterator<Formula> getLeftSidedDeepestFirstIterator() {
@@ -325,37 +323,48 @@ public class Formula implements Serializable {
 	}
 
 	/**
-	 * Returns true if this formula is a substitution instance of the 
-	 * given formula.
+	 * @return -1 if this formula is a substitution instance of the given formula.
+	 * 	Otherwise return the position from the left in the given template formula where matching failed.
 	 */
-	public boolean isInstanceOf(Formula template) {
+	public int isInstanceOf(Formula template) {
 		Formula[] formulaBindings= new Formula[MAX_VARIABLES];
 		return isInstanceOf(template, formulaBindings);
 	}
-	boolean isInstanceOf(Formula template, Formula[] formulaBindings) {
+	private int isInstanceOf(Formula template, Formula[] formulaBindings) {
 		if (template._operator == IF_THEN) {
 			if (_operator != IF_THEN)
-				return false;
-			if (_left.isInstanceOf(template._left, formulaBindings))
-				return _right.isInstanceOf(template._right, formulaBindings);
-			return false;			
+				return 0;
+			int i= _left.isInstanceOf(template._left, formulaBindings);
+			if (0 <= i)
+				return i + 1;
+			i= _right.isInstanceOf(template._right, formulaBindings);
+			if (0 <= i)
+				return template._left.length()+i+1;
+			return -1;
 		}
 		else if (template._operator == NEGATION) {
 			if (_operator != NEGATION)
-				return false;
-			return _right.isInstanceOf(template._right, formulaBindings);
+				return 0;
+			int i= _right.isInstanceOf(template._right, formulaBindings);
+			if (0 <= i)
+				return i+1;
+			return -1;
 		}
 		else if (template._variable == 'T' || template._variable == 'F') { 
-			return _variable == template._variable;
+			if (_variable == template._variable)
+				return -1;
+			return 0;
 		}
 
 		int i= template._variable - 'a';
 		Formula match= formulaBindings[i];
 		if (match == null) {
 			formulaBindings[i]= this;
-			return true;
+			return -1;
 		}
-		return _string.equals(match._string);
+		if (_string.equals(match._string))
+			return -1;
+		return 0;
 	}
 	
 	@Override

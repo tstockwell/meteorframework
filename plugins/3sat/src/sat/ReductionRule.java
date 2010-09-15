@@ -11,6 +11,6 @@ public class ReductionRule {
 	
 	@Override
 	public String toString() {
-		return formula.toString()+ " ==> "+reduction;
+		return formula.getFormulaText()+ " ==> "+reduction.getFormulaText();
 	}
 }
