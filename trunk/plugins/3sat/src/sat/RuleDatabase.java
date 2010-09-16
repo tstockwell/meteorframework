@@ -235,7 +235,6 @@ public class RuleDatabase {
 				}
 				else
 					_lengthOfLongestCanonical= 0;
-				System.out.println("The length of the longest canonical formula is "+_lengthOfLongestCanonical);
 				try { s.close(); } catch (Throwable t) { }
 				try { resultSet.close(); } catch (Throwable t) { }
 			} 
