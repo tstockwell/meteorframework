@@ -26,8 +26,8 @@ public class DatabaseReport {
 		/* 
 		 * Count # of rules
 		 */
-		System.out.println("Total Canonical Formula Count="+database.countCanonicalFormulas());
-		System.out.println("Total Non-Canonical Formula Count="+database.countNonCanonicalFormulas());
+		System.out.println("Total number of canonical formulas is "+database.countCanonicalFormulas());
+		System.out.println("Total number of non-canonical formulas  is "+database.countNonCanonicalFormulas());
 		
 		int tt= 0;
 		for (int truthValue= 0; truthValue < TruthTable.MAX_TRUTH_TABLES; truthValue++) {
@@ -36,7 +36,7 @@ public class DatabaseReport {
 				tt++;
 		}
 		System.out.println("Have found forumlas for "+tt+" of "+TruthTable.MAX_TRUTH_TABLES+ " truth tables");
-		System.out.println("Length of longest canonical forumla="+database.getLengthOfLongestCanonicalFormula());
+		System.out.println("The length of the longest canonical formula is "+database.getLengthOfLongestCanonicalFormula());
 		System.out.println();
 		
 		
