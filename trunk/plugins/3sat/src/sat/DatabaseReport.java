@@ -46,15 +46,15 @@ public class DatabaseReport {
 		 * List lengths and # of canonical formulas
 		 */
 		database.getLengthOfCanonicalFormulas(TruthTable.create(0));
-		System.out.println("TRUTH VALUE   LENGTH    COUNT");
-		System.out.println("              FORMULAS");
-		System.out.println("-----------   ------   ------");
+		System.out.println("TRUTH VALUE     LENGTH    COUNT");
+		System.out.println("                FORMULAS");
+		System.out.println("-------------   ------   ------");
 		for (int truthValue= 0; truthValue < TruthTable.MAX_TRUTH_TABLES; truthValue++) {
 			TruthTable truthTable= TruthTable.create(truthValue);
 			List<Formula> canonicalFormulas= database.getCanonicalFormulas(truthTable);
 			
-			String t= "           "+truthValue;
-			t= t.substring(t.length()-11);
+			String t= ""+truthValue+"("+truthTable+")                 ";
+			t= t.substring(0, 13);
 
 			if (canonicalFormulas.isEmpty()) {
 				System.out.println(t+"   *not yet determined*");
@@ -69,7 +69,7 @@ public class DatabaseReport {
 					System.out.println("              "+formula.getFormulaText());
 				}
 			}
-			System.out.println("-----------   ------   ------");
+			System.out.println("-------------   ------   ------");
 		}
 		
 		if (showReductionRules) {
