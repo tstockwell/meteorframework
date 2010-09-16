@@ -204,6 +204,12 @@ public class Formula implements Serializable {
 		return _length;
 	}
 
+	/**
+	 * Returns an iterator that enumerates all the subformulas of this 
+	 * formula, always enumerating the subformulas of antecedents before 
+	 * the subformulas of consequences.
+	 * This formula is the last formula returned.  
+	 */
 	public Iterator<Formula> getLeftSidedDeepestFirstIterator() {
 		if (_variable != 0) {
 			ArrayList<Formula> list= new ArrayList<Formula>(1);
@@ -409,7 +415,7 @@ public class Formula implements Serializable {
 			return _right.unify(z._right);
 		}
 		else if (_operator == IF_THEN) {
-			if (_operator != IF_THEN)
+			if (z._operator != IF_THEN)
 				return null;
 			Substitution s= _left.unify(z._left);
 			if (s == null)
@@ -469,6 +475,14 @@ public class Formula implements Serializable {
 		if (f != null)
 			return f;
 		return this;
+	}
+
+	public Formula getAntecedent() {
+		return _left;
+	}
+
+	public Formula getConsequence() {
+		return _right;
 	}
 
 }

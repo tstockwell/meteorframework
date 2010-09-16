@@ -31,4 +31,21 @@ public class Substitution {
 		return _formulas[variable-'a'];
 	}
 	
+	@Override
+	public String toString() {
+		String s= "{";
+		for (int i= 0; i < Formula.MAX_VARIABLES; i++) {
+			Formula f= _formulas[i];
+			if (f != null) {
+				if (0 < i)
+					s+= ", ";
+				s+=(char)('a'+i);
+				s+= "=";
+				s+=f.getFormulaText();
+			}
+		}
+		s+= "}";
+		return s;
+	}
+	
 }
