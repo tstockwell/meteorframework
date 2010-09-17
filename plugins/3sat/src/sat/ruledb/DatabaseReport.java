@@ -1,6 +1,8 @@
-package sat;
+package sat.ruledb;
 
 import java.util.List;
+
+import sat.Formula;
 
 /**
  * Spits out a bunch of information about the formulas in the Rule Database.

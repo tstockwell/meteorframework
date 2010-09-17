@@ -1,8 +1,10 @@
-package sat;
+package sat.ruledb;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import sat.Formula;
 
 /**
  * Enumerates all formulas that need to be processed by the RuleGenerator application.

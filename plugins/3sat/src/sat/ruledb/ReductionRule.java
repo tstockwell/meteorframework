@@ -1,4 +1,6 @@
-package sat;
+package sat.ruledb;
+
+import sat.Formula;
 
 public class ReductionRule {
 	public Formula formula;

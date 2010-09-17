@@ -1,6 +1,8 @@
-package sat;
+package sat.ruledb;
 
 import java.util.NoSuchElementException;
+
+import sat.Formula;
 
 /**
  * Creates new formulas of a specified length by assembling 
