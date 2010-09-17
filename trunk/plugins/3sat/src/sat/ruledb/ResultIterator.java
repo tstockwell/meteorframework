@@ -1,4 +1,4 @@
-package sat;
+package sat.ruledb;
 
 import java.util.Iterator;
 

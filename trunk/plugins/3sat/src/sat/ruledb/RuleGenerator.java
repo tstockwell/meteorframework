@@ -1,6 +1,9 @@
-package sat;
+package sat.ruledb;
 
 import java.sql.SQLException;
+
+import sat.Formula;
+import sat.utils.ServerCommandLineInterface;
 
 /**
  * This class generates production rules for reducing propositional statements.
@@ -64,7 +67,7 @@ public class RuleGenerator {
 				System.out.println("Found a new reduction rule: "+reductionRule);
 			}
 			formula.setCanonical(isCanonical);
-			_database.addFormula(formula);
+			_database.addFormula(formula, isCanonical);
 		}
 		else {
 			if (reductionRule.formula.length() == reductionRule.reduction.length()) {

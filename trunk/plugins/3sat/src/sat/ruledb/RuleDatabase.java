@@ -1,4 +1,4 @@
-package sat;
+package sat.ruledb;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -14,6 +14,9 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.derby.jdbc.EmbeddedDriver;
+
+import sat.Domain;
+import sat.Formula;
 
 
 /**
@@ -72,13 +75,13 @@ public class RuleDatabase {
 		}
 
 	}
-
+	
 	public static final String LIST_FORMULA_LENGTHS= "-listFormulaLengths";
 
 	public String framework = "embedded";
 	public String driver = "org.apache.derby.jdbc.EmbeddedDriver";
 	public String protocol = "jdbc:derby:";
-	public String dbFolder = "/"+Formula.MAX_VARIABLES+"satdb";
+	public String dbFolder = "/"+Domain.variableCount()+"satdb";
 	public String options = ";create=true";
 	
 	public String dbURL= protocol+dbFolder+options;
@@ -295,7 +298,7 @@ public class RuleDatabase {
 		};
 	}
 
-	public void addFormula(Formula formula) {
+	public void addFormula(Formula formula, boolean isCanonical) {
 		try {
 			String sql= "INSERT INTO FORMULA (FORMULA, LENGTH, TRUTHVALUE, CANONICAL) VALUES ('"+
 						formula.getFormulaText()+"',"+
@@ -306,7 +309,7 @@ public class RuleDatabase {
 			try {
 				s.execute(sql);
 				int formulaLength= formula.length();
-				if (formula.isCanonical()) {
+				if (isCanonical) {
 					if (_lengthOfLongestCanonical == null || _lengthOfLongestCanonical < formulaLength) {
 						_lengthOfLongestCanonical= formula.length();
 						System.out.println("The length of the longest canonical formula is "+_lengthOfLongestCanonical);
