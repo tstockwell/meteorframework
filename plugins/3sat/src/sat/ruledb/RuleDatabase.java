@@ -15,8 +15,9 @@ import java.util.Properties;
 
 import org.apache.derby.jdbc.EmbeddedDriver;
 
-import sat.Domain;
+import sat.PropostionalSystem;
 import sat.Formula;
+import sat.TruthTable;
 
 
 /**
@@ -54,7 +55,7 @@ public class RuleDatabase {
 				if (_next == null)
 					_resultSet.next();
 				_next= null;
-				return Formula.create(_resultSet.getString("FORMULA"));
+				return Formula.createFormula(_resultSet.getString("FORMULA"));
 			}
 			catch (SQLException x) { throw new RuntimeException(x); }
 		}
@@ -81,7 +82,7 @@ public class RuleDatabase {
 	public String framework = "embedded";
 	public String driver = "org.apache.derby.jdbc.EmbeddedDriver";
 	public String protocol = "jdbc:derby:";
-	public String dbFolder = "/"+Domain.variableCount()+"satdb";
+	public String dbFolder = "/"+PropostionalSystem.variableCount()+"satdb";
 	public String options = ";create=true";
 	
 	public String dbURL= protocol+dbFolder+options;
@@ -156,7 +157,7 @@ public class RuleDatabase {
 				resultSet= s.executeQuery(sql);
 				if (resultSet.next()) {
 					String formula= resultSet.getString("FORMULA");
-					return Formula.create(formula);
+					return Formula.createFormula(formula);
 				}
 			}
 			finally {
@@ -181,7 +182,7 @@ public class RuleDatabase {
 				ArrayList<Formula> list= new ArrayList<Formula>();
 				while (resultSet.next()) {
 					String formula= resultSet.getString("FORMULA");
-					list.add(Formula.create(formula));
+					list.add(Formula.createFormula(formula));
 				}
 				return list;
 			}
@@ -271,7 +272,7 @@ public class RuleDatabase {
 				ResultSet resultSet= s.executeQuery(sql);
 				List<Formula> list= new ArrayList<Formula>();
 				while (resultSet.next()) {
-					list.add(Formula.create(resultSet.getString("FORMULA")));
+					list.add(Formula.createFormula(resultSet.getString("FORMULA")));
 				}
 				formulas= list;
 				_canonicalFormulasByLength.put(size, formulas);
@@ -356,7 +357,7 @@ public class RuleDatabase {
 							if (_next == null)
 								resultSet.next();
 							_next= null;
-							return Formula.create(resultSet.getString("FORMULA"));
+							return Formula.createFormula(resultSet.getString("FORMULA"));
 						}
 						catch (SQLException x) { throw new RuntimeException(x); }
 					}
@@ -393,7 +394,7 @@ public class RuleDatabase {
 						if (_next == null)
 							resultSet.next();
 						_next= null;
-						return Formula.create(resultSet.getString("FORMULA"));
+						return Formula.createFormula(resultSet.getString("FORMULA"));
 					}
 					catch (SQLException x) { throw new RuntimeException(x); }
 				}
@@ -444,7 +445,7 @@ public class RuleDatabase {
 			try {
 				resultSet= s.executeQuery(sql);
 				if (resultSet.next()) 
-					return Formula.create(resultSet.getString("FORMULA"));
+					return Formula.createFormula(resultSet.getString("FORMULA"));
 				return null;
 			}
 			finally {

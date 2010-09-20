@@ -1,28 +1,13 @@
-package sat.ruledb;
+package sat;
 
 import java.util.Map;
 import java.util.TreeMap;
 
-import sat.Formula;
 import sat.utils.Resource;
 
 
 
 public class TruthTable {
-	
-	public static final int MAX_TRUTH_VALUES= 1 << Formula.MAX_VARIABLES;
-	public static final int MAX_TRUTH_TABLES= 1 << MAX_TRUTH_VALUES;
-	
-	public static class Property extends sat.utils.Property<TruthTable> {
-		@Override
-		public TruthTable getDefaultValue(final Resource resource) {
-			return TruthTable.create(new TruthTable.Builder() {
-				public boolean evaluate(String values) {
-					return ((Formula)resource).evaluate(values);
-				}
-			});
-		}
-	}
 	
 	private static String __zeropad; 
 	static {
@@ -50,7 +35,7 @@ public class TruthTable {
 	}
 	
 	public static interface Builder {
-		boolean evaluate(String booleanString);
+		public boolean evaluate(Map<String, Boolean> values);
 	}
 	
 	private int _truthTable; 
