@@ -4,14 +4,12 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 
-import sat.utils.Resource;
-
 /**
  * Represents a propositional formula
  * 
  * @author Ted Stockwell <emorning@yahoo.com>
  */
-abstract public class Formula extends Resource {
+abstract public class Formula {
 	
 	final String _txt; // the textual normal form representation of this formula 
 	
@@ -22,7 +20,7 @@ abstract public class Formula extends Resource {
 	 * 
 	 * @return true if the given valuation satisfies this formula, else false.
 	 */
-	abstract boolean evaluate(Map<String, Boolean> valuation);
+	abstract public boolean evaluate(Map<String, Boolean> valuation);
 
 	public int length() {
 		return _txt.length();
@@ -43,7 +41,7 @@ abstract public class Formula extends Resource {
 	
 	/**
 	 * @return A textual representation of this formula in normal form.
-	 * @see PropostionalSystem
+	 * @see PropositionalSystem
 	 */
 	public String getFormulaText() {
 		return _txt;

@@ -3,7 +3,6 @@ package sat.ruledb;
 import java.util.List;
 
 import sat.Formula;
-import sat.TruthTable;
 
 /**
  * Spits out a bunch of information about the formulas in the Rule Database.

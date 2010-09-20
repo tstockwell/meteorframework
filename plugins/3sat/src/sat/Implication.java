@@ -22,7 +22,7 @@ public class Implication extends Formula {
 	}
 	
 	@Override
-	boolean evaluate(Map<String, Boolean> values) {
+	public boolean evaluate(Map<String, Boolean> values) {
 		return (_antecedent.evaluate(values) && !_consequent.evaluate(values)) ? false : true;
 	}
 	@Override

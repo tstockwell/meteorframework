@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import sat.Constant;
 import sat.Formula;
 
 /**
@@ -22,10 +23,10 @@ public class FormulaGenerator {
 	
 	List<Formula> _startingFormulas= new ArrayList<Formula>();
 	{
-		_startingFormulas.add(Formula.FALSE);
-		_startingFormulas.add(Formula.TRUE);
-		for (int i= 0; i < Formula.VARIABLES.length; i++)
-			_startingFormulas.add(Formula.VARIABLES[i]);
+		_startingFormulas.add(Constant.FALSE);
+		_startingFormulas.add(Constant.TRUE);
+		for (int i= 1; i <= 3; i++)
+			_startingFormulas.add(RuleDatabase.SYSTEM.createVariable(i));
 	}
 	
 
