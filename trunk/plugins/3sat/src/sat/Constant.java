@@ -7,12 +7,12 @@ import java.util.NoSuchElementException;
 abstract public class Constant extends Formula {
 	// constants
 	public static final Formula TRUE= new Constant("T") {
-		final boolean evaluate(Map<String, Boolean> valuation) {
+		public final boolean evaluate(Map<String, Boolean> valuation) {
 			return true;
 		};
 	};
 	public static final Formula FALSE= new Constant("F") {
-		final boolean evaluate(Map<String, Boolean> valuation) {
+		public final boolean evaluate(Map<String, Boolean> valuation) {
 			return false;
 		};
 	};

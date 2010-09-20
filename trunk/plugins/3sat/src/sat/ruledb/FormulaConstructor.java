@@ -129,7 +129,7 @@ public class FormulaConstructor implements ResultIterator<Formula> {
 		public Formula next() {
 			if (!_formulas.hasNext())
 				throw new NoSuchElementException();
-			return Formula.createNegation(_formulas.next());
+			return RuleDatabase.SYSTEM.createNegation(_formulas.next());
 		}
 		
 		@Override
@@ -188,7 +188,7 @@ public class FormulaConstructor implements ResultIterator<Formula> {
 		public Formula next() {
 			if (!hasNext())
 				throw new NoSuchElementException();
-			return Formula.createImplication(_rightFormula, _leftIterator.next());
+			return RuleDatabase.SYSTEM.createImplication(_rightFormula, _leftIterator.next());
 		}
 
 		public void remove() {

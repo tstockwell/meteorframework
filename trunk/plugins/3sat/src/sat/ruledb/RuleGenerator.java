@@ -66,7 +66,6 @@ public class RuleGenerator {
 				reductionRule= new ReductionRule(formula, _database.findCanonicalFormula(formula));
 				System.out.println("Found a new reduction rule: "+reductionRule);
 			}
-			formula.setCanonical(isCanonical);
 			_database.addFormula(formula, isCanonical);
 		}
 		else {
@@ -80,7 +79,7 @@ public class RuleGenerator {
 	}
 
 	private Boolean isCanonicalFormula(Formula formula) {
-		int length= _database.getLengthOfCanonicalFormulas(formula.getTruthTable());
+		int length= _database.getLengthOfCanonicalFormulas(TruthTable.getTruthTable(formula));
 		if (length < 0) // no canonical formulas in database
 			return true;
 		return formula.length() <= length; 

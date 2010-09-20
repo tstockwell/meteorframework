@@ -27,7 +27,7 @@ public class Variable extends Formula {
 	}
 
 	@Override
-	boolean evaluate(Map<String, Boolean> valuation) {
+	public boolean evaluate(Map<String, Boolean> valuation) {
 		return valuation.get(_txt);
 	}
 

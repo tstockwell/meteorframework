@@ -15,9 +15,8 @@ import java.util.Properties;
 
 import org.apache.derby.jdbc.EmbeddedDriver;
 
-import sat.PropostionalSystem;
+import sat.PropositionalSystem;
 import sat.Formula;
-import sat.TruthTable;
 
 
 /**
@@ -26,6 +25,10 @@ import sat.TruthTable;
  *
  */
 public class RuleDatabase {
+	
+	public static final int VARIABLE_COUNT= 3;
+	public static final PropositionalSystem SYSTEM= new PropositionalSystem(VARIABLE_COUNT);
+	
 	
 	public class Navigator {
 		
@@ -55,7 +58,7 @@ public class RuleDatabase {
 				if (_next == null)
 					_resultSet.next();
 				_next= null;
-				return Formula.createFormula(_resultSet.getString("FORMULA"));
+				return SYSTEM.createFormula(_resultSet.getString("FORMULA"));
 			}
 			catch (SQLException x) { throw new RuntimeException(x); }
 		}
@@ -82,7 +85,7 @@ public class RuleDatabase {
 	public String framework = "embedded";
 	public String driver = "org.apache.derby.jdbc.EmbeddedDriver";
 	public String protocol = "jdbc:derby:";
-	public String dbFolder = "/"+PropostionalSystem.variableCount()+"satdb";
+	public String dbFolder = "/"+VARIABLE_COUNT+"satdb";
 	public String options = ";create=true";
 	
 	public String dbURL= protocol+dbFolder+options;
@@ -157,7 +160,7 @@ public class RuleDatabase {
 				resultSet= s.executeQuery(sql);
 				if (resultSet.next()) {
 					String formula= resultSet.getString("FORMULA");
-					return Formula.createFormula(formula);
+					return SYSTEM.createFormula(formula);
 				}
 			}
 			finally {
@@ -182,7 +185,7 @@ public class RuleDatabase {
 				ArrayList<Formula> list= new ArrayList<Formula>();
 				while (resultSet.next()) {
 					String formula= resultSet.getString("FORMULA");
-					list.add(Formula.createFormula(formula));
+					list.add(SYSTEM.createFormula(formula));
 				}
 				return list;
 			}
@@ -272,7 +275,7 @@ public class RuleDatabase {
 				ResultSet resultSet= s.executeQuery(sql);
 				List<Formula> list= new ArrayList<Formula>();
 				while (resultSet.next()) {
-					list.add(Formula.createFormula(resultSet.getString("FORMULA")));
+					list.add(SYSTEM.createFormula(resultSet.getString("FORMULA")));
 				}
 				formulas= list;
 				_canonicalFormulasByLength.put(size, formulas);
@@ -304,8 +307,8 @@ public class RuleDatabase {
 			String sql= "INSERT INTO FORMULA (FORMULA, LENGTH, TRUTHVALUE, CANONICAL) VALUES ('"+
 						formula.getFormulaText()+"',"+
 						formula.length()+","+
-						"'"+formula.getTruthTable()+"',"+
-						(formula.isCanonical()?1:0)+")";
+						"'"+TruthTable.getTruthTable(formula)+"',"+
+						(isCanonical?1:0)+")";
 			Statement s = _connection.createStatement();
 			try {
 				s.execute(sql);
@@ -315,7 +318,7 @@ public class RuleDatabase {
 						_lengthOfLongestCanonical= formula.length();
 						System.out.println("The length of the longest canonical formula is "+_lengthOfLongestCanonical);
 					}
-					_lengthOfCanonicalFormulas.put(formula.getTruthTable(), formulaLength);
+					_lengthOfCanonicalFormulas.put(TruthTable.getTruthTable(formula), formulaLength);
 					List<Formula> formulas= _canonicalFormulasByLength.get(formulaLength);
 					if (formulas == null) {
 						formulas= new ArrayList<Formula>();
@@ -357,7 +360,7 @@ public class RuleDatabase {
 							if (_next == null)
 								resultSet.next();
 							_next= null;
-							return Formula.createFormula(resultSet.getString("FORMULA"));
+							return SYSTEM.createFormula(resultSet.getString("FORMULA"));
 						}
 						catch (SQLException x) { throw new RuntimeException(x); }
 					}
@@ -394,7 +397,7 @@ public class RuleDatabase {
 						if (_next == null)
 							resultSet.next();
 						_next= null;
-						return Formula.createFormula(resultSet.getString("FORMULA"));
+						return SYSTEM.createFormula(resultSet.getString("FORMULA"));
 					}
 					catch (SQLException x) { throw new RuntimeException(x); }
 				}
@@ -439,13 +442,13 @@ public class RuleDatabase {
 	 */
 	public Formula findCanonicalFormula(Formula formula) {
 		try {
-			String sql= "SELECT * FROM FORMULA WHERE TRUTHVALUE = '"+formula.getTruthTable()+"' AND CANONICAL=1";
+			String sql= "SELECT * FROM FORMULA WHERE TRUTHVALUE = '"+TruthTable.getTruthTable(formula)+"' AND CANONICAL=1";
 			Statement s = _connection.createStatement();
 			ResultSet resultSet= null;		
 			try {
 				resultSet= s.executeQuery(sql);
 				if (resultSet.next()) 
-					return Formula.createFormula(resultSet.getString("FORMULA"));
+					return SYSTEM.createFormula(resultSet.getString("FORMULA"));
 				return null;
 			}
 			finally {

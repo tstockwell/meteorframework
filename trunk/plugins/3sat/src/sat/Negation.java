@@ -18,7 +18,7 @@ public class Negation extends Formula {
 	}
 	
 	@Override
-	boolean evaluate(Map<String, Boolean> valuation) {
+	public boolean evaluate(Map<String, Boolean> valuation) {
 		return _child.evaluate(valuation) ? false : true;
 	}
 	
