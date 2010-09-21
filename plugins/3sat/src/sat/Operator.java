@@ -1,15 +1,15 @@
 package sat;
 
 public enum Operator {
-	Negation('~'),
-	Implication('*');
+	Negation("~"),
+	Implication("*");
 	
-	private char _text; 
-	private Operator(char text) {
+	private String _text; 
+	private Operator(String text) {
 		_text= text;
 	}
 	
-	public char asCharacter() {
+	public String getFormulaText() {
 		return _text;
 	}
 

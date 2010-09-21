@@ -11,6 +11,9 @@ public class Negation extends Formula {
 	Negation(Formula f, String text) {
 		super(text);
 		_child= f;
+		
+		// we can save memory by reusing the given text for subformula text
+		_child._txt= text.substring(1);
 	}
 	
 	public Formula getChild() {
