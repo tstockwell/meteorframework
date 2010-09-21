@@ -21,7 +21,7 @@ public class Negation extends Formula {
 	}
 	
 	@Override
-	public boolean evaluate(Map<String, Boolean> valuation) {
+	public boolean evaluate(Map<Variable, Boolean> valuation) {
 		return _child.evaluate(valuation) ? false : true;
 	}
 	
@@ -62,10 +62,10 @@ public class Negation extends Formula {
 	}
 
 	@Override
-	protected int isInstanceOf(Formula template, Map<String, Formula> formulaBindings) {
-		if (template instanceof Negation)
+	protected int subsumes(Formula formula, Map<Variable, Formula> variableBindings) {
+		if (!(formula instanceof Negation))
 			return 0;
-		int i= _child.isInstanceOf(((Negation)template).getChild(), formulaBindings);
+		int i= _child.subsumes(((Negation)formula).getChild(), variableBindings);
 		if (0 <= i)
 			return i+1;
 		return -1;

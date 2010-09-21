@@ -7,12 +7,12 @@ import java.util.NoSuchElementException;
 abstract public class Constant extends Formula {
 	// constants
 	public static final Formula TRUE= new Constant("T") {
-		public final boolean evaluate(Map<String, Boolean> valuation) {
+		public final boolean evaluate(Map<Variable, Boolean> valuation) {
 			return true;
 		};
 	};
 	public static final Formula FALSE= new Constant("F") {
-		public final boolean evaluate(Map<String, Boolean> valuation) {
+		public final boolean evaluate(Map<Variable, Boolean> valuation) {
 			return false;
 		};
 	};
@@ -36,7 +36,7 @@ abstract public class Constant extends Formula {
 			public void remove() { throw new UnsupportedOperationException(); }
 		};
 	}
-	final protected int isInstanceOf(Formula template, Map<String, Formula> formulaBindings) {
-		return template._txt.equals(_txt) ? -1 : 0;
+	final protected int subsumes(Formula formula, Map<Variable, Formula> variableBindings) {
+		return formula._txt.equals(_txt) ? -1 : 0;
 	}
 }

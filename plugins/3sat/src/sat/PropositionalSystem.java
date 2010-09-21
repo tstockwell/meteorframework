@@ -83,12 +83,12 @@ public class PropositionalSystem {
 		}
 	}
 
-	public Formula createNegation(Formula right) {
+	public Negation createNegation(Formula right) {
 		String text= Operator.Negation.getFormulaText()+right.getFormulaText();
-		Formula formula= null;
+		Negation formula= null;
 		synchronized (__formulaCache) {
 			FormulaReference ref= __formulaCache.get(text);
-			if (ref == null || (formula= ref.get()) == null) {
+			if (ref == null || (formula= (Negation)ref.get()) == null) {
 				formula= new Negation(right, text);
 				addFormula(formula);
 			}
@@ -97,12 +97,12 @@ public class PropositionalSystem {
 		return formula;
 	}
 
-	public Formula createImplication(Formula antecedent, Formula consequent) {
+	public Implication createImplication(Formula antecedent, Formula consequent) {
 		String text= Operator.Implication.getFormulaText()+antecedent.getFormulaText()+consequent.getFormulaText();
-		Formula formula= null;
+		Implication formula= null;
 		synchronized (__formulaCache) {
 			FormulaReference ref= __formulaCache.get(text);
-			if (ref == null || (formula= ref.get()) == null) {
+			if (ref == null || (formula= (Implication)ref.get()) == null) {
 				formula= new Implication(antecedent, consequent, text);
 				addFormula(formula);
 			}
@@ -110,11 +110,19 @@ public class PropositionalSystem {
 		
 		return formula;
 	}
-	public Formula createVariable(int variable) {
+	public Variable createVariable(int variable) {
 		if (variable < 1)
 			throw new RuntimeException("Variable numbers must be greater than 0");
 		String text= "#"+Integer.toString(variable);
-		return createFormula(text);
+		Variable formula= null;
+		synchronized (__formulaCache) {
+			FormulaReference ref= __formulaCache.get(text);
+			if (ref == null || (formula= (Variable)ref.get()) == null) {
+				formula= new Variable(text);
+				addFormula(formula);
+			}
+		}
+		return formula;
 	}
 
 	private Formula parse(String formula) {
