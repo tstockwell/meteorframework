@@ -1,8 +1,8 @@
 package sat;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.TreeMap;
 
 /**
  * Represents a propositional formula
@@ -20,7 +20,7 @@ abstract public class Formula {
 	 * 
 	 * @return true if the given valuation satisfies this formula, else false.
 	 */
-	abstract public boolean evaluate(Map<String, Boolean> valuation);
+	abstract public boolean evaluate(Map<Variable, Boolean> valuation);
 
 	public int length() {
 		return _txt.length();
@@ -48,14 +48,15 @@ abstract public class Formula {
 	}
 
 	/**
-	 * @return -1 if this formula is a substitution instance of the given formula.
-	 * 	Otherwise return the position from the left in the given template formula where matching failed.
+	 * @return -1 if this formula subsumes the given formula, 
+	 *  in other words, if the given formula is a substitution instance of this formula.
+	 * 	Otherwise return the position from the left of this formula where matching failed.
 	 */
-	public int isInstanceOf(Formula template) {
-		Map<String, Formula> formulaBindings= new TreeMap<String, Formula>();
-		return isInstanceOf(template, formulaBindings);
+	public int subsumes(Formula formula) {
+		Map<Variable, Formula> formulaBindings= new HashMap<Variable, Formula>();
+		return subsumes(formula, formulaBindings);
 	}
-	abstract protected int isInstanceOf(Formula template, Map<String, Formula> formulaBindings);
+	abstract protected int subsumes(Formula formula, Map<Variable, Formula> variableBindings);
 	
 	@Override
 	public boolean equals(Object obj) {

@@ -98,7 +98,7 @@ public class RuleGenerator {
 		try {
 			while (navigator.hasNext()) {
 				Formula reducableFormula= navigator.next();
-				int i= formula.isInstanceOf(reducableFormula);
+				int i= reducableFormula.subsumes(formula);
 				if (i < 0) 
 					return new ReductionRule(reducableFormula, _database.findCanonicalFormula(reducableFormula));
 				navigator.advanceFromPosition(i);

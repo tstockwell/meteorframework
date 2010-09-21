@@ -27,18 +27,18 @@ public class Variable extends Formula {
 	}
 
 	@Override
-	public boolean evaluate(Map<String, Boolean> valuation) {
-		return valuation.get(_txt);
+	public boolean evaluate(Map<Variable, Boolean> valuation) {
+		return valuation.get(this);
 	}
 
 	@Override
-	protected int isInstanceOf(Formula template, Map<String, Formula> formulaBindings) {
-		Formula match= formulaBindings.get(_txt);
+	protected int subsumes(Formula formula, Map<Variable, Formula> variableBindings) {
+		Formula match= variableBindings.get(this);
 		if (match == null) {
-			formulaBindings.put(_txt, this);
+			variableBindings.put(this, formula);
 			return -1;
 		}
-		if (_txt.equals(match._txt))
+		if (this.equals(match))
 			return -1;
 		return 0;
 	}
