@@ -22,9 +22,7 @@ import java.util.TreeMap;
  * 	...the symbols 'T' and 'F' for TRUE and FALSE.
  *  ...the symbol '~' for the negation operator. 
  *  ...the symbol '*' for the implication operator. 
- *  ...numeric symbols for representing variables.
- *  	Variable symbols must be prepended with zeros so that all numbers are the same 
- *  	length as the largest variable in the system.
+ *  ...the symbol '#' followed by a number for representing variables.
  *  
  *  Use the static PropositionalSystem.create* methods to create instances of formulas.
  *  
@@ -46,25 +44,15 @@ public class PropositionalSystem {
 	}
 	
 	
-	final int _variableCount;
-	final int _variableLength;
-	
 	/**
 	 * @param variableCount  the number of variables in the system.
 	 * 		Variables are numbered from 1 to variableCount
 	 */
-	public PropositionalSystem(int variableCount) {
-		assert 0 < variableCount;
-		_variableCount= variableCount;
-		_variableLength= Integer.toString(variableCount).length();
+	public PropositionalSystem() {
 		__formulaCache.put(Constant.TRUE.getFormulaText(), new FormulaReference(Constant.TRUE));
 		__formulaCache.put(Constant.FALSE.getFormulaText(), new FormulaReference(Constant.FALSE));
 	}
 	
-	public int getVariableCount() {
-		return _variableCount;
-	}
-
 	/**
 	 * Create a formula from its textual representation in normal form
 	 */
@@ -74,36 +62,58 @@ public class PropositionalSystem {
 			Reference<Formula> ref= __formulaCache.get(path);
 			if (ref == null || (formula= ref.get()) == null) {
 				formula= parse(path);
-				__formulaCache.put(path, new FormulaReference(formula));
+				addFormula(formula);
 			}
 		}
 		
-		// clean up expired references
-		FormulaReference ref;
-		while ((ref= (FormulaReference)__referenceQueue.poll()) != null) {
-			synchronized (__formulaCache) {
-				__formulaCache.remove(ref._string);
+		return formula;
+	}
+	private void addFormula(Formula formula) {
+		synchronized (__formulaCache) {
+			__formulaCache.put(formula.getFormulaText(), new FormulaReference(formula));
+
+			// clean up expired references
+			FormulaReference ref;
+			while ((ref= (FormulaReference)__referenceQueue.poll()) != null) {
+				synchronized (__formulaCache) {
+					__formulaCache.remove(ref._string);
+				}
+			}
+
+		}
+	}
+
+	public Formula createNegation(Formula right) {
+		String text= Operator.Negation.getFormulaText()+right.getFormulaText();
+		Formula formula= null;
+		synchronized (__formulaCache) {
+			FormulaReference ref= __formulaCache.get(text);
+			if (ref == null || (formula= ref.get()) == null) {
+				formula= new Negation(right, text);
+				addFormula(formula);
 			}
 		}
 		
 		return formula;
 	}
 
-	public Formula createNegation(Formula right) {
-		return createFormula(Operator.Negation+right.getFormulaText());
-	}
-
 	public Formula createImplication(Formula antecedent, Formula consequent) {
-		return createFormula(Operator.Implication+antecedent.getFormulaText()+consequent.getFormulaText());
+		String text= Operator.Implication.getFormulaText()+antecedent.getFormulaText()+consequent.getFormulaText();
+		Formula formula= null;
+		synchronized (__formulaCache) {
+			FormulaReference ref= __formulaCache.get(text);
+			if (ref == null || (formula= ref.get()) == null) {
+				formula= new Implication(antecedent, consequent, text);
+				addFormula(formula);
+			}
+		}
+		
+		return formula;
 	}
 	public Formula createVariable(int variable) {
 		if (variable < 1)
 			throw new RuntimeException("Variable numbers must be greater than 0");
-		if (_variableCount < variable)
-			throw new RuntimeException("Variable numbers must be less than or equal to the number of variables in the system");
-		String text= Integer.toString(variable);
-		while (text.length() < _variableLength)
-			text= "0"+text;
+		String text= "#"+Integer.toString(variable);
 		return createFormula(text);
 	}
 
@@ -132,9 +142,9 @@ public class PropositionalSystem {
 				int end= i+1;
 				while (0 < i && Character.isDigit(formula.charAt(i-1))) 
 					i--;
-				String text= formula.substring(i, end);
-				while (text.length() < _variableLength)
-					text= "0"+text;
+				if (i <= 0 || formula.charAt(i-1) != '#')  
+					throw new RuntimeException("Expected a '#' at position "+((0 < i) ? (i-1) : 0));
+				String text= formula.substring(--i, end);
 				stack.push(new Variable(text));
 			}
 			else 
@@ -147,10 +157,5 @@ public class PropositionalSystem {
 		Formula formula2= stack.pop();
 		return formula2;
 	}
-	
-	public int getVariableLength() {
-		return _variableLength;
-	}
-
 
 }

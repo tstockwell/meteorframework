@@ -11,8 +11,11 @@ public class Implication extends Formula {
 	
 	public Implication(Formula antecedent, Formula consequent, String text) {
 		super(text);
-		_antecedent= antecedent;
-		_consequent= consequent;
+		
+		// we can save memory by reusing the given text for subformula text
+		int a= antecedent.length();
+		(_antecedent= antecedent)._txt= text.substring(1, a);
+		(_consequent= consequent)._txt= text.substring(a+1);
 	}
 	public Formula getAntecedent() {
 		return _antecedent;

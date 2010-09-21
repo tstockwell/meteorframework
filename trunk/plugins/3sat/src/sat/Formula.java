@@ -11,7 +11,7 @@ import java.util.TreeMap;
  */
 abstract public class Formula {
 	
-	final String _txt; // the textual normal form representation of this formula 
+	protected String _txt; // the textual normal form representation of this formula 
 	
 	Formula(String text) { _txt= text; }
 
