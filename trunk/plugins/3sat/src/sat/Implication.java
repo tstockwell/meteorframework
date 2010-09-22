@@ -14,7 +14,7 @@ public class Implication extends Formula {
 		
 		// we can save memory by reusing the given text for subformula text
 		int a= antecedent.length();
-		(_antecedent= antecedent)._txt= text.substring(1, a);
+		(_antecedent= antecedent)._txt= text.substring(1, a+1);
 		(_consequent= consequent)._txt= text.substring(a+1);
 	}
 	public Formula getAntecedent() {

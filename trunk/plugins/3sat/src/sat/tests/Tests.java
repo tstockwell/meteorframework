@@ -8,11 +8,18 @@ import sat.Formula;
 import sat.Implication;
 import sat.PropositionalSystem;
 import sat.Variable;
+import sat.ruledb.RuleDatabase;
+import sat.ruledb.TruthTable;
 
 public class Tests extends TestCase {
 	
 	public void testFormulaConstruction() {
 		PropositionalSystem system= new PropositionalSystem();
+		
+		assertEquals("#1", system.createVariable(1).getFormulaText());
+		
+		assertEquals("*#1#1", system.createFormula("*#1#1").getFormulaText());
+		
 		String text= "***#1#2#3#4";
 		Formula formula1= system.createFormula(text);
 		assertEquals(formula1.length(), text.length());
@@ -70,5 +77,15 @@ public class Tests extends TestCase {
 				assertEquals("formula evaluation failed", !value1, value2);
 			}
 		}
+	}
+	
+	public void testTruthTables() {
+		Formula formula= RuleDatabase.SYSTEM.createFormula("~#1");
+		TruthTable truthTable= TruthTable.getTruthTable(formula);
+		assertEquals("1010", truthTable.toString());
+		
+		formula= RuleDatabase.SYSTEM.createFormula("*#1#2");
+		truthTable= TruthTable.getTruthTable(formula);
+		assertEquals("1011", truthTable.toString());
 	}
 }

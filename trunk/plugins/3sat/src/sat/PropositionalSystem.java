@@ -84,7 +84,9 @@ public class PropositionalSystem {
 	}
 
 	public Negation createNegation(Formula right) {
-		String text= Operator.Negation.getFormulaText()+right.getFormulaText();
+		return createNegation(right, Operator.Negation.getFormulaText()+right.getFormulaText());
+	}
+	private Negation createNegation(Formula right, String text) {
 		Negation formula= null;
 		synchronized (__formulaCache) {
 			FormulaReference ref= __formulaCache.get(text);
@@ -98,7 +100,9 @@ public class PropositionalSystem {
 	}
 
 	public Implication createImplication(Formula antecedent, Formula consequent) {
-		String text= Operator.Implication.getFormulaText()+antecedent.getFormulaText()+consequent.getFormulaText();
+		return createImplication(antecedent, consequent, Operator.Implication.getFormulaText()+antecedent.getFormulaText()+consequent.getFormulaText());
+	}
+	private Implication createImplication(Formula antecedent, Formula consequent, String text) {
 		Implication formula= null;
 		synchronized (__formulaCache) {
 			FormulaReference ref= __formulaCache.get(text);
@@ -113,7 +117,9 @@ public class PropositionalSystem {
 	public Variable createVariable(int variable) {
 		if (variable < 1)
 			throw new RuntimeException("Variable numbers must be greater than 0");
-		String text= "#"+Integer.toString(variable);
+		return createVariable("#"+Integer.toString(variable));
+	}
+	private Variable createVariable(String text) {
 		Variable formula= null;
 		synchronized (__formulaCache) {
 			FormulaReference ref= __formulaCache.get(text);
@@ -132,13 +138,13 @@ public class PropositionalSystem {
 			if (Operator.isNegation(c)) {
 				Formula f= stack.pop();
 				String text= formula.substring(i, i + f.length()+1);
-				stack.push(new Negation(f, text));
+				stack.push(createNegation(f, text));
 			}
 			else if (Operator.isImplication(c)) {
 				Formula antecendent= stack.pop();
 				Formula consequent= stack.pop();
 				String text= formula.substring(i, i + antecendent.length()+consequent.length()+1);
-				stack.push(new Implication(antecendent, consequent, text));
+				stack.push(createImplication(antecendent, consequent, text));
 			}
 			else if (c == 'T') {
 				stack.push(Constant.TRUE);
@@ -153,7 +159,7 @@ public class PropositionalSystem {
 				if (i <= 0 || formula.charAt(i-1) != '#')  
 					throw new RuntimeException("Expected a '#' at position "+((0 < i) ? (i-1) : 0));
 				String text= formula.substring(--i, end);
-				stack.push(new Variable(text));
+				stack.push(createVariable(text));
 			}
 			else 
 				throw new RuntimeException("Unknown symbol:"+c);

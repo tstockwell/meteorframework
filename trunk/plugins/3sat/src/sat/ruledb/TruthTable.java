@@ -126,13 +126,12 @@ public class TruthTable {
 			truthTable= __tablesForFormulas.get(path);
 			if (truthTable == null) {
 				__formulas.put(path, new FormulaReference(formula));
-				__tablesForFormulas.put(path,
-					create(new TruthTable.Builder() {
-						public boolean evaluate(Map<Variable, Boolean> valuation) {
-							return formula.evaluate(valuation);
-						}
-					})
-				);
+				truthTable= create(new TruthTable.Builder() {
+					public boolean evaluate(Map<Variable, Boolean> valuation) {
+						return formula.evaluate(valuation);
+					}
+				});
+				__tablesForFormulas.put(path, truthTable);
 			}
 		}
 		

@@ -9,7 +9,7 @@ import sat.Formula;
 import sat.PropositionalSystem;
 
 /**
- * Reads a clausal SAT problem.
+ * Reads a clausal SAT problem from a file.
  * File format described here: 
  * 		http://www.satcompetition.org/2004/format-solvers2004.html
  * 
