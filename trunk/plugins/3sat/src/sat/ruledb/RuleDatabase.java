@@ -69,7 +69,10 @@ public class RuleDatabase {
 
 		public void advanceFromPosition(int i) {
 			try {
-				String formula= _resultSet.getString("FORMULA").substring(0, i+1)+((char)0x7F);
+				String formula= _resultSet.getString("FORMULA");
+				if (i < formula.length()) 
+					formula= formula.substring(0, i+1);
+				formula+= ((char)0x7F);
 				_resultSet.close();
 				_selectCanonical.setString(1, formula);
 				_resultSet= _selectCanonical.executeQuery();
