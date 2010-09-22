@@ -38,7 +38,7 @@ public class Variable extends Formula {
 			variableBindings.put(this, formula);
 			return -1;
 		}
-		if (this.equals(match))
+		if (formula.equals(match))
 			return -1;
 		return 0;
 	}

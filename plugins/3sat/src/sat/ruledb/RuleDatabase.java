@@ -26,7 +26,7 @@ import sat.Formula;
  */
 public class RuleDatabase {
 	
-	public static final int VARIABLE_COUNT= 3;
+	public static final int VARIABLE_COUNT= 2;
 	public static final PropositionalSystem SYSTEM= new PropositionalSystem();
 	
 	

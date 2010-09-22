@@ -18,6 +18,5 @@
 <booleanAttribute key="org.eclipse.jdt.launching.DEFAULT_CLASSPATH" value="false"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="sat.ruledb.RuleGenerator"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="3sat"/>
-<booleanAttribute key="org.eclipse.jdt.launching.STOP_IN_MAIN" value="true"/>
 <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xmx512m -Dderby.storage.pageCacheSize=100000"/>
 </launchConfiguration>
