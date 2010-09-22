@@ -25,7 +25,7 @@ public class FormulaGenerator {
 	{
 		_startingFormulas.add(Constant.FALSE);
 		_startingFormulas.add(Constant.TRUE);
-		for (int i= 1; i <= 3; i++)
+		for (int i= 1; i <= RuleDatabase.VARIABLE_COUNT; i++)
 			_startingFormulas.add(RuleDatabase.SYSTEM.createVariable(i));
 	}
 	
