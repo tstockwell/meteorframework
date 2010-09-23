@@ -37,16 +37,28 @@ public class CNFFile {
 			throw new RuntimeException("Expected to find 'p' line before clauses");
 		}
 		
+		Formula formula= null;
 		for (int count= cnfFile._clauseCount; 0 < count--;) { 
 			if ((inputLine= reader.readLine()) == null) 
 					throw new RuntimeException("Premature end of file");
 			
-			String[] tokens= inputLine.split(" ");
 			
+			String[] tokens= inputLine.replaceAll("-", "~").split(" ");
+			if (tokens.length <= 1) // an empty clause
+				continue;
+			Formula clause= system.createFormula(tokens[0]);
+			for (int v= 1; v < tokens.length-1; v++) 
+				clause= system.createImplication(system.createNegation(clause), system.createFormula(tokens[v]));
+				
+			if (formula== null) {
+				formula= clause;
+			}
+			else
+				formula= system.createNegation(system.createImplication(formula, system.createNegation(clause)));
 		}
 		
-		
-		return null;
+		cnfFile._formula= formula;
+		return cnfFile;
 	}
 	
 	private Formula _formula;
