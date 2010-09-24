@@ -15,8 +15,8 @@ import java.util.Properties;
 
 import org.apache.derby.jdbc.EmbeddedDriver;
 
-import sat.PropositionalSystem;
 import sat.Formula;
+import sat.PropositionalSystem;
 
 
 /**
@@ -99,11 +99,13 @@ public class RuleDatabase {
 	//HashMap<Integer, List<Formula>> _allNonCanonicalFormulasByLength= new HashMap<Integer, List<Formula>>();
 	
 	
-	private PreparedStatement _selectCanonical;
-	private PropositionalSystem _system;
+	final private PreparedStatement _selectCanonical;
+	final private PropositionalSystem _system;
+	final private TruthTables _truthTables; 
 	
-	public RuleDatabase(PropositionalSystem system) throws SQLException {
-		_system= system;
+	public RuleDatabase(TruthTables tables) throws SQLException {
+		_truthTables= tables;
+		_system= tables.getSystem();
 		connect();
 		createIfNecessary();		
 		
@@ -311,7 +313,7 @@ public class RuleDatabase {
 			String sql= "INSERT INTO FORMULA (FORMULA, LENGTH, TRUTHVALUE, CANONICAL) VALUES ('"+
 						formula.getFormulaText()+"',"+
 						formula.length()+","+
-						"'"+TruthTable.getTruthTable(formula)+"',"+
+						"'"+_truthTables.getTruthTable(formula)+"',"+
 						(isCanonical?1:0)+")";
 			Statement s = _connection.createStatement();
 			try {
@@ -322,7 +324,7 @@ public class RuleDatabase {
 						_lengthOfLongestCanonical= formula.length();
 						System.out.println("The length of the longest canonical formula is "+_lengthOfLongestCanonical);
 					}
-					_lengthOfCanonicalFormulas.put(TruthTable.getTruthTable(formula), formulaLength);
+					_lengthOfCanonicalFormulas.put(_truthTables.getTruthTable(formula), formulaLength);
 					List<Formula> formulas= _canonicalFormulasByLength.get(formulaLength);
 					if (formulas == null) {
 						formulas= new ArrayList<Formula>();
@@ -424,7 +426,7 @@ public class RuleDatabase {
 				Statement s = _connection.createStatement();
 				ResultSet resultSet= s.executeQuery(sql);
 				while (resultSet.next()) {
-					TruthTable tt= TruthTable.create(resultSet.getString("TRUTHVALUE"));
+					TruthTable tt= _truthTables.create(resultSet.getString("TRUTHVALUE"));
 					if (!lengths.containsKey(tt))
 						lengths.put(tt, resultSet.getInt("LENGTH"));
 				}
@@ -446,7 +448,7 @@ public class RuleDatabase {
 	 */
 	public Formula findCanonicalFormula(Formula formula) {
 		try {
-			String sql= "SELECT * FROM FORMULA WHERE TRUTHVALUE = '"+TruthTable.getTruthTable(formula)+"' AND CANONICAL=1";
+			String sql= "SELECT * FROM FORMULA WHERE TRUTHVALUE = '"+_truthTables.getTruthTable(formula)+"' AND CANONICAL=1";
 			Statement s = _connection.createStatement();
 			ResultSet resultSet= null;		
 			try {
@@ -544,6 +546,10 @@ public class RuleDatabase {
 
 	public Navigator getNonCanonicalFormulaNavigator() {
 		return new Navigator();
+	}
+
+	public PropositionalSystem getSystem() {
+		return _system;
 	}
 
 }

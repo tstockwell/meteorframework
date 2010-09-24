@@ -6,6 +6,7 @@ import java.util.List;
 
 import sat.Constant;
 import sat.Formula;
+import sat.PropositionalSystem;
 
 /**
  * Enumerates all formulas that need to be processed by the RuleGenerator application.
@@ -16,22 +17,23 @@ import sat.Formula;
  */
 public class FormulaGenerator {
 	
-	RuleDatabase _database;
+	final RuleDatabase _database;
+	final PropositionalSystem _system;
 	int _startingLength= 0;
 	int _currentLength= 0;
 	ResultIterator<Formula> _currentIterator;
 	
 	List<Formula> _startingFormulas= new ArrayList<Formula>();
-	{
-		_startingFormulas.add(Constant.FALSE);
-		_startingFormulas.add(Constant.TRUE);
-		for (int i= 1; i <= RuleDatabase.VARIABLE_COUNT; i++)
-			_startingFormulas.add(RuleGenerator.SYSTEM.createVariable(i));
-	}
 	
 
 	public FormulaGenerator(RuleDatabase database) {
 		_database= database;
+		_system= database.getSystem();
+		
+		_startingFormulas.add(Constant.FALSE);
+		_startingFormulas.add(Constant.TRUE);
+		for (int i= 1; i <= RuleDatabase.VARIABLE_COUNT; i++)
+			_startingFormulas.add(_system.createVariable(i));
 	}
 
 	public Formula getStartingFormula() {
