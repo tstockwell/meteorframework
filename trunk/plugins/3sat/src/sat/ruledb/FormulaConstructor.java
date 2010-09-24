@@ -3,6 +3,7 @@ package sat.ruledb;
 import java.util.NoSuchElementException;
 
 import sat.Formula;
+import sat.PropositionalSystem;
 
 /**
  * Creates new formulas of a specified length by assembling 
@@ -37,6 +38,7 @@ public class FormulaConstructor implements ResultIterator<Formula> {
 	NegationFormulaConstructor _negationConstructor= null;
 	IfThenFormulaConstructor _ifthenConstructor= null;
 	int _rightLength;
+	final PropositionalSystem _system;
 	
 	
 	/**
@@ -56,7 +58,9 @@ public class FormulaConstructor implements ResultIterator<Formula> {
 		_database= database;
 		_formulaLength= formulaLength;
 		_negationConstructor= new NegationFormulaConstructor();
-		_rightLength= formulaLength - 2; 
+		_rightLength= formulaLength - 2;
+		_system= database.getSystem();
+		
 		
 		// skip formulas until we're at the starting formula
 		if (startingFormula != null) {
@@ -129,7 +133,7 @@ public class FormulaConstructor implements ResultIterator<Formula> {
 		public Formula next() {
 			if (!_formulas.hasNext())
 				throw new NoSuchElementException();
-			return RuleGenerator.SYSTEM.createNegation(_formulas.next());
+			return _system.createNegation(_formulas.next());
 		}
 		
 		@Override
@@ -188,7 +192,7 @@ public class FormulaConstructor implements ResultIterator<Formula> {
 		public Formula next() {
 			if (!hasNext())
 				throw new NoSuchElementException();
-			return RuleGenerator.SYSTEM.createImplication(_rightFormula, _leftIterator.next());
+			return _system.createImplication(_rightFormula, _leftIterator.next());
 		}
 
 		public void remove() {

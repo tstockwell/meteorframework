@@ -1,16 +1,22 @@
 package sat.tests;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
 import junit.framework.TestCase;
+import sat.Constant;
 import sat.Formula;
 import sat.Implication;
 import sat.PropositionalSystem;
 import sat.Variable;
 import sat.ruledb.RuleDatabase;
-import sat.ruledb.RuleGenerator;
 import sat.ruledb.TruthTable;
+import sat.ruledb.TruthTables;
+import sat.solver.CNFFile;
+import sat.solver.Solver;
 
 public class Tests extends TestCase {
 	
@@ -81,12 +87,49 @@ public class Tests extends TestCase {
 	}
 	
 	public void testTruthTables() {
-		Formula formula= RuleGenerator.SYSTEM.createFormula("~#1");
-		TruthTable truthTable= TruthTable.getTruthTable(formula);
+		PropositionalSystem system= new PropositionalSystem();
+		Formula formula= system.createFormula("~#1");
+		TruthTables tables= new TruthTables(system);
+		TruthTable truthTable= tables.getTruthTable(formula);
 		assertEquals("1010", truthTable.toString());
 		
-		formula= RuleGenerator.SYSTEM.createFormula("*#1#2");
-		truthTable= TruthTable.getTruthTable(formula);
+		formula= system.createFormula("*#1#2");
+		truthTable= tables.getTruthTable(formula);
 		assertEquals("1011", truthTable.toString());
+	}
+	
+	public void testSubstitutions() {
+		PropositionalSystem system= new PropositionalSystem();
+		String text= "***#1#2#3#4";
+		Formula formula1= system.createFormula(text);
+		
+		HashMap<Variable, Formula> substitutions= new HashMap<Variable, Formula>();
+		substitutions.put(system.createVariable(1), system.createVariable(5));
+		substitutions.put(system.createVariable(2), system.createVariable(6));
+		substitutions.put(system.createVariable(3), system.createVariable(7));
+		substitutions.put(system.createVariable(4), system.createVariable(8));
+		Formula instance= system.createFormula(formula1, substitutions);
+		
+		assertEquals("***#5#6#7#8", instance.getFormulaText());
+		
+		Formula instance2= system.createFormula("***#5#6#7#8");
+		assertSame(instance2, instance);
+	}
+	
+	public void testSolver() throws SQLException, IOException {
+		
+		ClassLoader classLoader= getClass().getClassLoader();
+		String homeFolder= getClass().getPackage().getName().replaceAll("\\.", "/");
+		PropositionalSystem system= new PropositionalSystem();
+		TruthTables truthTables= new TruthTables(system);
+		RuleDatabase ruleDatabase= new RuleDatabase(truthTables);
+		Solver solver= new Solver(system, ruleDatabase);
+		
+		InputStream inputStream= classLoader.getResourceAsStream(homeFolder+"/cnf-example-1.txt");
+		assertNotNull("Missing input file:"+homeFolder+"/cnf-example-1.txt", inputStream);
+		CNFFile file= CNFFile.read(system, inputStream);
+		Formula canonicalForm= solver.reduce(file.getFormula());
+		assertEquals(Constant.FALSE, canonicalForm);
+		inputStream.close();
 	}
 }

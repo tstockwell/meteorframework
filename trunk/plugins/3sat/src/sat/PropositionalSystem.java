@@ -3,7 +3,6 @@ package sat;
 import java.lang.ref.Reference;
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.SoftReference;
-import java.text.Normalizer.Form;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;

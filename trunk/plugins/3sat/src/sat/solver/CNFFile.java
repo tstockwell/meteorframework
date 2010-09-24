@@ -37,19 +37,32 @@ public class CNFFile {
 			throw new RuntimeException("Expected to find 'p' line before clauses");
 		}
 		
+		// read all clauses and append into one big formula
 		Formula formula= null;
 		for (int count= cnfFile._clauseCount; 0 < count--;) { 
 			if ((inputLine= reader.readLine()) == null) 
 					throw new RuntimeException("Premature end of file");
 			
-			
+			// get all variables in the clause
 			String[] tokens= inputLine.replaceAll("-", "~").split(" ");
 			if (tokens.length <= 1) // an empty clause
 				continue;
+			
+			// prefix variable symbols with '#'
+			for (int t= 0; t < tokens.length-1; t++) {
+				tokens[t]= tokens[t].startsWith("~")?
+					 "~#"+tokens[t].substring(1): 
+					 "#"+tokens[t];
+			}
+			
+			// create clause
 			Formula clause= system.createFormula(tokens[0]);
 			for (int v= 1; v < tokens.length-1; v++) 
-				clause= system.createImplication(system.createNegation(clause), system.createFormula(tokens[v]));
+				clause= system.createImplication(
+						system.createNegation(clause), 
+						system.createFormula(tokens[v]));
 				
+			// add clause to formula
 			if (formula== null) {
 				formula= clause;
 			}

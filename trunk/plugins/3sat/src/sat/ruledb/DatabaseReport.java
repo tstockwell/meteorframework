@@ -24,8 +24,9 @@ public class DatabaseReport {
 			if (arg.equals(SHOW_REDUCTION_RULES))
 				showReductionRules= true;
 		
-		final PropositionalSystem system= new PropositionalSystem(); 
-		final RuleDatabase database= new RuleDatabase(system);
+		final PropositionalSystem system= new PropositionalSystem();
+		final TruthTables truthTables= new TruthTables(system);
+		final RuleDatabase database= new RuleDatabase(truthTables);
 		
 		/* 
 		 * Count # of rules
@@ -34,12 +35,12 @@ public class DatabaseReport {
 		System.out.println("Total number of non-canonical formulas  is "+database.countNonCanonicalFormulas());
 		
 		int tt= 0;
-		for (int truthValue= 0; truthValue < TruthTable.MAX_TRUTH_TABLES; truthValue++) {
-			TruthTable truthTable= TruthTable.create(truthValue);
+		for (int truthValue= 0; truthValue < TruthTables.MAX_TRUTH_TABLES; truthValue++) {
+			TruthTable truthTable= truthTables.create(truthValue);
 			if (0 < database.getLengthOfCanonicalFormulas(truthTable))
 				tt++;
 		}
-		System.out.println("Have found forumlas for "+tt+" of "+TruthTable.MAX_TRUTH_TABLES+ " truth tables");
+		System.out.println("Have found forumlas for "+tt+" of "+TruthTables.MAX_TRUTH_TABLES+ " truth tables");
 		System.out.println("The length of the longest canonical formula is "+database.getLengthOfLongestCanonicalFormula());
 		System.out.println();
 		
@@ -49,12 +50,12 @@ public class DatabaseReport {
 		/*
 		 * List lengths and # of canonical formulas
 		 */
-		database.getLengthOfCanonicalFormulas(TruthTable.create(0));
+		database.getLengthOfCanonicalFormulas(truthTables.create(0));
 		System.out.println("TRUTH VALUE     LENGTH    COUNT");
 		System.out.println("                FORMULAS");
 		System.out.println("-------------   ------   ------");
-		for (int truthValue= 0; truthValue < TruthTable.MAX_TRUTH_TABLES; truthValue++) {
-			TruthTable truthTable= TruthTable.create(truthValue);
+		for (int truthValue= 0; truthValue < TruthTables.MAX_TRUTH_TABLES; truthValue++) {
+			TruthTable truthTable= truthTables.create(truthValue);
 			List<Formula> canonicalFormulas= database.getCanonicalFormulas(truthTable);
 			
 			String t= ""+truthValue+"("+truthTable+")                 ";

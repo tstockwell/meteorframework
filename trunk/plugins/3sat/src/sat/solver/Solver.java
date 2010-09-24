@@ -11,8 +11,8 @@ import sat.Implication;
 import sat.Negation;
 import sat.PropositionalSystem;
 import sat.Variable;
-import sat.ruledb.ReductionRule;
 import sat.ruledb.RuleDatabase;
+import sat.ruledb.TruthTables;
 import sat.utils.ArgUtils;
 
 /**
@@ -25,10 +25,11 @@ public class Solver {
 	
 	public static void main(String[] args) throws IOException, SQLException {
 		PropositionalSystem system= new PropositionalSystem();
+		TruthTables truthTables= new TruthTables(system);
 		String file= ArgUtils.getString(args, "file", true);
 		CNFFile cnf= CNFFile.read(system, new FileInputStream(file));
 		
-		Solver solver= new Solver(system, new RuleDatabase(system));
+		Solver solver= new Solver(system, new RuleDatabase(truthTables));
 		Formula reducedForm= solver.reduce(cnf.getFormula());
 		
 		// produce output according to rules here:
@@ -95,7 +96,7 @@ public class Solver {
 				if (i < 0) {
 					Formula canonicalForm= _ruleDatabase.findCanonicalFormula(reducableFormula);
 					Formula reducedFormula= _system.createFormula(canonicalForm, substitutions);
-					return reducableFormula;
+					return reducedFormula;
 				}
 				navigator.advanceFromPosition(i);
 			}

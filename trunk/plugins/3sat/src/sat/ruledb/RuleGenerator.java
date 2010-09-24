@@ -14,15 +14,16 @@ import sat.utils.ServerCommandLineInterface;
  */
 public class RuleGenerator {
 	
-	public static final PropositionalSystem SYSTEM= new PropositionalSystem();
-
 	public static void main(String[] args) {
 		new RuleGenerator().run();
 	}
 
-	private RuleDatabase _database;
 	private FormulaGenerator _formulaGenerator;
 	private ServerCommandLineInterface _commandLine;
+	private final PropositionalSystem _system= new PropositionalSystem();
+	private final TruthTables _truthTables= new TruthTables(_system);
+	private RuleDatabase _database;
+	
 
 	public void run() {
 
@@ -50,7 +51,7 @@ public class RuleGenerator {
 	private void setup() throws SQLException {
 		addShutdownHook();
 
-		_database = new RuleDatabase(SYSTEM);
+		_database = new RuleDatabase(_truthTables);
 		_formulaGenerator= new FormulaGenerator(_database);
 		
 		_commandLine= new ServerCommandLineInterface("Rule Generator", ">>> ");
@@ -82,7 +83,7 @@ public class RuleGenerator {
 	}
 
 	private Boolean isCanonicalFormula(Formula formula) {
-		int length= _database.getLengthOfCanonicalFormulas(TruthTable.getTruthTable(formula));
+		int length= _database.getLengthOfCanonicalFormulas(_truthTables.getTruthTable(formula));
 		if (length < 0) // no canonical formulas in database
 			return true;
 		return formula.length() <= length; 
