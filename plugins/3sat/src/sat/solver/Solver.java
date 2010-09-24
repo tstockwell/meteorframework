@@ -5,7 +5,10 @@ import java.io.IOException;
 
 import sat.Constant;
 import sat.Formula;
+import sat.Implication;
 import sat.PropositionalSystem;
+import sat.Variable;
+import sat.ruledb.RuleDatabase;
 import sat.utils.ArgUtils;
 
 /**
@@ -20,7 +23,9 @@ public class Solver {
 		PropositionalSystem system= new PropositionalSystem();
 		String file= ArgUtils.getString(args, "file", true);
 		CNFFile cnf= CNFFile.read(system, new FileInputStream(file));
-		Formula reducedForm= getMaximallyReducedForm(cnf.getFormula());
+		
+		Solver solver= new Solver(system, new RuleDatabase());
+		Formula reducedForm= solver.reduce(cnf.getFormula());
 		
 		// produce output according to rules here:
 		// 	http://www.satcompetition.org/2004/format-solvers2004.html
@@ -36,14 +41,36 @@ public class Solver {
 		}
 		System.exit(status);
 	}
+	
+	private PropositionalSystem _system;
+	private RuleDatabase _ruleDatabase; 
+	public Solver(PropositionalSystem system, RuleDatabase ruleDatabase) { 
+		_system= system;
+		_ruleDatabase= ruleDatabase;
+	}
+	
+	
 
 	private static void printSatisfyingValuation(Formula reducedForm) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	private static Formula getMaximallyReducedForm(Object formula) {
-		// TODO Auto-generated method stub
-		return null;
+	public Formula reduce(Formula formula) {
+		if (formula instanceof Negation) {
+			return
+		}
+		if (formula instanceof Implication) {
+			
+		}
+		return formula; // the given formula is a variable or constant
+	}
+	
+	/**
+	 * Only applies rules to the given formula, not subformulas
+	 * @returns the reduced rule if a rule applied, else the given rule.
+	 */
+	private Formula applyRules(Formula formula) {
+		
 	}
 }
