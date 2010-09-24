@@ -2,12 +2,16 @@ package sat.solver;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.HashMap;
 
 import sat.Constant;
 import sat.Formula;
 import sat.Implication;
+import sat.Negation;
 import sat.PropositionalSystem;
 import sat.Variable;
+import sat.ruledb.ReductionRule;
 import sat.ruledb.RuleDatabase;
 import sat.utils.ArgUtils;
 
@@ -19,12 +23,12 @@ import sat.utils.ArgUtils;
  */
 public class Solver {
 	
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, SQLException {
 		PropositionalSystem system= new PropositionalSystem();
 		String file= ArgUtils.getString(args, "file", true);
 		CNFFile cnf= CNFFile.read(system, new FileInputStream(file));
 		
-		Solver solver= new Solver(system, new RuleDatabase());
+		Solver solver= new Solver(system, new RuleDatabase(system));
 		Formula reducedForm= solver.reduce(cnf.getFormula());
 		
 		// produce output according to rules here:
@@ -58,10 +62,21 @@ public class Solver {
 
 	public Formula reduce(Formula formula) {
 		if (formula instanceof Negation) {
-			return
+			Formula subformula= ((Negation)formula).getChild();
+			Formula reduced= reduce(subformula);
+			if (reduced != subformula)
+				formula= _system.createNegation(reduced);
+			return applyRules(formula);
 		}
 		if (formula instanceof Implication) {
-			
+			Implication implication= (Implication)formula;
+			Formula antecent= implication.getAntecedent();
+			Formula consequent= implication.getConsequent();
+			Formula a= reduce(antecent);
+			Formula c= reduce(consequent);
+			if (a != antecent || c != consequent)
+				formula= _system.createImplication(a, c);
+			return applyRules(formula);
 		}
 		return formula; // the given formula is a variable or constant
 	}
@@ -71,6 +86,24 @@ public class Solver {
 	 * @returns the reduced rule if a rule applied, else the given rule.
 	 */
 	private Formula applyRules(Formula formula) {
+		RuleDatabase.Navigator navigator= _ruleDatabase.getNonCanonicalFormulaNavigator();
+		try {
+			while (navigator.hasNext()) {
+				Formula reducableFormula= navigator.next();
+				HashMap<Variable, Formula> substitutions= new HashMap<Variable, Formula>();
+				int i= reducableFormula.subsumes(formula, substitutions);
+				if (i < 0) {
+					Formula canonicalForm= _ruleDatabase.findCanonicalFormula(reducableFormula);
+					Formula reducedFormula= _system.createFormula(canonicalForm, substitutions);
+					return reducableFormula;
+				}
+				navigator.advanceFromPosition(i);
+			}
+		}
+		finally {
+			navigator.close();
+		}
+		return formula;
 		
 	}
 }

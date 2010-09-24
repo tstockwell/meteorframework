@@ -35,7 +35,7 @@ public class TruthTable {
 			Map<Variable, Boolean> valuation= new HashMap<Variable, Boolean>();
 			for (int j= 1; j <= RuleDatabase.VARIABLE_COUNT; j++) {
 				valuation.put(
-						RuleDatabase.SYSTEM.createVariable(j), 
+						RuleGenerator.SYSTEM.createVariable(j), 
 						v.charAt(v.length()-j) == '0' ? Boolean.FALSE : Boolean.TRUE);
 			}
 			__valuations[i]= valuation;

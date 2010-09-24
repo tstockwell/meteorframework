@@ -36,7 +36,7 @@ abstract public class Constant extends Formula {
 			public void remove() { throw new UnsupportedOperationException(); }
 		};
 	}
-	final protected int subsumes(Formula formula, Map<Variable, Formula> variableBindings) {
+	final protected int findSubstutions(Formula formula, Map<Variable, Formula> variableBindings) {
 		return formula._txt.equals(_txt) ? -1 : 0;
 	}
 }

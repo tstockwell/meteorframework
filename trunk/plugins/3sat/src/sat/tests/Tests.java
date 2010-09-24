@@ -9,6 +9,7 @@ import sat.Implication;
 import sat.PropositionalSystem;
 import sat.Variable;
 import sat.ruledb.RuleDatabase;
+import sat.ruledb.RuleGenerator;
 import sat.ruledb.TruthTable;
 
 public class Tests extends TestCase {
@@ -80,11 +81,11 @@ public class Tests extends TestCase {
 	}
 	
 	public void testTruthTables() {
-		Formula formula= RuleDatabase.SYSTEM.createFormula("~#1");
+		Formula formula= RuleGenerator.SYSTEM.createFormula("~#1");
 		TruthTable truthTable= TruthTable.getTruthTable(formula);
 		assertEquals("1010", truthTable.toString());
 		
-		formula= RuleDatabase.SYSTEM.createFormula("*#1#2");
+		formula= RuleGenerator.SYSTEM.createFormula("*#1#2");
 		truthTable= TruthTable.getTruthTable(formula);
 		assertEquals("1011", truthTable.toString());
 	}

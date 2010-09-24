@@ -76,7 +76,7 @@ public class Implication extends Formula {
 		};
 	}
 	@Override
-	protected int subsumes(Formula formula, Map<Variable, Formula> variableBindings) {
+	protected int findSubstutions(Formula formula, Map<Variable, Formula> variableBindings) {
 		if (!(formula instanceof Implication)) 
 				return 0;
 		Implication it= (Implication)formula;

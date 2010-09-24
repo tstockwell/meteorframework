@@ -32,7 +32,7 @@ public class Variable extends Formula {
 	}
 
 	@Override
-	protected int subsumes(Formula formula, Map<Variable, Formula> variableBindings) {
+	protected int findSubstutions(Formula formula, Map<Variable, Formula> variableBindings) {
 		Formula match= variableBindings.get(this);
 		if (match == null) {
 			variableBindings.put(this, formula);
