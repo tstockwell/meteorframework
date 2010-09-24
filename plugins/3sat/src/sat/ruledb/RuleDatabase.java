@@ -27,7 +27,6 @@ import sat.Formula;
 public class RuleDatabase {
 	
 	public static final int VARIABLE_COUNT= 2;
-	public static final PropositionalSystem SYSTEM= new PropositionalSystem();
 	
 	
 	public class Navigator {
@@ -58,7 +57,7 @@ public class RuleDatabase {
 				if (_next == null)
 					_resultSet.next();
 				_next= null;
-				return SYSTEM.createFormula(_resultSet.getString("FORMULA"));
+				return _system.createFormula(_resultSet.getString("FORMULA"));
 			}
 			catch (SQLException x) { throw new RuntimeException(x); }
 		}
@@ -101,8 +100,10 @@ public class RuleDatabase {
 	
 	
 	private PreparedStatement _selectCanonical;
+	private PropositionalSystem _system;
 	
-	public RuleDatabase() throws SQLException {
+	public RuleDatabase(PropositionalSystem system) throws SQLException {
+		_system= system;
 		connect();
 		createIfNecessary();		
 		
@@ -163,7 +164,7 @@ public class RuleDatabase {
 				resultSet= s.executeQuery(sql);
 				if (resultSet.next()) {
 					String formula= resultSet.getString("FORMULA");
-					return SYSTEM.createFormula(formula);
+					return _system.createFormula(formula);
 				}
 			}
 			finally {
@@ -188,7 +189,7 @@ public class RuleDatabase {
 				ArrayList<Formula> list= new ArrayList<Formula>();
 				while (resultSet.next()) {
 					String formula= resultSet.getString("FORMULA");
-					list.add(SYSTEM.createFormula(formula));
+					list.add(_system.createFormula(formula));
 				}
 				return list;
 			}
@@ -278,7 +279,7 @@ public class RuleDatabase {
 				ResultSet resultSet= s.executeQuery(sql);
 				List<Formula> list= new ArrayList<Formula>();
 				while (resultSet.next()) {
-					list.add(SYSTEM.createFormula(resultSet.getString("FORMULA")));
+					list.add(_system.createFormula(resultSet.getString("FORMULA")));
 				}
 				formulas= list;
 				_canonicalFormulasByLength.put(size, formulas);
@@ -363,7 +364,7 @@ public class RuleDatabase {
 							if (_next == null)
 								resultSet.next();
 							_next= null;
-							return SYSTEM.createFormula(resultSet.getString("FORMULA"));
+							return _system.createFormula(resultSet.getString("FORMULA"));
 						}
 						catch (SQLException x) { throw new RuntimeException(x); }
 					}
@@ -400,7 +401,7 @@ public class RuleDatabase {
 						if (_next == null)
 							resultSet.next();
 						_next= null;
-						return SYSTEM.createFormula(resultSet.getString("FORMULA"));
+						return _system.createFormula(resultSet.getString("FORMULA"));
 					}
 					catch (SQLException x) { throw new RuntimeException(x); }
 				}
@@ -451,7 +452,7 @@ public class RuleDatabase {
 			try {
 				resultSet= s.executeQuery(sql);
 				if (resultSet.next()) 
-					return SYSTEM.createFormula(resultSet.getString("FORMULA"));
+					return _system.createFormula(resultSet.getString("FORMULA"));
 				return null;
 			}
 			finally {

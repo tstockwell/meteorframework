@@ -11,7 +11,7 @@
 <mapEntry key="[debug]" value="org.eclipse.jdt.launching.localJavaApplication"/>
 </mapAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="sat.ruledb.DatabaseReport"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-XshowReductionRules"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-showReductionRules"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="3sat"/>
 <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xmx512m -Dderby.storage.pageCacheSize=100000"/>
 </launchConfiguration>

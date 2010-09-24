@@ -3,6 +3,7 @@ package sat.ruledb;
 import java.util.List;
 
 import sat.Formula;
+import sat.PropositionalSystem;
 
 /**
  * Spits out a bunch of information about the formulas in the Rule Database.
@@ -23,7 +24,8 @@ public class DatabaseReport {
 			if (arg.equals(SHOW_REDUCTION_RULES))
 				showReductionRules= true;
 		
-		final RuleDatabase database= new RuleDatabase();
+		final PropositionalSystem system= new PropositionalSystem(); 
+		final RuleDatabase database= new RuleDatabase(system);
 		
 		/* 
 		 * Count # of rules

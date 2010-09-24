@@ -3,6 +3,8 @@ package sat;
 import java.lang.ref.Reference;
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.SoftReference;
+import java.text.Normalizer.Form;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 import java.util.TreeMap;
@@ -170,6 +172,40 @@ public class PropositionalSystem {
 		
 		Formula formula2= stack.pop();
 		return formula2;
+	}
+
+	/**
+	 * Creates a new formula by making the given substitutions for the 
+	 * variables in the given formula.  
+	 */
+	public Formula createFormula(Formula templateFormula, HashMap<Variable, Formula> substitutions) {
+		
+		if (templateFormula instanceof Constant) 
+			return templateFormula;
+		
+		if (templateFormula instanceof Variable) {
+			Formula f= substitutions.get(templateFormula);
+			if (f != null)
+				return f;
+			return templateFormula;
+		}
+		
+		if (templateFormula instanceof Negation) {
+			Formula child= ((Negation)templateFormula).getChild();
+			Formula f= createFormula(child, substitutions);
+			if (f == child)
+				return templateFormula;
+			return createNegation(f);
+		}
+		
+		Implication implication= (Implication)templateFormula;
+		Formula ant= implication.getAntecedent();
+		Formula con= implication.getConsequent();
+		Formula a= createFormula(ant, substitutions);
+		Formula c= createFormula(con, substitutions);
+		if (a != ant || c != con)
+			return createImplication(a, c);
+		return templateFormula;
 	}
 
 }

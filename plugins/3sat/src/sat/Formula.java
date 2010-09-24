@@ -52,11 +52,20 @@ abstract public class Formula {
 	 *  in other words, if the given formula is a substitution instance of this formula.
 	 * 	Otherwise return the position from the left of this formula where matching failed.
 	 */
-	public int subsumes(Formula formula) {
-		Map<Variable, Formula> formulaBindings= new HashMap<Variable, Formula>();
-		return subsumes(formula, formulaBindings);
+	final public int subsumes(Formula formula) {
+		return subsumes(formula, new HashMap<Variable, Formula>());
 	}
-	abstract protected int subsumes(Formula formula, Map<Variable, Formula> variableBindings);
+	/**
+	 * @see subsume(Formula)
+	 * 
+	 * Use this version if you also want to know what substitutions will 
+	 * transform this formula into the given formula.
+	 * The given map will be populated with appropriate substitutions.
+	 */
+	final public int subsumes(Formula formula, Map<Variable, Formula> variableSubstitions) {
+		return findSubstutions(formula, variableSubstitions);
+	}
+	abstract protected int findSubstutions(Formula formula, Map<Variable, Formula> variableBindings);
 	
 	@Override
 	public boolean equals(Object obj) {

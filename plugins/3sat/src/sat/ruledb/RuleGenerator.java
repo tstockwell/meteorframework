@@ -3,6 +3,7 @@ package sat.ruledb;
 import java.sql.SQLException;
 
 import sat.Formula;
+import sat.PropositionalSystem;
 import sat.utils.ServerCommandLineInterface;
 
 /**
@@ -12,6 +13,8 @@ import sat.utils.ServerCommandLineInterface;
  * @author Ted Stockwell
  */
 public class RuleGenerator {
+	
+	public static final PropositionalSystem SYSTEM= new PropositionalSystem();
 
 	public static void main(String[] args) {
 		new RuleGenerator().run();
@@ -47,7 +50,7 @@ public class RuleGenerator {
 	private void setup() throws SQLException {
 		addShutdownHook();
 
-		_database = new RuleDatabase();
+		_database = new RuleDatabase(SYSTEM);
 		_formulaGenerator= new FormulaGenerator(_database);
 		
 		_commandLine= new ServerCommandLineInterface("Rule Generator", ">>> ");
