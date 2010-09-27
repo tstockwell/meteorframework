@@ -23,11 +23,11 @@ public class Tests extends TestCase {
 	public void testFormulaConstruction() {
 		PropositionalSystem system= new PropositionalSystem();
 		
-		assertEquals("#1", system.createVariable(1).getFormulaText());
+		assertEquals("^1", system.createVariable(1).getFormulaText());
 		
-		assertEquals("*#1#1", system.createFormula("*#1#1").getFormulaText());
+		assertEquals("*^1^1", system.createFormula("*^1^1").getFormulaText());
 		
-		String text= "***#1#2#3#4";
+		String text= "***^1^2^3^4";
 		Formula formula1= system.createFormula(text);
 		assertEquals(formula1.length(), text.length());
 		assertEquals(formula1.getFormulaText(), text);
@@ -37,34 +37,34 @@ public class Tests extends TestCase {
 		assertEquals(formula2.length(), text.length());
 		assertEquals(formula2.getFormulaText(), text);
 
-		text= "~"+text;
+		text= "-"+text;
 		Formula formula3= system.createNegation(formula2);
 		assertEquals(formula3.length(), text.length());
 		assertEquals(formula3.getFormulaText(), text);
 		
 		Formula formula4= system.createVariable(23);
-		assertEquals(formula4.getFormulaText(), "#23");
+		assertEquals(formula4.getFormulaText(), "^23");
 		
 		
 	}
 	
 	public void testSubsumption() {
 		PropositionalSystem system= new PropositionalSystem();
-		String text= "***#1#2#3#4";
+		String text= "***^1^2^3^4";
 		Formula formula1= system.createFormula(text);
 
 		text= "*"+text+text;
 		Formula formula2= system.createImplication(formula1, formula1);
-		assertEquals(-1, system.createFormula("*#1#2").subsumes(formula2));
-		assertEquals(-1, system.createFormula("*#1#1").subsumes(formula2));
-		assertEquals(-1, system.createFormula("**#1#2*#3#4").subsumes(formula2));
-		assertEquals(-1, system.createFormula("**#1#2*#3#2").subsumes(formula2));
-		assertEquals(-1, system.createFormula("**#1#2*#1#4").subsumes(formula2));
-		assertEquals(-1, system.createFormula("**#1#2*#1#2").subsumes(formula2));
+		assertEquals(-1, system.createFormula("*^1^2").subsumes(formula2));
+		assertEquals(-1, system.createFormula("*^1^1").subsumes(formula2));
+		assertEquals(-1, system.createFormula("**^1^2*^3^4").subsumes(formula2));
+		assertEquals(-1, system.createFormula("**^1^2*^3^2").subsumes(formula2));
+		assertEquals(-1, system.createFormula("**^1^2*^1^4").subsumes(formula2));
+		assertEquals(-1, system.createFormula("**^1^2*^1^2").subsumes(formula2));
 
-		text= "~"+text;
+		text= "-"+text;
 		Formula formula3= system.createNegation(formula2);
-		assertEquals(-1, system.createFormula("~#1").subsumes(formula3));
+		assertEquals(-1, system.createFormula("-^1").subsumes(formula3));
 	}
 	
 	public void testEvaluation() {
@@ -88,19 +88,19 @@ public class Tests extends TestCase {
 	
 	public void testTruthTables() {
 		PropositionalSystem system= new PropositionalSystem();
-		Formula formula= system.createFormula("~#1");
+		Formula formula= system.createFormula("-^1");
 		TruthTables tables= new TruthTables(system);
 		TruthTable truthTable= tables.getTruthTable(formula);
 		assertEquals("1010", truthTable.toString());
 		
-		formula= system.createFormula("*#1#2");
+		formula= system.createFormula("*^1^2");
 		truthTable= tables.getTruthTable(formula);
 		assertEquals("1011", truthTable.toString());
 	}
 	
 	public void testSubstitutions() {
 		PropositionalSystem system= new PropositionalSystem();
-		String text= "***#1#2#3#4";
+		String text= "***^1^2^3^4";
 		Formula formula1= system.createFormula(text);
 		
 		HashMap<Variable, Formula> substitutions= new HashMap<Variable, Formula>();
@@ -110,9 +110,9 @@ public class Tests extends TestCase {
 		substitutions.put(system.createVariable(4), system.createVariable(8));
 		Formula instance= system.createFormula(formula1, substitutions);
 		
-		assertEquals("***#5#6#7#8", instance.getFormulaText());
+		assertEquals("***^5^6^7^8", instance.getFormulaText());
 		
-		Formula instance2= system.createFormula("***#5#6#7#8");
+		Formula instance2= system.createFormula("***^5^6^7^8");
 		assertSame(instance2, instance);
 	}
 	

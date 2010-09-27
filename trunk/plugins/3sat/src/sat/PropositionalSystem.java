@@ -21,9 +21,9 @@ import java.util.TreeMap;
  * This system supports a textual form for representing formulas.
  * The normal form uses Polish notation and...
  * 	...the symbols 'T' and 'F' for TRUE and FALSE.
- *  ...the symbol '~' for the negation operator. 
+ *  ...the symbol '-' for the negation operator. 
  *  ...the symbol '*' for the implication operator. 
- *  ...the symbol '#' followed by a number for representing variables.
+ *  ...the symbol '^' followed by a number for representing variables.
  *  
  *  Use the static PropositionalSystem.create* methods to create instances of formulas.
  *  
@@ -118,7 +118,7 @@ public class PropositionalSystem {
 	public Variable createVariable(int variable) {
 		if (variable < 1)
 			throw new RuntimeException("Variable numbers must be greater than 0");
-		return createVariable("#"+Integer.toString(variable));
+		return createVariable("^"+Integer.toString(variable));
 	}
 	private Variable createVariable(String text) {
 		Variable formula= null;
@@ -157,8 +157,8 @@ public class PropositionalSystem {
 				int end= i+1;
 				while (0 < i && Character.isDigit(formula.charAt(i-1))) 
 					i--;
-				if (i <= 0 || formula.charAt(i-1) != '#')  
-					throw new RuntimeException("Expected a '#' at position "+((0 < i) ? (i-1) : 0));
+				if (i <= 0 || formula.charAt(i-1) != '^')  
+					throw new RuntimeException("Expected a '^' at position "+((0 < i) ? (i-1) : 0));
 				String text= formula.substring(--i, end);
 				stack.push(createVariable(text));
 			}

@@ -44,15 +44,15 @@ public class CNFFile {
 					throw new RuntimeException("Premature end of file");
 			
 			// get all variables in the clause
-			String[] tokens= inputLine.replaceAll("-", "~").split(" ");
+			String[] tokens= inputLine.replaceAll("-", "-").split(" ");
 			if (tokens.length <= 1) // an empty clause
 				continue;
 			
-			// prefix variable symbols with '#'
+			// prefix variable symbols with '^'
 			for (int t= 0; t < tokens.length-1; t++) {
-				tokens[t]= tokens[t].startsWith("~")?
-					 "~#"+tokens[t].substring(1): 
-					 "#"+tokens[t];
+				tokens[t]= tokens[t].startsWith("-")?
+					 "-^"+tokens[t].substring(1): 
+					 "^"+tokens[t];
 			}
 			
 			// create clause

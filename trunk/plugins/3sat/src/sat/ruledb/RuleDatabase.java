@@ -26,7 +26,7 @@ import sat.PropositionalSystem;
  */
 public class RuleDatabase {
 	
-	public static final int VARIABLE_COUNT= 2;
+	public static final int VARIABLE_COUNT= 3;
 	
 	
 	public class Navigator {
@@ -68,7 +68,7 @@ public class RuleDatabase {
 
 		public void advanceFromPosition(int i) {
 			try {
-				String formula= _resultSet.getString("FORMULA");
+				String formula= _resultSet.getString("FORMULA_TEMPLATE");
 				if (i < formula.length()) 
 					formula= formula.substring(0, i+1);
 				formula+= ((char)0x7F);
@@ -109,101 +109,36 @@ public class RuleDatabase {
 		connect();
 		createIfNecessary();		
 		
-		String sql= "SELECT FORMULA FROM FORMULA WHERE CANONICAL = 0 AND ? < FORMULA ORDER BY FORMULA";
+		String sql= "SELECT FORMULA, FORMULA_TEMPLATE FROM FORMULA WHERE CANONICAL = 0 AND ? < FORMULA_TEMPLATE ORDER BY FORMULA_TEMPLATE";
 		_selectCanonical= _connection.prepareStatement(sql, ResultSet.TYPE_FORWARD_ONLY, Connection.TRANSACTION_READ_UNCOMMITTED);
 	}
 
-	private void connect() throws SQLException {
-		// Load the derby JDBC driver
-		new EmbeddedDriver();
-
-		Properties props = new Properties();
-		_connection= DriverManager.getConnection(dbURL, props);
-		_connection.setAutoCommit(true);
+	public Navigator getNonCanonicalFormulaNavigator() {
+		return new Navigator();
 	}
 
-	private void createIfNecessary() throws SQLException {
-			DatabaseMetaData metaData= _connection.getMetaData();
-			ResultSet resultSet= metaData.getTables(null, null, "FORMULA", null);
-			if (resultSet.next() == false) {
-				Statement s = _connection.createStatement();
-
-				s.execute("create table FORMULA(" +
-						"ID int NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), " +
-						"FORMULA varchar(32672) NOT NULL, " +
-						"LENGTH int NOT NULL, " +
-						"TRUTHVALUE varchar(32672) NOT NULL, " +
-						"CANONICAL int not NULL, " +
-						"PRIMARY KEY (ID)" +
-						")");
-				s.execute("CREATE INDEX formula_index_1 ON FORMULA (LENGTH, CANONICAL, TRUTHVALUE)");
-				s.execute("CREATE INDEX formula_index_2 ON FORMULA (TRUTHVALUE, CANONICAL, LENGTH)");
-				s.execute("CREATE INDEX formula_index_3 ON FORMULA (FORMULA, CANONICAL, LENGTH, TRUTHVALUE)");
-				s.execute("CREATE INDEX formula_index_4 ON FORMULA (CANONICAL, LENGTH, TRUTHVALUE)");
-				
-
-//				s.execute("create table RULE(" +
-//						"ID integer NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), " +
-//						"ANTECEDENT integer NOT NULL, " +
-//						"CONSEQUENT integer not null, " +
-//						"PRIMARY KEY (ID)" +
-//						")");
-//				s.execute("CREATE INDEX rule_index_1 ON RULE (ANTECEDENT, CONSEQUENT)");
-//				s.execute("CREATE INDEX rule_index_2 ON RULE (CONSEQUENT, ANTECEDENT)");
-				
-				s.close();
-			}
-			resultSet.close();
+	public PropositionalSystem getSystem() {
+		return _system;
 	}
 
 	public Formula getLastGeneratedFormula() 
 	{
-		try {
-			String sql= "SELECT * FROM FORMULA ORDER BY ID DESC";
-			Statement s = _connection.createStatement();
-			ResultSet resultSet= null;		
-			try {
-				resultSet= s.executeQuery(sql);
-				if (resultSet.next()) {
-					String formula= resultSet.getString("FORMULA");
-					return _system.createFormula(formula);
-				}
-			}
-			finally {
-				try { resultSet.close(); } catch (Throwable t) { }
-				try { s.close(); } catch (Throwable t) { }
-			}
+		ResultIterator<Formula> i= executeQuery("SELECT * FROM FORMULA ORDER BY ID DESC");
+		if (!i.hasNext())
 			return null;
-		} 
-		catch (SQLException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
+		Formula f= i.next();
+		i.close();
+		return f; 
 	}
 
-	public List<Formula> getCanonicalFormulas(TruthTable truthTable) {
-		try {
-			String sql= "SELECT * FROM FORMULA WHERE TRUTHVALUE = '"+truthTable+"' AND CANONICAL=1 ORDER BY ID ASC";
-			Statement s = _connection.createStatement();
-			ResultSet resultSet= null;		
-			try {
-				resultSet= s.executeQuery(sql);
-				ArrayList<Formula> list= new ArrayList<Formula>();
-				while (resultSet.next()) {
-					String formula= resultSet.getString("FORMULA");
-					list.add(_system.createFormula(formula));
-				}
-				return list;
-			}
-			finally {
-				try { resultSet.close(); } catch (Throwable t) { }
-				try { s.close(); } catch (Throwable t) { }
-			}
-		} 
-		catch (SQLException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
+	public List<Formula> getCanonicalFormulas(TruthTable truthTable) 
+	{
+		ResultIterator<Formula> i= executeQuery("SELECT * FROM FORMULA WHERE TRUTHVALUE = '"+truthTable+"' AND CANONICAL=1 ORDER BY ID ASC");
+		ArrayList<Formula> list= new ArrayList<Formula>();
+		while (i.hasNext()) 
+			list.add(i.next());
+		i.close();
+		return list;
 	}
 	
 	
@@ -275,21 +210,12 @@ public class RuleDatabase {
 	public ResultIterator<Formula> findCanonicalFormulasByLength(int size) {
 		List<Formula> formulas= _canonicalFormulasByLength.get(size);
 		if (formulas == null) {
-			try {
-				String sql= "SELECT * FROM FORMULA WHERE LENGTH = "+size+" AND CANONICAL = 1 ORDER BY ID ASC";
-				Statement s = _connection.createStatement();
-				ResultSet resultSet= s.executeQuery(sql);
-				List<Formula> list= new ArrayList<Formula>();
-				while (resultSet.next()) {
-					list.add(_system.createFormula(resultSet.getString("FORMULA")));
-				}
-				formulas= list;
-				_canonicalFormulasByLength.put(size, formulas);
-			} 
-			catch (SQLException e) {
-				e.printStackTrace();
-				throw new RuntimeException(e);
-			}
+			Iterator<Formula> i= executeQuery("SELECT * FROM FORMULA WHERE LENGTH = "+size+" AND CANONICAL = 1 ORDER BY ID ASC");
+			List<Formula> list= new ArrayList<Formula>();
+			while (i.hasNext()) 
+				list.add(i.next());
+			formulas= list;
+			_canonicalFormulasByLength.put(size, formulas);
 		}
 		final Iterator<Formula> results= formulas.iterator();
 		return new ResultIterator<Formula>() {
@@ -310,11 +236,15 @@ public class RuleDatabase {
 
 	public void addFormula(Formula formula, boolean isCanonical) {
 		try {
-			String sql= "INSERT INTO FORMULA (FORMULA, LENGTH, TRUTHVALUE, CANONICAL) VALUES ('"+
-						formula.getFormulaText()+"',"+
-						formula.length()+","+
-						"'"+_truthTables.getTruthTable(formula)+"',"+
-						(isCanonical?1:0)+")";
+			String formulaText= formula.getFormulaText();
+			String templateText= formulaText.replaceAll("[0123456789]", "^");
+			
+			String sql= "INSERT INTO FORMULA (FORMULA, FORMULA_TEMPLATE, LENGTH, TRUTHVALUE, CANONICAL) VALUES (" +
+					"'"+formulaText+"',"+
+					"'"+templateText+"',"+
+					formula.length()+","+
+					"'"+_truthTables.getTruthTable(formula)+"',"+
+					(isCanonical?1:0)+")";
 			Statement s = _connection.createStatement();
 			try {
 				s.execute(sql);
@@ -344,79 +274,14 @@ public class RuleDatabase {
 	}
 
 	public ResultIterator<Formula> getAllNonCanonicalFormulas(int maxLength) {
-			try {
-				String sql= "SELECT * FROM FORMULA WHERE CANONICAL = 0 AND LENGTH <= "+maxLength;
-				Statement s = _connection.createStatement();
-				final ResultSet resultSet= s.executeQuery(sql);
-				return new ResultIterator<Formula>() {
-					private Boolean _next;
-					public void close() {
-						try { resultSet.close(); } catch (SQLException x) { throw new RuntimeException(x); }
-					}
-					public boolean hasNext() {
-						try {
-							if (_next == null) 
-								_next= resultSet.next();							
-							return _next;
-						}
-						catch (SQLException x) { throw new RuntimeException(x); }
-					}
-					public Formula next() {
-						try {
-							if (_next == null)
-								resultSet.next();
-							_next= null;
-							return _system.createFormula(resultSet.getString("FORMULA"));
-						}
-						catch (SQLException x) { throw new RuntimeException(x); }
-					}
-					public void remove() {
-						throw new UnsupportedOperationException();
-					}
-				};
-			} 
-			catch (SQLException e) {
-				e.printStackTrace();
-				throw new RuntimeException(e);
-			}
+		return executeQuery("SELECT * FROM FORMULA WHERE CANONICAL = 0 AND LENGTH <= "+maxLength);
 	}
 	public ResultIterator<Formula> getAllNonCanonicalFormulas() {
-		try {
-			String sql= "SELECT * FROM FORMULA WHERE CANONICAL = 0 ORDER BY FORMULA";
-			Statement s = _connection.createStatement();
-			final ResultSet resultSet= s.executeQuery(sql);
-			return new ResultIterator<Formula>() {
-				private Boolean _next;
-				public void close() {
-					try { resultSet.close(); } catch (SQLException x) { throw new RuntimeException(x); }
-				}
-				public boolean hasNext() {
-					try {
-						if (_next == null) 
-							_next= resultSet.next();							
-						return _next;
-					}
-					catch (SQLException x) { throw new RuntimeException(x); }
-				}
-				public Formula next() {
-					try {
-						if (_next == null)
-							resultSet.next();
-						_next= null;
-						return _system.createFormula(resultSet.getString("FORMULA"));
-					}
-					catch (SQLException x) { throw new RuntimeException(x); }
-				}
-				public void remove() {
-					throw new UnsupportedOperationException();
-				}
-			};
-		} 
-		catch (SQLException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
-}
+		return executeQuery("SELECT * FROM FORMULA WHERE CANONICAL = 0 ORDER BY FORMULA");
+	}
+	public ResultIterator<Formula> getAllCanonicalFormulasInLexicalOrder() {
+		return executeQuery("SELECT * FROM FORMULA WHERE CANONICAL = 1 ORDER BY FORMULA_TEMPLATE, FORMULA");
+	}
 
 	public int getLengthOfCanonicalFormulas(TruthTable truthTable) {
 		if (_lengthOfCanonicalFormulas == null) {
@@ -447,25 +312,12 @@ public class RuleDatabase {
 	 * Finds the canonical form of the given formula.
 	 */
 	public Formula findCanonicalFormula(Formula formula) {
-		try {
-			String sql= "SELECT * FROM FORMULA WHERE TRUTHVALUE = '"+_truthTables.getTruthTable(formula)+"' AND CANONICAL=1";
-			Statement s = _connection.createStatement();
-			ResultSet resultSet= null;		
-			try {
-				resultSet= s.executeQuery(sql);
-				if (resultSet.next()) 
-					return _system.createFormula(resultSet.getString("FORMULA"));
-				return null;
-			}
-			finally {
-				try { resultSet.close(); } catch (Throwable t) { }
-				try { s.close(); } catch (Throwable t) { }
-			}
-		} 
-		catch (SQLException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
+		ResultIterator<Formula> i= executeQuery("SELECT * FROM FORMULA WHERE TRUTHVALUE = '"+_truthTables.getTruthTable(formula)+"' AND CANONICAL=1");
+		if (!i.hasNext())
+			return null;
+		Formula f= i.next();
+		i.close();
+		return f;
 	}
 
 	public long countNonCanonicalFormulas() {
@@ -508,48 +360,92 @@ public class RuleDatabase {
 		}
 	}
 
-//	public ResultIterator<Formula> getAllNonCanonicalFormulasByDescendingLength() {
-//		try {
-//			final ResultSet resultSet= _selectCanonicalDescending.executeQuery();
-//			return new ResultIterator<Formula>() {
-//				private Boolean _next;
-//				public void close() {
-//					try { resultSet.close(); } catch (SQLException x) { throw new RuntimeException(x); }
-//				}
-//				public boolean hasNext() {
-//					try {
-//						if (_next == null) 
-//							_next= resultSet.next() ? Boolean.TRUE : Boolean.FALSE;							
-//						return _next;
-//					}
-//					catch (SQLException x) { throw new RuntimeException(x); }
-//				}
-//				public Formula next() {
-//					try {
-//						if (_next == null)
-//							resultSet.next();
-//						_next= null;
-//						return Formula.create(resultSet.getString("FORMULA"));
-//					}
-//					catch (SQLException x) { throw new RuntimeException(x); }
-//				}
-//				public void remove() {
-//					throw new UnsupportedOperationException();
-//				}
-//			};
-//		} 
-//		catch (SQLException e) {
-//			e.printStackTrace();
-//			throw new RuntimeException(e);
-//		}
-//	}
+	private void connect() throws SQLException {
+		// Load the derby JDBC driver
+		new EmbeddedDriver();
 
-	public Navigator getNonCanonicalFormulaNavigator() {
-		return new Navigator();
+		Properties props = new Properties();
+		_connection= DriverManager.getConnection(dbURL, props);
+		_connection.setAutoCommit(true);
 	}
 
-	public PropositionalSystem getSystem() {
-		return _system;
+	private void createIfNecessary() throws SQLException {
+			DatabaseMetaData metaData= _connection.getMetaData();
+			ResultSet resultSet= metaData.getTables(null, null, "FORMULA", null);
+			if (resultSet.next() == false) {
+				Statement s = _connection.createStatement();
+
+				s.execute("create table FORMULA(" +
+						"ID int NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), " +
+						"FORMULA varchar(32672) NOT NULL, " +
+						"FORMULA_TEMPLATE varchar(32672) NOT NULL, " +
+						"LENGTH int NOT NULL, " +
+						"TRUTHVALUE varchar(32672) NOT NULL, " +
+						"CANONICAL int not NULL, " +
+						"PRIMARY KEY (ID)" +
+						")");
+				s.execute("CREATE INDEX formula_index_1 ON FORMULA (LENGTH, CANONICAL, TRUTHVALUE)");
+				s.execute("CREATE INDEX formula_index_2 ON FORMULA (TRUTHVALUE, CANONICAL, LENGTH)");
+				s.execute("CREATE INDEX formula_index_3 ON FORMULA (FORMULA, CANONICAL, LENGTH, TRUTHVALUE)");
+				s.execute("CREATE INDEX formula_index_4 ON FORMULA (FORMULA_TEMPLATE, CANONICAL, LENGTH, TRUTHVALUE)");
+				s.execute("CREATE INDEX formula_index_5 ON FORMULA (CANONICAL, LENGTH, TRUTHVALUE)");
+				
+
+//				s.execute("create table RULE(" +
+//						"ID integer NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), " +
+//						"ANTECEDENT integer NOT NULL, " +
+//						"CONSEQUENT integer not null, " +
+//						"PRIMARY KEY (ID)" +
+//						")");
+//				s.execute("CREATE INDEX rule_index_1 ON RULE (ANTECEDENT, CONSEQUENT)");
+//				s.execute("CREATE INDEX rule_index_2 ON RULE (CONSEQUENT, ANTECEDENT)");
+				
+				s.close();
+			}
+			resultSet.close();
+	}
+
+	private ResultIterator<Formula> executeQuery(String sql) {
+		Statement s = null;
+		try {
+			s = _connection.createStatement();
+			return asResultIterator(s.executeQuery(sql));
+		} 
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		finally {
+			//try { s.close(); } catch (Throwable t) { }
+		}
+	}
+	private ResultIterator<Formula> asResultIterator(final ResultSet resultSet) {
+		return new ResultIterator<Formula>() {
+			private Boolean _next;
+			public void close() {
+				try { resultSet.close(); } catch (SQLException x) { throw new RuntimeException(x); }
+			}
+			public boolean hasNext() {
+				try {
+					if (_next == null) 
+						_next= resultSet.next();							
+					return _next;
+				}
+				catch (SQLException x) { throw new RuntimeException(x); }
+			}
+			public Formula next() {
+				try {
+					if (_next == null)
+						resultSet.next();
+					_next= null;
+					return _system.createFormula(resultSet.getString("FORMULA"));
+				}
+				catch (SQLException x) { throw new RuntimeException(x); }
+			}
+			public void remove() {
+				throw new UnsupportedOperationException();
+			}
+		};
 	}
 
 }
