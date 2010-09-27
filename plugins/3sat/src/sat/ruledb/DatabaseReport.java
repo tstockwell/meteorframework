@@ -45,8 +45,6 @@ public class DatabaseReport {
 		System.out.println();
 		
 		
-		
-
 		/*
 		 * List lengths and # of canonical formulas
 		 */
@@ -75,6 +73,15 @@ public class DatabaseReport {
 				}
 			}
 			System.out.println("-------------   ------   ------");
+		}
+		
+		System.out.println();
+		System.out.println("Canonical Formulas in Lexical Order");
+		System.out.println("=====================================");
+		ResultIterator<Formula> canonicalFormulas= database.getAllCanonicalFormulasInLexicalOrder();
+		while (canonicalFormulas.hasNext()) {
+			Formula formula= canonicalFormulas.next();
+			System.out.println(formula);
 		}
 		
 		if (showReductionRules) {

@@ -1,7 +1,7 @@
 package sat;
 
 public enum Operator {
-	Negation("~"),
+	Negation("-"),
 	Implication("*");
 	
 	private String _text; 
@@ -14,7 +14,7 @@ public enum Operator {
 	}
 
 	public static final boolean isNegation(char c) {
-		return c == '~';
+		return c == '-';
 	}
 
 	public static final boolean isImplication(char c) {
