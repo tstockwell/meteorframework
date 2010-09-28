@@ -13,14 +13,14 @@ import java.util.TreeMap;
  * A propositional system manages the creation of propositional formulas and 
  * provides facilities for testing the validity of formulas.
  * This system represents propositional formulas using only...
- * 	...TRUE and FALSE.
+ * 	...TRUE and KEY_FALSE.
  *  ...variables.
  *  ...a negation operator 
  *  ...an implication operator (aka the if-then operator, most often written as ->).
  *  
  * This system supports a textual form for representing formulas.
  * The normal form uses Polish notation and...
- * 	...the symbols 'T' and 'F' for TRUE and FALSE.
+ * 	...the symbols 'T' and 'F' for KEY_TRUE and KEY_FALSE.
  *  ...the symbol '-' for the negation operator. 
  *  ...the symbol '*' for the implication operator. 
  *  ...the symbol '^' followed by a number for representing variables.
