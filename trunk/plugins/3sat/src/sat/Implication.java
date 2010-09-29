@@ -85,7 +85,7 @@ public class Implication extends Formula {
 			return i + 1;
 		i= _consequent.subsumes(it.getConsequent(), variableBindings);
 		if (0 <= i)
-			return it.getAntecedent().length()+i+1;
+			return _antecedent.length()+i+1;
 		return -1;
 	}
 }
