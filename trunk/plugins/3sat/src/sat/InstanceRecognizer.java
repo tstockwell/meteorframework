@@ -1,7 +1,9 @@
 package sat;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
@@ -45,6 +47,29 @@ public class InstanceRecognizer {
 	public Iterator<Match> findMatches(Formula formula) {
 		Map<String, String> substitions= new HashMap<String, String>();
 		return _root.findMatches(formula.getFormulaText(), substitions);
+	}
+	/**
+	 * Find the first substitution instance.
+	 * @returns null if there is no match
+	 */
+	public Match findFirstMatch(Formula formula) {
+		Map<String, String> substitions= new HashMap<String, String>();
+		Iterator<Match> i= _root.findMatches(formula.getFormulaText(), substitions);
+		if (i.hasNext())
+			return i.next();
+		return null;
+	}
+	/**
+	 * Find the first substitution instance.
+	 * @returns null if there is no match
+	 */
+	public List<Match> findAllMatches(Formula formula) {
+		Map<String, String> substitions= new HashMap<String, String>();
+		Iterator<Match> i= _root.findMatches(formula.getFormulaText(), substitions);
+		ArrayList<Match> all= new ArrayList<InstanceRecognizer.Match>();
+		while (i.hasNext())
+			all.add(i.next());
+		return all;
 	}
 	
 	
@@ -140,9 +165,9 @@ public class InstanceRecognizer {
 
 
 	
-	static class Match {
-		String formula;
-		Map<String, String> substitutions;
+	public static class Match {
+		public String formula;
+		public Map<String, String> substitutions;
 		Match (String formula, Map<String, String> substitutions) {
 			this.formula= formula;
 			this.substitutions= substitutions;
