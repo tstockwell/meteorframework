@@ -148,6 +148,7 @@ public class PropositionalSystem {
 			case 'T': count++; break;
 			case 'F': count++; break;
 			case '^': {
+				count++;
 				while (i < max && Character.isDigit(formulaText.charAt(i+1))) 
 					i++;
 			} break;
