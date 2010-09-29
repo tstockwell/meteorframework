@@ -9,7 +9,7 @@ public enum Operator {
 		_text= text;
 	}
 	
-	public String getFormulaText() {
+	public final String getFormulaText() {
 		return _text;
 	}
 

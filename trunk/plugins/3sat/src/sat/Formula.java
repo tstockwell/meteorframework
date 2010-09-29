@@ -12,7 +12,7 @@ import java.util.Map;
 abstract public class Formula {
 	
 	protected String _txt; // the textual normal form representation of this formula 
-	
+
 	Formula(String text) { _txt= text; }
 
 	/**

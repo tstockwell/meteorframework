@@ -1,14 +1,9 @@
 package sat;
 
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
-
-import javax.naming.OperationNotSupportedException;
 
 /**
  * A utility for recognizing substitution instances of a set of formulas.
@@ -29,15 +24,126 @@ import javax.naming.OperationNotSupportedException;
  */
 public class InstanceRecognizer {
 	
-	static final Integer KEY_IMP= new Integer(-1);
-	static final Integer KEY_NEG= new Integer(-2);
-	static final Integer KEY_TRUE= new Integer(-3);
-	static final Integer KEY_FALSE= new Integer(-4);
+	static final String SYMBOL_TRUE= Constant.TRUE.getFormulaText(); 
+	static final String SYMBOL_FALSE= Constant.FALSE.getFormulaText(); 
+	static final String SYMBOL_NEGATION= Operator.Negation.getFormulaText(); 
+	static final String SYMBOL_IMPLICATION= Operator.Implication.getFormulaText(); 
+	static final String SYMBOL_VARIABLE= "^"; 
+	
+	
+	private final Node _root= new Node("", null);
+	public InstanceRecognizer() { 
+	}
+	
+	public void addFormula(Formula formula) {
+		_root.addFormula(formula.getFormulaText());
+	}
+	
+	/**
+	 * Find all formulas for which the given formula is a substitution instance.
+	 */
+	public Iterator<Match> findMatches(Formula formula) {
+		Map<String, String> substitions= new HashMap<String, String>();
+		return _root.findMatches(formula.getFormulaText(), substitions);
+	}
+	
+	
+	
+	
+
+	/**
+	 * A node in the internal trie structure that is associated with a symbol 
+	 * in a formula
+	 */
+	class Node {
+		String _symbol; // the symbol from the associated formula associated with this node
+		Node _parent;
+		/**
+		 * Stores nodes for symbols after the symbol represented by this node.
+		 * If this node is the last node in a formula then this container will be null. 
+		 * Uses KEY_* for implication, negation, and constants.
+		 * Uses variables numbers for everything else. 
+		 */
+		Map<String, Node> _children;
+		
+		Node(String symbol, Node parent) {
+			_symbol= symbol;
+			_parent= parent;
+		}
+		
+		String getSymbol() { return _symbol; }
+		
+		String getFormulaText() {
+			String text= _symbol;
+			Node parent= _parent;
+			while (parent != null) {
+				text= parent._symbol+text;
+				parent= parent._parent;
+			}
+			return text;
+		}
+		
+		public void addFormula(String formulaText) {
+			if (_children == null)
+				_children= new HashMap<String, Node>();
+			String symbol= formulaText.substring(0, 1);
+			if (symbol.equals("^")) {
+				int end= 1;
+				for (int i= 1; i < formulaText.length(); i++) {
+					if (Character.isDigit(formulaText.charAt(i))) {
+						end++;
+					}
+					else
+						break;
+				}
+				symbol= formulaText.substring(0, end);
+			}
+			
+			Node n= getChildNode(symbol);
+			if (symbol.length() < formulaText.length())
+				n.addFormula(formulaText.substring(symbol.length()));
+		}
+		
+		Node getChildNode(String symbol) {
+			Node n= _children.get(symbol);
+			if (n == null) {
+				n= new Node(symbol, this);
+				_children.put(symbol, n);
+			}
+			return n;
+		}
+
+		public Iterator<Match> findMatches(String formulaText, Map<String, String> substitions) {
+			String match= _symbol;
+			if (_symbol.startsWith(SYMBOL_VARIABLE)) {
+				match= substitions.get(_symbol);
+				if (match == null) {
+					substitions= new HashMap<String, String>(substitions);
+					match= PropositionalSystem.nextFormula(formulaText);
+					substitions.put(_symbol, match);
+				}
+			}
+			
+			
+			if (!formulaText.startsWith(match))
+				return EMPTY_MATCHES;
+			if (_children == null) {
+				if (match.length() < formulaText.length())
+					return EMPTY_MATCHES;
+				return new SingleMatch(new Match(getFormulaText(), substitions));
+			}
+			if (formulaText.length() <= match.length())
+				return EMPTY_MATCHES;
+			return new CompositeMatch(_children.values().iterator(), formulaText.substring(match.length()), substitions);
+		}
+	}
+
+
 	
 	static class Match {
-		Formula formula;
-		Map<Integer, Formula> substitutions;
-		Match (Formula formula, Map<Integer, Formula> substitutions) {
+		String formula;
+		Map<String, String> substitutions;
+		Match (String formula, Map<String, String> substitutions) {
 			this.formula= formula;
 			this.substitutions= substitutions;
 		}
@@ -65,11 +171,11 @@ public class InstanceRecognizer {
 	static class CompositeMatch implements Iterator<Match> {
 		Iterator<Match> _matches;
 		Iterator<Node> _children;
-		Formula _formula;
-		Map<Integer, Formula> _substitutions;
-		public CompositeMatch(Iterator<Node> children, Formula formula, Map<Integer, Formula> substitutions) {
+		String _formulaText;
+		Map<String, String> _substitutions;
+		public CompositeMatch(Iterator<Node> children, String formulaText, Map<String, String> substitutions) {
 			_children= children;
-			_formula= formula;
+			_formulaText= formulaText;
 			_substitutions= substitutions;
 		}
 		public Match next() {
@@ -82,7 +188,7 @@ public class InstanceRecognizer {
 				if (_matches == null) {
 					if (!_children.hasNext())
 						return false;
-					_matches= _children.next().findMatches(_formula, _substitutions);
+					_matches= _children.next().findMatches(_formulaText, _substitutions);
 
 				}
 				if (_matches.hasNext())
@@ -91,184 +197,6 @@ public class InstanceRecognizer {
 			}
 		}
 		public void remove() { throw new UnsupportedOperationException(); }
-	}
-	
-	
-	// cache keys to save memory
-	private static final HashMap<Integer, Integer> __keys= new HashMap<Integer, Integer>();
-	static {
-		__keys.put(KEY_IMP, KEY_IMP);
-		__keys.put(KEY_NEG, KEY_NEG);
-	}
-	static Integer getKey(Integer key) {
-		Integer k= __keys.get(key);
-		if (k != null)
-			return k;
-		__keys.put(key, key);
-		return key;
-	}
-	
-	
-	private final Node _root= new Node(null, null);
-	private final PropositionalSystem _system;
-	public InstanceRecognizer(PropositionalSystem system) { 
-		_system= system;
-	}
-	
-	public void addFormula(Formula formula) {
-		_root.addFormula(formula);
-	}
-	
-	/**
-	 * Find all formulas for which the given formula is a substitution instance.
-	 */
-	public Iterator<Match> findMatches(Formula formula) {
-		Map<Integer, Formula> substitions= new HashMap<Integer, Formula>();
-		return _root.findMatches(formula, substitions);
-	}
-	
-	
-	
-	
-
-
-	class Node {
-		Integer _key;
-		Node _parent;
-		/**
-		 * Uses -1 for implication, -2 for negation, variables numbers for 
-		 * everything else 
-		 */
-		Map<Integer, Node> _children= new HashMap<Integer, Node>();
-		
-		Node(Integer key, Node parent) {
-			_key= getKey(key);
-			_parent= parent;
-		}
-		
-		public void addFormula(Formula formula) {
-			char c= formulaText.charAt(0);
-			switch (c) {
-			
-			case 'T':
-				getNode(KEY_TRUE).addFormula(formulaText.substring(1));
-				break;
-				
-			case 'F':
-				getNode(KEY_FALSE).addFormula(formulaText.substring(1));
-				break;
-				
-			case '*':
-				getNode(KEY_IMP).addFormula(formulaText.substring(1));
-				break;
-
-			case '-':
-				getNode(KEY_NEG).addFormula(formulaText.substring(1));
-				break;
-
-			case '^':
-				int end= 1;
-				for (int i= 1; i < formulaText.length(); i++) {
-					if (Character.isDigit(formulaText.charAt(i))) {
-						end++;
-					}
-					else
-						break;
-				}
-				
-				Integer key= Integer.parseInt(formulaText.substring(1, end));
-				getNode(key).addFormula(formulaText.substring(end));
-				break;
-				
-			default:
-				throw new RuntimeException("Unknown symbol:"+c+" in formula "+formulaText);
-			}
-			
-		}
-		
-		Node getNode(Integer key) {
-			Node n= _children.get(key);
-			if (n == null) {
-				Integer k= getKey(key);
-				n= new Node(k, this);
-				_children.put(k, n);
-			}
-			return n;
-		}
-
-		public Iterator<Match> findMatches(Formula formula, Map<Integer, Formula> substitions) {
-			return new CompositeMatch(_children.values().iterator(), formula, substitions);
-		}
-	}
-
-
-
-	class ConstantNode extends Node {
-		
-		public ConstantNode(Integer key, Node parent) {
-			super(key, parent);
-		}
-
-		@Override
-		public Iterator<Match> findMatches(Formula formula, Map<Integer, Formula> substitions) {
-			if (_key.equals(KEY_TRUE)  && formula.equals(Constant.TRUE))
-				return new SingleMatch(new Match(Constant.TRUE, substitions));
-			if (_key.equals(KEY_FALSE)  && formula.equals(Constant.FALSE))
-				return new SingleMatch(new Match(Constant.TRUE, substitions));
-			return EMPTY_MATCHES;
-		}
-	}
-
-
-
-	class VariableNode extends Node {
-		
-		public VariableNode(Integer key, Node parent) {
-			super(key, parent);
-		}
-
-		@Override
-		public Iterator<Match> findMatches(Formula formula, Map<Integer, Formula> substitions) {
-			Formula match= substitions.get(_key);
-			if (match == null) {
-				substitions= new HashMap<Integer, Formula>(substitions);
-				substitions.put(_key, formula);
-				return new SingleMatch(new Match(_system.createVariable(_key), substitions));
-			}
-			if (formula.equals(match))
-				return new SingleMatch(new Match(_system.createVariable(_key), substitions));
-			return EMPTY_MATCHES;
-		}
-	}
-
-
-	class NegationNode extends Node {
-		
-		public NegationNode(Node parent) {
-			super(KEY_NEG, parent);
-		}
-
-		@Override
-		public Iterator<Match> findMatches(final Formula formula, final Map<Integer, Formula> substitions) {
-			if (!(formula instanceof Negation))
-				return EMPTY_MATCHES;
-			return new CompositeMatch(_children.values().iterator(), formula, substitions);
-		}
-	}
-	
-
-	class ImplicationNode extends Node {
-		
-		public ImplicationNode(Node parent) {
-			super(KEY_IMP, parent);
-		}
-
-		@Override
-		public Iterator<Match> findMatches(final Formula formula, final Map<Integer, Formula> substitions) {
-			if (!(formula instanceof Negation))
-				return EMPTY_MATCHES;
-			return new CompositeMatch(_children.values().iterator(), formula, substitions);
-		}
 	}
 	
 }
