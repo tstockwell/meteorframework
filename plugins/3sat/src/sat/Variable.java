@@ -6,7 +6,7 @@ import java.util.NoSuchElementException;
 
 public class Variable extends Formula {
 	
-	public Variable(String text) {
+	Variable(String text) {
 		super(text);
 	}
 

@@ -131,6 +131,34 @@ public class PropositionalSystem {
 		}
 		return formula;
 	}
+	
+	/**
+	 * This method finds the end of a formula.
+	 * @param formulaText A string that starts with a formula but may have 
+	 * more text appended to the end of the formula.
+	 */
+	public static String nextFormula(String formulaText) {
+		int count= 0;
+		final int max= formulaText.length()-1;
+		for (int i = 0; i <= max; i++) {
+			char c = formulaText.charAt(i);
+			switch (c) {
+			case '-': break;
+			case '*': count--; break;
+			case 'T': count++; break;
+			case 'F': count++; break;
+			case '^': {
+				while (i < max && Character.isDigit(formulaText.charAt(i+1))) 
+					i++;
+			} break;
+			default: throw new RuntimeException("Not a valid formula:"+formulaText);
+			}
+			if (0 < count)
+				return formulaText.substring(0, i+1);
+		}
+		throw new RuntimeException("Not a valid formula:"+formulaText);
+	}
+	
 
 	private Formula parse(String formula) {
 		Stack<Formula> stack= new Stack<Formula>();
