@@ -46,13 +46,13 @@ public class RuleDatabase {
 	
 	
 	final private PropositionalSystem _system;
-	final private TruthTables _truthTables; 
-	
+	final private TruthTables _truthTables;
 	public RuleDatabase(TruthTables tables) throws SQLException {
 		_truthTables= tables;
 		_system= tables.getSystem();
 		connect();
-		createIfNecessary();		
+		createIfNecessary();
+		
 	}
 
 	public PropositionalSystem getSystem() {
@@ -369,6 +369,27 @@ public class RuleDatabase {
 				throw new UnsupportedOperationException();
 			}
 		};
+	}
+
+	
+	public long countCanonicalTruthTables() {
+		try {
+			String sql= "SELECT COUNT(DISTINCT TRUTH_TABLE) as count FROM FORMULA WHERE CANONICAL = 1";
+			Statement s = _connection.createStatement();
+			ResultSet resultSet= null;		
+			try {
+				(resultSet= s.executeQuery(sql)).next();
+				return resultSet.getLong(1);
+			}
+			finally {
+				try { resultSet.close(); } catch (Throwable t) { }
+				try { s.close(); } catch (Throwable t) { }
+			}
+		} 
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
 	}
 
 }
