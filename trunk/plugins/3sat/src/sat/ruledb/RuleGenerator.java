@@ -96,21 +96,21 @@ public class RuleGenerator {
 		
 		if (formula.length() <= length) {
 			
-			/* 
-			 * If there are other canonical formulas with the same truth 
-			 * table and this formula is not a substitution instance of any 
-			 * of those other canonical formulas then we make this formula 
-			 * a reduction rule.
-			 * Doing this reduces the number of canonical formulas and greatly 
-			 * reduces the total number of reduction rules. 
-			 * We only do this for formulas that are not substitution instances 
-			 * of existing canonical formula in order to preserve the confluence 
-			 * of the reduction rules.
-			 */
-			List<Formula> canonicalFormulas= _database.getCanonicalFormulas(_truthTables.getTruthTable(formula));
-			if (!canonicalFormulas.isEmpty()) 
-				if (new InstanceRecognizer(canonicalFormulas).findFirstMatch(formula) == null)  
-					return false;
+//			/* 
+//			 * If there are other canonical formulas with the same truth 
+//			 * table and this formula is not a substitution instance of any 
+//			 * of those other canonical formulas then we make this formula 
+//			 * a reduction rule.
+//			 * Doing this reduces the number of canonical formulas and greatly 
+//			 * reduces the total number of reduction rules. 
+//			 * We only do this for formulas that are not substitution instances 
+//			 * of existing canonical formula in order to preserve the confluence 
+//			 * of the reduction rules.
+//			 */
+//			List<Formula> canonicalFormulas= _database.getCanonicalFormulas(_truthTables.getTruthTable(formula));
+//			if (!canonicalFormulas.isEmpty()) 
+//				if (new InstanceRecognizer(canonicalFormulas).findFirstMatch(formula) == null)  
+//					return false;
 			
 			return true;
 		}
