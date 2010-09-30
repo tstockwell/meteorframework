@@ -84,12 +84,7 @@ public class RuleGenerator {
 			_database.addFormula(formula, isCanonical);
 		}
 		else {
-			if (reductionRule.formula.length() == reductionRule.reduction.length()) {
-				System.out.println("***** WARNING ****\nEncountered a reduction rule where the left and right sides have the same length");
-				System.exit(1);
-			}
-			else
-				System.out.println(formula+" can be reduced using rule "+reductionRule);
+			System.out.println(formula+" can be reduced using rule "+reductionRule);
 		}
 	}
 
