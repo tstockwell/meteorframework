@@ -1,6 +1,7 @@
 package sat;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -36,10 +37,18 @@ public class InstanceRecognizer {
 	private final Node _root= new Node("", null);
 	public InstanceRecognizer() { 
 	}
+	public InstanceRecognizer(Collection<Formula> formulas) {
+		for (Formula formula: formulas)
+			addFormula(formula);
+	}
+	public InstanceRecognizer(Formula formula) {
+		addFormula(formula);
+	}
 	
 	public void addFormula(Formula formula) {
 		_root.addFormula(formula.getFormulaText());
 	}
+	
 	
 	/**
 	 * Find all formulas for which the given formula is a substitution instance.
