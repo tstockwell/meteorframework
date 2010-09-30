@@ -41,25 +41,6 @@ public class Tests extends TestCase {
 
 	}
 
-	public void testSubsumption() {
-		PropositionalSystem system = new PropositionalSystem();
-		String text = "***^1^2^3^4";
-		Formula formula1 = system.createFormula(text);
-
-		text = "*" + text + text;
-		Formula formula2 = system.createImplication(formula1, formula1);
-		assertEquals(-1, system.createFormula("*^1^2").subsumes(formula2));
-		assertEquals(-1, system.createFormula("*^1^1").subsumes(formula2));
-		assertEquals(-1, system.createFormula("**^1^2*^3^4").subsumes(formula2));
-		assertEquals(-1, system.createFormula("**^1^2*^3^2").subsumes(formula2));
-		assertEquals(-1, system.createFormula("**^1^2*^1^4").subsumes(formula2));
-		assertEquals(-1, system.createFormula("**^1^2*^1^2").subsumes(formula2));
-
-		text = "-" + text;
-		Formula formula3 = system.createNegation(formula2);
-		assertEquals(-1, system.createFormula("-^1").subsumes(formula3));
-	}
-
 	public void testEvaluation() {
 		PropositionalSystem system = new PropositionalSystem();
 		Variable one = system.createVariable(1);
