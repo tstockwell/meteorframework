@@ -374,7 +374,7 @@ public class RuleDatabase {
 	
 	public long countCanonicalTruthTables() {
 		try {
-			String sql= "SELECT COUNT(DISTINCT TRUTH_TABLE) as count FROM FORMULA WHERE CANONICAL = 1";
+			String sql= "SELECT COUNT(DISTINCT TRUTHVALUE) as count FROM FORMULA WHERE CANONICAL = 1";
 			Statement s = _connection.createStatement();
 			ResultSet resultSet= null;		
 			try {
