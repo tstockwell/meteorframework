@@ -3,7 +3,6 @@ package sat.ruledb;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -29,65 +28,12 @@ public class RuleDatabase {
 	public static final int VARIABLE_COUNT= 3;
 	
 	
-	public class Navigator {
-		
-		ResultSet _resultSet;
-		private Boolean _next;
-		
-		public Navigator() {
-			try {
-				_selectCanonical.setString(1, "");
-				_resultSet= _selectCanonical.executeQuery();
-			} catch (SQLException e) {
-				throw new RuntimeException(e);
-			}
-		}
-
-		public boolean hasNext() {
-			try {
-				if (_next == null) 
-					_next= _resultSet.next() ? Boolean.TRUE : Boolean.FALSE;							
-				return _next;
-			}
-			catch (SQLException x) { throw new RuntimeException(x); }
-		}
-
-		public Formula next() {
-			try {
-				if (_next == null)
-					_resultSet.next();
-				_next= null;
-				return _system.createFormula(_resultSet.getString("FORMULA"));
-			}
-			catch (SQLException x) { throw new RuntimeException(x); }
-		}
-
-		public void close() {
-			try { _resultSet.close(); } catch (SQLException x) { throw new RuntimeException(x); }
-		}
-
-		public void advanceFromPosition(int i) {
-			try {
-				String formula= _resultSet.getString("FORMULA_TEMPLATE");
-				if (i < formula.length()) 
-					formula= formula.substring(0, i+1);
-				formula+= ((char)0x7F);
-				_resultSet.close();
-				_selectCanonical.setString(1, formula);
-				_resultSet= _selectCanonical.executeQuery();
-			} catch (SQLException e) {
-				throw new RuntimeException(e);
-			}
-		}
-
-	}
-	
 	public static final String LIST_FORMULA_LENGTHS= "-listFormulaLengths";
 
 	public String framework = "embedded";
 	public String driver = "org.apache.derby.jdbc.EmbeddedDriver";
 	public String protocol = "jdbc:derby:";
-	public String dbFolder = "/"+VARIABLE_COUNT+"satdb";
+	public String dbFolder = "/temp/"+VARIABLE_COUNT+"satdb";
 	public String options = ";create=true";
 	
 	public String dbURL= protocol+dbFolder+options;
@@ -99,7 +45,6 @@ public class RuleDatabase {
 	//HashMap<Integer, List<Formula>> _allNonCanonicalFormulasByLength= new HashMap<Integer, List<Formula>>();
 	
 	
-	final private PreparedStatement _selectCanonical;
 	final private PropositionalSystem _system;
 	final private TruthTables _truthTables; 
 	
@@ -108,13 +53,6 @@ public class RuleDatabase {
 		_system= tables.getSystem();
 		connect();
 		createIfNecessary();		
-		
-		String sql= "SELECT FORMULA, FORMULA_TEMPLATE FROM FORMULA WHERE CANONICAL = 0 AND ? < FORMULA_TEMPLATE ORDER BY FORMULA_TEMPLATE";
-		_selectCanonical= _connection.prepareStatement(sql, ResultSet.TYPE_FORWARD_ONLY, Connection.TRANSACTION_READ_UNCOMMITTED);
-	}
-
-	public Navigator getNonCanonicalFormulaNavigator() {
-		return new Navigator();
 	}
 
 	public PropositionalSystem getSystem() {
@@ -237,11 +175,9 @@ public class RuleDatabase {
 	public void addFormula(Formula formula, boolean isCanonical) {
 		try {
 			String formulaText= formula.getFormulaText();
-			String templateText= formulaText.replaceAll("[0123456789]", "^");
 			
-			String sql= "INSERT INTO FORMULA (FORMULA, FORMULA_TEMPLATE, LENGTH, TRUTHVALUE, CANONICAL) VALUES (" +
+			String sql= "INSERT INTO FORMULA (FORMULA, LENGTH, TRUTHVALUE, CANONICAL) VALUES (" +
 					"'"+formulaText+"',"+
-					"'"+templateText+"',"+
 					formula.length()+","+
 					"'"+_truthTables.getTruthTable(formula)+"',"+
 					(isCanonical?1:0)+")";
@@ -280,7 +216,7 @@ public class RuleDatabase {
 		return executeQuery("SELECT * FROM FORMULA WHERE CANONICAL = 0 ORDER BY FORMULA");
 	}
 	public ResultIterator<Formula> getAllCanonicalFormulasInLexicalOrder() {
-		return executeQuery("SELECT * FROM FORMULA WHERE CANONICAL = 1 ORDER BY FORMULA_TEMPLATE, FORMULA");
+		return executeQuery("SELECT * FROM FORMULA WHERE CANONICAL = 1 ORDER BY FORMULA");
 	}
 
 	public int getLengthOfCanonicalFormulas(TruthTable truthTable) {
@@ -378,7 +314,6 @@ public class RuleDatabase {
 				s.execute("create table FORMULA(" +
 						"ID int NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), " +
 						"FORMULA varchar(32672) NOT NULL, " +
-						"FORMULA_TEMPLATE varchar(32672) NOT NULL, " +
 						"LENGTH int NOT NULL, " +
 						"TRUTHVALUE varchar(32672) NOT NULL, " +
 						"CANONICAL int not NULL, " +
@@ -387,19 +322,7 @@ public class RuleDatabase {
 				s.execute("CREATE INDEX formula_index_1 ON FORMULA (LENGTH, CANONICAL, TRUTHVALUE)");
 				s.execute("CREATE INDEX formula_index_2 ON FORMULA (TRUTHVALUE, CANONICAL, LENGTH)");
 				s.execute("CREATE INDEX formula_index_3 ON FORMULA (FORMULA, CANONICAL, LENGTH, TRUTHVALUE)");
-				s.execute("CREATE INDEX formula_index_4 ON FORMULA (FORMULA_TEMPLATE, CANONICAL, LENGTH, TRUTHVALUE)");
 				s.execute("CREATE INDEX formula_index_5 ON FORMULA (CANONICAL, LENGTH, TRUTHVALUE)");
-				
-
-//				s.execute("create table RULE(" +
-//						"ID integer NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), " +
-//						"ANTECEDENT integer NOT NULL, " +
-//						"CONSEQUENT integer not null, " +
-//						"PRIMARY KEY (ID)" +
-//						")");
-//				s.execute("CREATE INDEX rule_index_1 ON RULE (ANTECEDENT, CONSEQUENT)");
-//				s.execute("CREATE INDEX rule_index_2 ON RULE (CONSEQUENT, ANTECEDENT)");
-				
 				s.close();
 			}
 			resultSet.close();

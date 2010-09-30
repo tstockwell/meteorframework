@@ -4,10 +4,12 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import sat.Constant;
 import sat.Formula;
 import sat.Implication;
+import sat.InstanceRecognizer;
 import sat.Negation;
 import sat.PropositionalSystem;
 import sat.Variable;
@@ -49,9 +51,15 @@ public class Solver {
 	
 	private PropositionalSystem _system;
 	private RuleDatabase _ruleDatabase; 
+	private InstanceRecognizer _recognizer;
 	public Solver(PropositionalSystem system, RuleDatabase ruleDatabase) { 
 		_system= system;
 		_ruleDatabase= ruleDatabase;
+		
+		for (Iterator<Formula> i= _ruleDatabase.getAllNonCanonicalFormulas(); i.hasNext();) {
+			_recognizer.addFormula(i.next());
+		}
+		
 	}
 	
 	
@@ -87,24 +95,18 @@ public class Solver {
 	 * @returns the reduced rule if a rule applied, else the given rule.
 	 */
 	private Formula applyRules(Formula formula) {
-		RuleDatabase.Navigator navigator= _ruleDatabase.getNonCanonicalFormulaNavigator();
-		try {
-			while (navigator.hasNext()) {
-				Formula reducableFormula= navigator.next();
-				HashMap<Variable, Formula> substitutions= new HashMap<Variable, Formula>();
-				int i= reducableFormula.subsumes(formula, substitutions);
-				if (i < 0) {
-					Formula canonicalForm= _ruleDatabase.findCanonicalFormula(reducableFormula);
-					Formula reducedFormula= _system.createFormula(canonicalForm, substitutions);
-					return reducedFormula;
-				}
-				navigator.advanceFromPosition(i);
-			}
+		InstanceRecognizer.Match match= _recognizer.findFirstMatch(formula);
+		if (match == null)
+			return formula;
+		Formula rule= _system.createFormula(match.formula);
+		Formula canonicalForm= _ruleDatabase.findCanonicalFormula(rule);
+		HashMap<Variable, Formula> substitutions= new HashMap<Variable, Formula>(match.substitutions.size());
+		for (String v: match.substitutions.keySet()) {
+			Variable variable= (Variable)_system.createFormula(v);
+			Formula substitution= _system.createFormula(match.substitutions.get(v));
+			substitutions.put(variable, substitution);
 		}
-		finally {
-			navigator.close();
-		}
-		return formula;
-		
+		Formula reducedFormula= _system.createFormula(canonicalForm, substitutions);
+		return reducedFormula;
 	}
 }
