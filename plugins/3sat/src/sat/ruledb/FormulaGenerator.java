@@ -73,10 +73,11 @@ public class FormulaGenerator {
 				_currentLength++;
 				System.out.println("The formulas lengths have been increased to "+_currentLength);
 				
-				if (_database.lengthOfLongestPossibleNonReducableFormula() < _currentLength) {
-					System.out.println("!!!!!! The Rule Database is Complete !!!");
-					return null;
-				} 
+				if (TruthTables.MAX_TRUTH_TABLES <= _database.countCanonicalTruthTables())
+					if (_database.lengthOfLongestPossibleNonReducableFormula() < _currentLength) {
+						System.out.println("!!!!!! The Rule Database is Complete !!!");
+						return null;
+					} 
 				
 				FormulaConstructor fc= new FormulaConstructor(_database, _currentLength);
 				if (fc.hasNext())
