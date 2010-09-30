@@ -31,16 +31,4 @@ public class Variable extends Formula {
 		return valuation.get(this);
 	}
 
-	@Override
-	protected int findSubstutions(Formula formula, Map<Variable, Formula> variableBindings) {
-		Formula match= variableBindings.get(this);
-		if (match == null) {
-			variableBindings.put(this, formula);
-			return -1;
-		}
-		if (formula.equals(match))
-			return -1;
-		return 0;
-	}
-
 }

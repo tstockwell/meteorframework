@@ -1,6 +1,5 @@
 package sat;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -47,26 +46,6 @@ abstract public class Formula {
 		return _txt;
 	}
 
-	/**
-	 * @return -1 if this formula subsumes the given formula, 
-	 *  in other words, if the given formula is a substitution instance of this formula.
-	 * 	Otherwise return the position from the left of this formula where matching failed.
-	 */
-	final public int subsumes(Formula formula) {
-		return subsumes(formula, new HashMap<Variable, Formula>());
-	}
-	/**
-	 * @see subsume(Formula)
-	 * 
-	 * Use this version if you also want to know what substitutions will 
-	 * transform this formula into the given formula.
-	 * The given map will be populated with appropriate substitutions.
-	 */
-	final public int subsumes(Formula formula, Map<Variable, Formula> variableSubstitions) {
-		return findSubstutions(formula, variableSubstitions);
-	}
-	abstract protected int findSubstutions(Formula formula, Map<Variable, Formula> variableBindings);
-	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

@@ -75,17 +75,4 @@ public class Implication extends Formula {
 			}
 		};
 	}
-	@Override
-	protected int findSubstutions(Formula formula, Map<Variable, Formula> variableBindings) {
-		if (!(formula instanceof Implication)) 
-				return 0;
-		Implication it= (Implication)formula;
-		int i= _antecedent.subsumes(it.getAntecedent(), variableBindings);
-		if (0 <= i)
-			return i + 1;
-		i= _consequent.subsumes(it.getConsequent(), variableBindings);
-		if (0 <= i)
-			return _antecedent.length()+i+1;
-		return -1;
-	}
 }

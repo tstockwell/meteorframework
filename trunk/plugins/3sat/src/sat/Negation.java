@@ -60,14 +60,4 @@ public class Negation extends Formula {
 			}
 		};
 	}
-
-	@Override
-	protected int findSubstutions(Formula formula, Map<Variable, Formula> variableBindings) {
-		if (!(formula instanceof Negation))
-			return 0;
-		int i= _child.subsumes(((Negation)formula).getChild(), variableBindings);
-		if (0 <= i)
-			return i+1;
-		return -1;
-	}
 }
