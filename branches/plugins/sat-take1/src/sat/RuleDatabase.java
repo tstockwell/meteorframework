@@ -78,7 +78,7 @@ public class RuleDatabase {
 	public String framework = "embedded";
 	public String driver = "org.apache.derby.jdbc.EmbeddedDriver";
 	public String protocol = "jdbc:derby:";
-	public String dbFolder = "/"+Formula.MAX_VARIABLES+"satdb";
+	public String dbFolder = "/temp/"+Formula.MAX_VARIABLES+"satdb";
 	public String options = ";create=true";
 	
 	public String dbURL= protocol+dbFolder+options;
