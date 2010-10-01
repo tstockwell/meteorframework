@@ -8,11 +8,16 @@ import java.util.Map;
  * 
  * @author Ted Stockwell <emorning@yahoo.com>
  */
-abstract public class Formula {
-	
+abstract public class Formula implements Comparable<Formula> {
+
 	protected String _txt; // the textual normal form representation of this formula 
 
 	Formula(String text) { _txt= text; }
+	
+	@Override
+	public int compareTo(Formula formula) {
+		return _txt.compareTo(formula._txt);
+	}
 
 	/**
 	 * @param valuation  A collection that denotes boolean values for all variables 

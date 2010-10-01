@@ -2,9 +2,13 @@ package sat.solver;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.lang.ref.ReferenceQueue;
+import java.lang.ref.SoftReference;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.TreeMap;
 
 import sat.Constant;
 import sat.Formula;
@@ -24,6 +28,12 @@ import sat.utils.ArgUtils;
  * @author Ted Stockwell <emorning@yahoo.com>
  */
 public class Solver {
+	
+	public static final Solver FAUX_SOLVER= new Solver() {
+		public final Formula reduce(Formula formula) {
+			return formula;
+		};
+	};
 	
 	public static void main(String[] args) throws IOException, SQLException {
 		PropositionalSystem system= new PropositionalSystem();
@@ -49,14 +59,40 @@ public class Solver {
 		System.exit(status);
 	}
 	
-	private PropositionalSystem _system;
-	private RuleDatabase _ruleDatabase; 
-	private InstanceRecognizer _recognizer= new InstanceRecognizer();
+	final private PropositionalSystem _system;
+	final private RuleDatabase _ruleDatabase; 
+	final private InstanceRecognizer _recognizer= new InstanceRecognizer();
+	
+	/*
+	 * cache of reduction results.
+	 * Used to avoid repeatedly reducing the same formula
+	 */
+	
+	/*
+	 * For efficiency we cache formulas and truth tables.
+	 */
+	final Map<String, FormulaReference> _reductionCache= new TreeMap<String, FormulaReference>(); 
+	final Map<String, FormulaReference> _formulaCache= new TreeMap<String, FormulaReference>(); 
+	final private ReferenceQueue<Formula> _referenceQueue= new ReferenceQueue<Formula>();
+	private class FormulaReference extends SoftReference<Formula> {
+		String _string;
+		public FormulaReference(Formula referent) {
+			super(referent, _referenceQueue);
+			_string= referent.getFormulaText();
+		}
+	}
+	
+	
 	public Solver(PropositionalSystem system, RuleDatabase ruleDatabase) { 
 		_system= system;
 		_ruleDatabase= ruleDatabase;
 		for (Iterator<Formula> i= _ruleDatabase.getAllNonCanonicalFormulas(); i.hasNext();) 
 			_recognizer.addFormula(i.next());
+	}
+	
+	private Solver() { 
+		_system= null;
+		_ruleDatabase= null;
 	}
 	
 	
@@ -67,43 +103,97 @@ public class Solver {
 	}
 
 	public Formula reduce(Formula formula) {
-		if (formula instanceof Negation) {
-			Formula subformula= ((Negation)formula).getChild();
-			Formula reduced= reduce(subformula);
-			if (reduced != subformula)
-				formula= _system.createNegation(reduced);
-			return applyRules(formula);
+		while (true) {
+			Formula cached= checkCache(formula);
+			if (cached != null)
+				return cached;
+			
+			//
+			// reduce subformulas before reducing this formula
+			//
+			if (formula instanceof Negation) { 
+				Formula negated= ((Negation)formula).getChild();
+				Formula n= reduce(negated);
+				if (negated != n)
+					formula= _system.createNegation(n);
+			}
+			else if (formula instanceof Implication) {
+				Implication implication= (Implication)formula;
+				Formula antecent= implication.getAntecedent();
+				Formula consequent= implication.getConsequent();
+				Formula a= reduce(antecent);
+				Formula c= reduce(consequent);
+				if (a != antecent || c != consequent)
+					formula= _system.createImplication(a, c);
+			}
+			
+			
+			Formula reduced= applyRules(formula);
+			if (reduced == formula)
+				return formula; // formula not reduced, no more to do
+			formula= reduced; continue; // formula reduced, go around again
 		}
-		if (formula instanceof Implication) {
-			Implication implication= (Implication)formula;
-			Formula antecent= implication.getAntecedent();
-			Formula consequent= implication.getConsequent();
-			Formula a= reduce(antecent);
-			Formula c= reduce(consequent);
-			if (a != antecent || c != consequent)
-				formula= _system.createImplication(a, c);
-			return applyRules(formula);
-		}
-		return formula; // the given formula is a variable or constant
 	}
 	
+	private synchronized Formula checkCache(Formula formula) {
+		try {
+			String key= formula.getFormulaText();
+			FormulaReference ref= _reductionCache.get(key);
+			if (ref != null) {
+				Formula f= ref.get();
+				if (f != null)
+					return f;
+				_reductionCache.remove(key);
+			}
+			return null;
+		}
+		finally {
+			cleanCache();
+		}
+	}
+	
+	private synchronized void addToCache(Formula formula, Formula reduction) {
+		String key= formula.getFormulaText();
+		_formulaCache.put(key, new FormulaReference(formula));
+		_reductionCache.put(key, new FormulaReference(reduction));
+		cleanCache();
+	}
+	private synchronized void cleanCache() {
+		// clean up expired references
+		FormulaReference ref;
+		while ((ref= (FormulaReference)_referenceQueue.poll()) != null) {
+			_formulaCache.remove(ref._string);
+			_reductionCache.remove(ref._string);
+		}
+	}
+
+
+
 	/**
 	 * Only applies rules to the given formula, not subformulas
 	 * @returns the reduced rule if a rule applied, else the given rule.
 	 */
 	private Formula applyRules(Formula formula) {
+		Formula cached= checkCache(formula);
+		if (cached != null)
+			return cached;
+		
+		Formula reducedFormula= formula;
 		InstanceRecognizer.Match match= _recognizer.findFirstMatch(formula);
-		if (match == null)
-			return formula;
-		Formula rule= _system.createFormula(match.formula);
-		Formula canonicalForm= _ruleDatabase.findCanonicalFormula(rule);
-		HashMap<Variable, Formula> substitutions= new HashMap<Variable, Formula>(match.substitutions.size());
-		for (String v: match.substitutions.keySet()) {
-			Variable variable= (Variable)_system.createFormula(v);
-			Formula substitution= _system.createFormula(match.substitutions.get(v));
-			substitutions.put(variable, substitution);
+		if (match != null) {
+			Formula rule= _system.createFormula(match.formula);
+			Formula canonicalForm= _ruleDatabase.findCanonicalFormula(rule);
+			HashMap<Variable, Formula> substitutions= new HashMap<Variable, Formula>(match.substitutions.size());
+			for (String v: match.substitutions.keySet()) {
+				Variable variable= (Variable)_system.createFormula(v);
+				Formula substitution= _system.createFormula(match.substitutions.get(v));
+				substitutions.put(variable, substitution);
+			}
+			reducedFormula= _system.createFormula(canonicalForm, substitutions);
 		}
-		Formula reducedFormula= _system.createFormula(canonicalForm, substitutions);
+		
+		addToCache(formula, reducedFormula);
+		
 		return reducedFormula;
 	}
 }

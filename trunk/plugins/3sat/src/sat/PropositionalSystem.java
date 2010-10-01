@@ -152,7 +152,7 @@ public class PropositionalSystem {
 				while (i < max && Character.isDigit(formulaText.charAt(i+1))) 
 					i++;
 			} break;
-			default: throw new RuntimeException("Not a valid formula:"+formulaText);
+			default: throw new RuntimeException("Invalid character '"+c+"' at position "+i+":"+formulaText);
 			}
 			if (0 < count)
 				return formulaText.substring(0, i+1);

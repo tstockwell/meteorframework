@@ -16,8 +16,9 @@ import sat.PropositionalSystem;
  * @author Ted Stockwell <emorning@yahoo.com>
  */
 public class CNFFile {
-	
-	public static CNFFile read(PropositionalSystem system, InputStream inputStream) throws IOException 
+
+	public static CNFFile readAndReduce(PropositionalSystem system, InputStream inputStream, Solver solver)
+	 throws IOException
 	{
 		CNFFile cnfFile= new CNFFile();		
 		BufferedReader reader= new BufferedReader(new InputStreamReader(inputStream));
@@ -68,10 +69,17 @@ public class CNFFile {
 			}
 			else
 				formula= system.createNegation(system.createImplication(formula, system.createNegation(clause)));
+			
+			formula= solver.reduce(formula);
 		}
 		
 		cnfFile._formula= formula;
 		return cnfFile;
+	}
+	
+	public static CNFFile read(PropositionalSystem system, InputStream inputStream) throws IOException 
+	{
+		return readAndReduce(system, inputStream, Solver.FAUX_SOLVER);
 	}
 	
 	private Formula _formula;
