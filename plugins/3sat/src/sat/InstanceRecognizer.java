@@ -149,6 +149,10 @@ public class InstanceRecognizer {
 
 		public Iterator<Match> findMatches(String formulaText, Map<String, String> substitions) {
 			String match= _symbol;
+			
+			// if this node is variable then get the substitution associated 
+			// with the variable.
+			// If there is no substitution then create one 
 			if (_symbol.startsWith(SYMBOL_VARIABLE)) {
 				match= substitions.get(_symbol);
 				if (match == null) {
@@ -158,17 +162,34 @@ public class InstanceRecognizer {
 				}
 			}
 			
+			int match_length= match.length();
+			int formula_length= formulaText.length();
 			
+			// if the formula doesn't start with the symbol associated with 
+			// this node then the formula is not a match
 			if (!formulaText.startsWith(match))
 				return EMPTY_MATCHES;
+			
+			// if this node represents a variable, say 25, then make sure the 
+			// formula doesn't start with a variable that matches but is longer, like 255.    
+			if (match.startsWith(SYMBOL_VARIABLE) && match_length < formula_length && Character.isDigit(formulaText.charAt(match_length)))
+				return EMPTY_MATCHES;
+			
+			
 			if (_children == null) {
-				if (match.length() < formulaText.length())
+				
+				// this node is a leaf but there is still formula left, so not a match
+				if (match_length < formula_length)
 					return EMPTY_MATCHES;
+				
 				return new SingleMatch(new Match(getFormulaText(), substitions));
 			}
-			if (formulaText.length() <= match.length())
+			
+			// this node is not a leaf but were out of formula, so not a match
+			if (formula_length <= match_length)
 				return EMPTY_MATCHES;
-			return new CompositeMatch(_children.values().iterator(), formulaText.substring(match.length()), substitions);
+			
+			return new CompositeMatch(_children.values().iterator(), formulaText.substring(match_length), substitions);
 		}
 	}
 

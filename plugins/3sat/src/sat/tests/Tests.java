@@ -146,20 +146,24 @@ public class Tests extends TestCase {
 	public void testSolver() throws SQLException, IOException {
 
 		ClassLoader classLoader= getClass().getClassLoader();
-		String homeFolder= getClass().getPackage().getName().replaceAll("\\.",
-		"/");
+		String homeFolder= getClass().getPackage().getName().replaceAll("\\.","/");
 		PropositionalSystem system= new PropositionalSystem();
 		TruthTables truthTables= new TruthTables(system);
 		RuleDatabase ruleDatabase= new RuleDatabase(truthTables);
 		Solver solver= new Solver(system, ruleDatabase);
 
-		InputStream inputStream=
-			classLoader.getResourceAsStream(homeFolder+"/cnf-example-1.txt");
-		assertNotNull("Missing input file:"+homeFolder+"/cnf-example-1.txt",
-				inputStream);
-		CNFFile file= CNFFile.read(system, inputStream);
-		Formula canonicalForm= solver.reduce(file.getFormula());
-		assertEquals(Constant.FALSE, canonicalForm);
+		InputStream inputStream= classLoader.getResourceAsStream(homeFolder+"/cnf-example-1.txt");
+		assertNotNull("Missing input file:"+homeFolder+"/cnf-example-1.txt", inputStream);
+		CNFFile file= CNFFile.readAndReduce(system, inputStream, solver);
+		Formula formula= file.getFormula();
+		assertEquals(truthTables.getTruthTable(formula), truthTables.getTruthTable(Constant.FALSE));
+		assertEquals(Constant.FALSE, formula);
+		inputStream.close();
+
+		inputStream= classLoader.getResourceAsStream(homeFolder+"/SAT_dat.k45.txt");
+		assertNotNull("Missing input file:"+homeFolder+"/SAT_dat.k45.txt", inputStream);
+		file= CNFFile.readAndReduce(system, inputStream, solver);
+		assertEquals(Constant.FALSE, file.getFormula());
 		inputStream.close();
 	}
 }
