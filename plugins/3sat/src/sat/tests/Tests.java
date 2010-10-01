@@ -1,16 +1,23 @@
 package sat.tests;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
 import junit.framework.TestCase;
+import sat.Constant;
 import sat.Formula;
 import sat.Implication;
 import sat.InstanceRecognizer;
 import sat.PropositionalSystem;
 import sat.Variable;
+import sat.ruledb.RuleDatabase;
 import sat.ruledb.TruthTable;
 import sat.ruledb.TruthTables;
+import sat.solver.CNFFile;
+import sat.solver.Solver;
 
 public class Tests extends TestCase {
 
@@ -135,24 +142,24 @@ public class Tests extends TestCase {
 
 	}
 
-	//
-	// public void testSolver() throws SQLException, IOException {
-	//
-	// ClassLoader classLoader= getClass().getClassLoader();
-	// String homeFolder= getClass().getPackage().getName().replaceAll("\\.",
-	// "/");
-	// PropositionalSystem system= new PropositionalSystem();
-	// TruthTables truthTables= new TruthTables(system);
-	// RuleDatabase ruleDatabase= new RuleDatabase(truthTables);
-	// Solver solver= new Solver(system, ruleDatabase);
-	//
-	// InputStream inputStream=
-	// classLoader.getResourceAsStream(homeFolder+"/cnf-example-1.txt");
-	// assertNotNull("Missing input file:"+homeFolder+"/cnf-example-1.txt",
-	// inputStream);
-	// CNFFile file= CNFFile.read(system, inputStream);
-	// Formula canonicalForm= solver.reduce(file.getFormula());
-	// assertEquals(Constant.FALSE, canonicalForm);
-	// inputStream.close();
-	// }
+	
+	public void testSolver() throws SQLException, IOException {
+
+		ClassLoader classLoader= getClass().getClassLoader();
+		String homeFolder= getClass().getPackage().getName().replaceAll("\\.",
+		"/");
+		PropositionalSystem system= new PropositionalSystem();
+		TruthTables truthTables= new TruthTables(system);
+		RuleDatabase ruleDatabase= new RuleDatabase(truthTables);
+		Solver solver= new Solver(system, ruleDatabase);
+
+		InputStream inputStream=
+			classLoader.getResourceAsStream(homeFolder+"/cnf-example-1.txt");
+		assertNotNull("Missing input file:"+homeFolder+"/cnf-example-1.txt",
+				inputStream);
+		CNFFile file= CNFFile.read(system, inputStream);
+		Formula canonicalForm= solver.reduce(file.getFormula());
+		assertEquals(Constant.FALSE, canonicalForm);
+		inputStream.close();
+	}
 }

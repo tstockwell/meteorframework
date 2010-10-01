@@ -51,15 +51,12 @@ public class Solver {
 	
 	private PropositionalSystem _system;
 	private RuleDatabase _ruleDatabase; 
-	private InstanceRecognizer _recognizer;
+	private InstanceRecognizer _recognizer= new InstanceRecognizer();
 	public Solver(PropositionalSystem system, RuleDatabase ruleDatabase) { 
 		_system= system;
 		_ruleDatabase= ruleDatabase;
-		
-		for (Iterator<Formula> i= _ruleDatabase.getAllNonCanonicalFormulas(); i.hasNext();) {
+		for (Iterator<Formula> i= _ruleDatabase.getAllNonCanonicalFormulas(); i.hasNext();) 
 			_recognizer.addFormula(i.next());
-		}
-		
 	}
 	
 	
