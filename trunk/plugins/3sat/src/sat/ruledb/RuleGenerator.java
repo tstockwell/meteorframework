@@ -7,6 +7,7 @@ import java.util.List;
 
 import sat.Formula;
 import sat.InstanceRecognizer;
+import sat.Match;
 import sat.PropositionalSystem;
 import sat.utils.ServerCommandLineInterface;
 
@@ -126,7 +127,7 @@ public class RuleGenerator {
 	 * to be non-reducable.   
 	 */
 	private ReductionRule formulaCanBeReduced(Formula formula) {
-		InstanceRecognizer.Match match= _recognizer.findFirstMatch(formula);
+		Match match= _recognizer.findFirstMatch(formula);
 		if (match == null)
 			return null;
 		Formula reducableFormula= _system.createFormula(match.formula);

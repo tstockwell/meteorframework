@@ -11,6 +11,7 @@ import sat.Constant;
 import sat.Formula;
 import sat.Implication;
 import sat.InstanceRecognizer;
+import sat.Match;
 import sat.PropositionalSystem;
 import sat.Variable;
 import sat.ruledb.RuleDatabase;
@@ -121,7 +122,7 @@ public class Tests extends TestCase {
 		recognizer.addFormula(rule1);
 		assertEquals(1, recognizer.findAllMatches(rule1).size());
 		assertEquals(1, recognizer.findAllMatches(formula2).size());
-		InstanceRecognizer.Match match = recognizer.findFirstMatch(formula2);
+		Match match = recognizer.findFirstMatch(formula2);
 		assertNotNull(match.substitutions);
 		assertEquals(2, match.substitutions.size());
 

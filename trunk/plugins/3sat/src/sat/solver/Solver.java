@@ -14,6 +14,7 @@ import sat.Constant;
 import sat.Formula;
 import sat.Implication;
 import sat.InstanceRecognizer;
+import sat.Match;
 import sat.Negation;
 import sat.PropositionalSystem;
 import sat.Variable;
@@ -179,7 +180,7 @@ public class Solver {
 			return cached;
 		
 		Formula reducedFormula= formula;
-		InstanceRecognizer.Match match= _recognizer.findFirstMatch(formula);
+		Match match= _recognizer.findFirstMatch(formula);
 		if (match != null) {
 			Formula rule= _system.createFormula(match.formula);
 			Formula canonicalForm= _ruleDatabase.findCanonicalFormula(rule);

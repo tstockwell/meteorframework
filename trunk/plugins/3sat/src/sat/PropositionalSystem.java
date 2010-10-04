@@ -8,10 +8,14 @@ import java.util.Map;
 import java.util.Stack;
 import java.util.TreeMap;
 
+import sat.InstanceRecognizer.Node;
+
 
 /**
- * A propositional system manages the creation of propositional formulas and 
- * provides facilities for testing the validity of formulas.
+ * A propositional system manages the creation and storage of propositional 
+ * formulas.
+ * This implementation builds an internal trie structure for representing all 
+ * the given formulas that is able to store many formulas efficiently.      
  * This system represents propositional formulas using only...
  * 	...TRUE and KEY_FALSE.
  *  ...variables.
@@ -31,61 +35,23 @@ import java.util.TreeMap;
  */
 public class PropositionalSystem {
 	
-	/*
-	 * For efficiency we cache formulas and truth tables.
-	 */
-	final private Map<String, FormulaReference> __formulaCache= new TreeMap<String, FormulaReference>(); 
-	final private ReferenceQueue<Formula> __referenceQueue= new ReferenceQueue<Formula>();
-	private class FormulaReference extends SoftReference<Formula> {
-		String _string;
-		public FormulaReference(Formula referent) {
-			super(referent, __referenceQueue);
-			_string= referent.getFormulaText();
-		}
-	}
+	private final Formula _root= new Formula("", null);
 	
+	private final Formula _true= _root.addFormula(Symbol.True.getFormulaText());
+	private final Formula _false= new Formula(Symbol.False.getFormulaText(), _root);
 	
-	/**
-	 * @param variableCount  the number of variables in the system.
-	 * 		Variables are numbered from 1 to variableCount
-	 */
 	public PropositionalSystem() {
-		__formulaCache.put(Constant.TRUE.getFormulaText(), new FormulaReference(Constant.TRUE));
-		__formulaCache.put(Constant.FALSE.getFormulaText(), new FormulaReference(Constant.FALSE));
 	}
 	
 	/**
 	 * Create a formula from its textual representation in normal form
 	 */
 	public Formula createFormula(String path) {
-		Formula formula= null;
-		synchronized (__formulaCache) {
-			Reference<Formula> ref= __formulaCache.get(path);
-			if (ref == null || (formula= ref.get()) == null) {
-				formula= parse(path);
-				addFormula(formula);
-			}
-		}
-		
-		return formula;
-	}
-	private void addFormula(Formula formula) {
-		synchronized (__formulaCache) {
-			__formulaCache.put(formula.getFormulaText(), new FormulaReference(formula));
-
-			// clean up expired references
-			FormulaReference ref;
-			while ((ref= (FormulaReference)__referenceQueue.poll()) != null) {
-				synchronized (__formulaCache) {
-					__formulaCache.remove(ref._string);
-				}
-			}
-
-		}
+		return _root.addFormula(path);
 	}
 
-	public Negation createNegation(Formula right) {
-		return createNegation(right, Operator.Negation.getFormulaText()+right.getFormulaText());
+	public Formula createNegation(Formula right) {
+		return _root.addFormula(Symbol.Negation.getFormulaText()+right.getFormulaText());
 	}
 	private Negation createNegation(Formula right, String text) {
 		Negation formula= null;
@@ -198,8 +164,7 @@ public class PropositionalSystem {
 		if (stack.size() != 1) 
 			throw new RuntimeException("Invalid postcondition after evaluating formula wellformedness: count < 1");
 		
-		Formula formula2= stack.pop();
-		return formula2;
+		return stack.pop();
 	}
 
 	/**
