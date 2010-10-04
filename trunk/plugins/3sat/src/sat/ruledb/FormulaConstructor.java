@@ -192,7 +192,7 @@ public class FormulaConstructor implements ResultIterator<Formula> {
 		public Formula next() {
 			if (!hasNext())
 				throw new NoSuchElementException();
-			return _system.createImplication(_consequents.next(), _antecedent);
+			return _system.createImplication(_antecedent, _consequents.next());
 		}
 
 		public void remove() {

@@ -60,8 +60,8 @@ public class CNFFile {
 			Formula clause= system.createFormula(tokens[0]);
 			for (int v= 1; v < tokens.length-1; v++) 
 				clause= system.createImplication(
-						system.createFormula(tokens[v]), // consequent 
-						system.createNegation(clause));  // antecedent
+						system.createFormula(tokens[v]),
+						system.createNegation(clause));
 				
 			// add clause to formula
 			if (formula== null) {
@@ -70,8 +70,8 @@ public class CNFFile {
 			else
 				formula= system.createNegation(
 						system.createImplication(
-								system.createNegation(clause),  // consequent 
-								formula));						// antecedent
+								system.createNegation(clause),
+								formula));
 			
 			formula= solver.reduce(formula);
 		}

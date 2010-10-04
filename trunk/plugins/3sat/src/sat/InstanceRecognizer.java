@@ -43,8 +43,8 @@ public class InstanceRecognizer extends PropositionalSystem {
 		return formula;
 	}
 	@Override
-	public Formula createImplication(Formula consequent, Formula antecedent) {
-		Formula formula= super.createImplication(consequent, antecedent);
+	public Formula createImplication(Formula antecedent, Formula consequent) {
+		Formula formula= super.createImplication(antecedent, consequent);
 		_formulas.add(formula);
 		return formula;
 	}

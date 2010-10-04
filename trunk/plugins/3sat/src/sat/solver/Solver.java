@@ -8,13 +8,11 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.TreeMap;
 
 import sat.Formula;
 import sat.InstanceRecognizer;
 import sat.Match;
 import sat.PropositionalSystem;
-import sat.Symbol;
 import sat.ruledb.RuleDatabase;
 import sat.ruledb.TruthTables;
 import sat.utils.ArgUtils;
@@ -114,24 +112,23 @@ public class Solver {
 			//
 			// reduce subformulas before reducing this formula
 			//
-			String formulaText= formula.getFormulaText();
 			if (formula.isNegation()) { 
-				Formula negated= formula.getAntecedent();
+				Formula negated= _system.getAntecedent(formula);
 				Formula n= reduce(negated);
 				if (negated != n)
 					formula= _system.createNegation(n);
 			}
 			else if (formula.isImplication()) {
-				Formula antecent= formula.getAntecedent();
-				Formula consequent= formula.getConsequent();
+				Formula antecent= _system.getAntecedent(formula);
+				Formula consequent= _system.getConsequent(formula);
 				Formula a= reduce(antecent);
 				if (a != antecent) {
-					formula= _system.createImplication(consequent, a);
+					formula= _system.createImplication(a, consequent);
 				}
 				else {
 					Formula c= reduce(consequent);
 					if (c != consequent)
-						formula= _system.createImplication(c, antecent);
+						formula= _system.createImplication(antecent, c);
 				}
 			}
 			

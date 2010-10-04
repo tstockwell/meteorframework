@@ -2,7 +2,6 @@ package sat.ruledb;
 
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.SoftReference;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -27,7 +26,7 @@ public class TruthTables {
 		__zeropad= new String(pad);
 	}
 	
-	private final Map<Formula, Boolean>[] __valuations= new Map[MAX_TRUTH_VALUES];
+	private final Map<String, Boolean>[] __valuations= new Map[MAX_TRUTH_VALUES];
 	private void init_valuations() {
 		for (int i= 0; i < MAX_TRUTH_VALUES; i++) {
 			String v= Integer.toString(i, 2);
@@ -35,10 +34,10 @@ public class TruthTables {
 			if (0 < l) 
 				v= __zeropad.substring(0, l) + v;
 			
-			Map<Formula, Boolean> valuation= new HashMap<Formula, Boolean>();
+			Map<String, Boolean> valuation= new TreeMap<String, Boolean>();
 			for (int j= 1; j <= RuleDatabase.VARIABLE_COUNT; j++) {
 				valuation.put(
-						_system.createVariable(j), 
+						_system.createVariable(j).getSymbol(), 
 						v.charAt(v.length()-j) == '0' ? Boolean.FALSE : Boolean.TRUE);
 			}
 			__valuations[i]= valuation;
@@ -88,7 +87,7 @@ public class TruthTables {
 	
 	
 	public static interface Builder {
-		public boolean evaluate(Map<Formula, Boolean> valuation);
+		public boolean evaluate(Map<String, Boolean> valuation);
 	}
 	
 	public TruthTable create(Builder builder) {
@@ -112,7 +111,7 @@ public class TruthTables {
 			if (truthTable == null) {
 				__formulas.put(path, new FormulaReference(formula));
 				truthTable= create(new TruthTables.Builder() {
-					public boolean evaluate(Map<Formula, Boolean> valuation) {
+					public boolean evaluate(Map<String, Boolean> valuation) {
 						return formula.evaluate(valuation);
 					}
 				});
