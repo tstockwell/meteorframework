@@ -96,7 +96,7 @@ public class Formula implements Comparable<Formula> {
 	 */
 	public synchronized String getFormulaText() {
 		String text= null;
-		if (_formulaText != null && (text= _formulaText.get()) == null) {
+		if (_formulaText == null || (text= _formulaText.get()) == null) {
 			text= _symbol;
 			Formula parent= _parent;
 			while (parent != null) {
@@ -195,16 +195,16 @@ public class Formula implements Comparable<Formula> {
 	 * 
 	 * @return true if the given valuation satisfies this formula, else false.
 	 */
-	public boolean evaluate(Map<Formula, Boolean> valuation) {
+	public boolean evaluate(Map<String, Boolean> valuation) {
 		Stack<Boolean> stack= new Stack<Boolean>();
 		for (Formula formula= this; formula != null; formula= formula._parent) {
 			if (Symbol.isImplication(formula._symbol)) {
-				Boolean consequent= stack.pop();
 				Boolean antecendent= stack.pop();
+				Boolean consequent= stack.pop();
 				stack.push((antecendent && !consequent) ? Boolean.FALSE : Boolean.TRUE);
 			}
 			else if (Symbol.isVariable(formula._symbol)) {
-				stack.push(valuation.get(this));
+				stack.push(valuation.get(formula._symbol));
 			}
 			else if (Symbol.isNegation(formula._symbol)) {
 				Boolean v= stack.pop();
@@ -255,20 +255,5 @@ public class Formula implements Comparable<Formula> {
 	public boolean isImplication() {
 		return Symbol.isImplication(getFormulaText());
 	}
-
-	public Formula getAntecedent() {
-		Formula formula= null;
-		if (_antecedent != null && (formula= _antecedent.get()) == null) {
-			text= _symbol;
-			Formula parent= _parent;
-			while (parent != null) {
-				text= parent._symbol+text;
-				parent= parent._parent;
-			}
-			_formulaText= new SoftReference<String>(text);
-		}
-		return formula;
-	}
-
 
 }

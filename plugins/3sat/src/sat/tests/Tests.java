@@ -21,13 +21,13 @@ import sat.solver.Solver;
 public class Tests extends TestCase {
 	
 	public void testPrettyPrinter() {
-		assertEquals("*^2^1", PrettyFormula.getFormulaText("(^1->^2)"));
-		assertEquals("*-^2^1", PrettyFormula.getFormulaText("(^1->~^2)"));
-		assertEquals("*-^2^1", PrettyFormula.getFormulaText("(^1 -> ~^2)"));
-		assertEquals("*T^1", PrettyFormula.getFormulaText("(^1 -> T)"));
-		assertEquals("**-^2^1^1", PrettyFormula.getFormulaText("(^1 -> (^1 -> ~^2))"));
+		assertEquals("*^1^2", PrettyFormula.getFormulaText("(^1->^2)"));
+		assertEquals("*^1-^2", PrettyFormula.getFormulaText("(^1->~^2)"));
+		assertEquals("*^1-^2", PrettyFormula.getFormulaText("(^1 -> ~^2)"));
+		assertEquals("*^1T", PrettyFormula.getFormulaText("(^1 -> T)"));
+		assertEquals("*^1*^1-^2", PrettyFormula.getFormulaText("(^1 -> (^1 -> ~^2))"));
 		
-		assertEquals("(^1->(^1->~^2))", PrettyFormula.getPrettyText("**-^2^1^1"));
+		assertEquals("(^1->(^1->~^2))", PrettyFormula.getPrettyText("*^1*^1-^2"));
 	}
 
 	public void testFormulaConstruction() {
@@ -61,16 +61,15 @@ public class Tests extends TestCase {
 		PropositionalSystem system = new PropositionalSystem();
 		Formula one = system.createVariable(1);
 		Formula two = system.createVariable(2);
-		Formula formula1 = system.createImplication(two, one);
+		Formula formula1 = system.createImplication(one, two);
 		Formula formula2 = system.createNegation(formula1);
 		for (int a = 0; a <= 1; a++) {
 			for (int b = 0; b <= 1; b++) {
-				Map<Formula, Boolean> valuation = new HashMap<Formula, Boolean>();
-				valuation.put(one, (a == 1 ? Boolean.TRUE : Boolean.FALSE));
-				valuation.put(two, (b == 1 ? Boolean.TRUE : Boolean.FALSE));
+				Map<String, Boolean> valuation = new HashMap<String, Boolean>();
+				valuation.put(one.getSymbol(), (a == 1 ? Boolean.TRUE : Boolean.FALSE));
+				valuation.put(two.getSymbol(), (b == 1 ? Boolean.TRUE : Boolean.FALSE));
 				boolean value1 = formula1.evaluate(valuation);
-				assertEquals("formula evaluation failed", a != 1 || b != 0,
-						value1);
+				assertEquals("formula evaluation failed", a != 1 || b != 0, value1);
 				boolean value2 = formula2.evaluate(valuation);
 				assertEquals("formula evaluation failed", !value1, value2);
 			}

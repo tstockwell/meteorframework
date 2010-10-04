@@ -18,7 +18,7 @@ public class PrettyFormula {
 			String antecedent= getFormulaText(prettyText.substring(1));
 			int o= prettyText.indexOf("->", 1+antecedent.length());
 			String consequent= getFormulaText(prettyText.substring(o+2));
-			return Operator.Implication.getFormulaText()+consequent+antecedent;
+			return Operator.Implication.getFormulaText()+antecedent+consequent;
 		}
 		if (prettyText.startsWith("~")) {
 			String antecedent= getFormulaText(prettyText.substring(1));
@@ -45,15 +45,15 @@ public class PrettyFormula {
 		Stack<String> stack= new Stack<String>();
 		for (; formula != null; formula= formula._parent) {
 			if (Symbol.isImplication(formula._symbol)) {
-				String consequent= stack.pop();
 				String antecendent= stack.pop();
+				String consequent= stack.pop();
 				stack.push("("+antecendent+"->"+consequent+")");
 			}
 			else if (Symbol.isVariable(formula._symbol)) {
 				stack.push(formula._symbol);
 			}
 			else if (Symbol.isNegation(formula._symbol)) {
-				stack.push("-"+stack.pop());
+				stack.push("~"+stack.pop());
 			}
 			else if (Symbol.isTrue(formula._symbol)) {
 				stack.push("T");
