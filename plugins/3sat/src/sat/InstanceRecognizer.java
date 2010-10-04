@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 /**
  * A utility for recognizing substitution instances of a set of formulas.
@@ -26,12 +25,6 @@ import java.util.NoSuchElementException;
  *
  */
 public class InstanceRecognizer {
-	
-	static final String SYMBOL_TRUE= Constant.TRUE.getFormulaText(); 
-	static final String SYMBOL_FALSE= Constant.FALSE.getFormulaText(); 
-	static final String SYMBOL_NEGATION= Operator.Negation.getFormulaText(); 
-	static final String SYMBOL_IMPLICATION= Operator.Implication.getFormulaText(); 
-	static final String SYMBOL_VARIABLE= "^"; 
 	
 	
 	private final Node _root= new Node("", null);
@@ -75,7 +68,7 @@ public class InstanceRecognizer {
 	public List<Match> findAllMatches(Formula formula) {
 		Map<String, String> substitions= new HashMap<String, String>();
 		Iterator<Match> i= _root.findMatches(formula.getFormulaText(), substitions);
-		ArrayList<Match> all= new ArrayList<InstanceRecognizer.Match>();
+		ArrayList<Match> all= new ArrayList<Match>();
 		while (i.hasNext())
 			all.add(i.next());
 		return all;
@@ -89,7 +82,7 @@ public class InstanceRecognizer {
 	 * A node in the internal trie structure that is associated with a symbol 
 	 * in a formula
 	 */
-	class Node {
+	static class Node {
 		String _symbol; // the symbol from the associated formula associated with this node
 		Node _parent;
 		/**
@@ -153,7 +146,7 @@ public class InstanceRecognizer {
 			// if this node is variable then get the substitution associated 
 			// with the variable.
 			// If there is no substitution then create one 
-			if (_symbol.startsWith(SYMBOL_VARIABLE)) {
+			if (Symbol.isVariable(_symbol)) {
 				match= substitions.get(_symbol);
 				if (match == null) {
 					substitions= new HashMap<String, String>(substitions);
@@ -168,90 +161,29 @@ public class InstanceRecognizer {
 			// if the formula doesn't start with the symbol associated with 
 			// this node then the formula is not a match
 			if (!formulaText.startsWith(match))
-				return EMPTY_MATCHES;
+				return Match.EMPTY_MATCHES;
 			
 			// if this node represents a variable, say 25, then make sure the 
 			// formula doesn't start with a variable that matches but is longer, like 255.    
-			if (match.startsWith(SYMBOL_VARIABLE) && match_length < formula_length && Character.isDigit(formulaText.charAt(match_length)))
-				return EMPTY_MATCHES;
+			if (Symbol.isVariable(match) && match_length < formula_length && Character.isDigit(formulaText.charAt(match_length)))
+				return Match.EMPTY_MATCHES;
 			
 			
 			if (_children == null) {
 				
 				// this node is a leaf but there is still formula left, so not a match
 				if (match_length < formula_length)
-					return EMPTY_MATCHES;
+					return Match.EMPTY_MATCHES;
 				
 				return new SingleMatch(new Match(getFormulaText(), substitions));
 			}
 			
 			// this node is not a leaf but were out of formula, so not a match
 			if (formula_length <= match_length)
-				return EMPTY_MATCHES;
+				return Match.EMPTY_MATCHES;
 			
 			return new CompositeMatch(_children.values().iterator(), formulaText.substring(match_length), substitions);
 		}
-	}
-
-
-	
-	public static class Match {
-		public String formula;
-		public Map<String, String> substitutions;
-		Match (String formula, Map<String, String> substitutions) {
-			this.formula= formula;
-			this.substitutions= substitutions;
-		}
-	}
-	static final Iterator<Match> EMPTY_MATCHES= new Iterator<Match>() {
-		public void remove() { throw new UnsupportedOperationException(); }
-		public Match next() { throw new NoSuchElementException(); }
-		public boolean hasNext() { return false; }
-	}; 
-	static class SingleMatch implements Iterator<Match> {
-		Match _formula;
-		public SingleMatch(Match formula) {
-			_formula= formula;
-		}
-		public void remove() { throw new UnsupportedOperationException(); }
-		public Match next() { 
-			if (_formula == null)
-				throw new NoSuchElementException();
-			Match f= _formula;
-			_formula= null;
-			return f;
-		}
-		public boolean hasNext() { return _formula != null; }
-	};
-	static class CompositeMatch implements Iterator<Match> {
-		Iterator<Match> _matches;
-		Iterator<Node> _children;
-		String _formulaText;
-		Map<String, String> _substitutions;
-		public CompositeMatch(Iterator<Node> children, String formulaText, Map<String, String> substitutions) {
-			_children= children;
-			_formulaText= formulaText;
-			_substitutions= substitutions;
-		}
-		public Match next() {
-			if (_matches == null)
-				throw new NoSuchElementException();
-			return _matches.next();
-		}
-		public boolean hasNext() {
-			while(true) {
-				if (_matches == null) {
-					if (!_children.hasNext())
-						return false;
-					_matches= _children.next().findMatches(_formulaText, _substitutions);
-
-				}
-				if (_matches.hasNext())
-					return true;
-				_matches= null;
-			}
-		}
-		public void remove() { throw new UnsupportedOperationException(); }
 	}
 	
 }
