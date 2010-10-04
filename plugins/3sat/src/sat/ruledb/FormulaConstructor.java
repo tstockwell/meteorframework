@@ -151,48 +151,48 @@ public class FormulaConstructor implements ResultIterator<Formula> {
 	class IfThenFormulaConstructor implements ResultIterator<Formula> {
 
 		ResultIterator<Formula> _rightIterator;
-		ResultIterator<Formula> _leftIterator;
-		Formula _rightFormula= null;
+		ResultIterator<Formula> _consequents;
+		Formula _antecedent= null;
 		IfThenFormulaConstructor(int lengthOfRightSideFormulas) {
 			_rightIterator= _database.findCanonicalFormulasByLength(lengthOfRightSideFormulas);
-			_leftIterator= _database.findCanonicalFormulasByLength(_formulaLength - lengthOfRightSideFormulas - 1);
-			if (!_rightIterator.hasNext() || !_leftIterator.hasNext()) {
+			_consequents= _database.findCanonicalFormulasByLength(_formulaLength - lengthOfRightSideFormulas - 1);
+			if (!_rightIterator.hasNext() || !_consequents.hasNext()) {
 				close();
 			}
 			else
-				_rightFormula= _rightIterator.next();
+				_antecedent= _rightIterator.next();
 		}
 		
 		@Override
 		public void close() {
 			if (_rightIterator != null)
 				_rightIterator.close();
-			if (_leftIterator != null)
-				_leftIterator.close();
+			if (_consequents != null)
+				_consequents.close();
 			_rightIterator= null;
-			_leftIterator= null;
-			_rightFormula= null;
+			_consequents= null;
+			_antecedent= null;
 		}
 
 		public boolean hasNext() {
-			if (_rightFormula == null)
+			if (_antecedent == null)
 				return false;
-			if (_leftIterator.hasNext())
+			if (_consequents.hasNext())
 				return true;
 			if (!_rightIterator.hasNext()) {
 				close();
 				return false;
 			}
-			_rightFormula= _rightIterator.next();
-			_leftIterator.close();
-			_leftIterator= _database.findCanonicalFormulasByLength(_formulaLength - _rightFormula.length() - 1);
+			_antecedent= _rightIterator.next();
+			_consequents.close();
+			_consequents= _database.findCanonicalFormulasByLength(_formulaLength - _antecedent.length() - 1);
 			return true;
 		}
 
 		public Formula next() {
 			if (!hasNext())
 				throw new NoSuchElementException();
-			return _system.createImplication(_rightFormula, _leftIterator.next());
+			return _system.createImplication(_consequents.next(), _antecedent);
 		}
 
 		public void remove() {

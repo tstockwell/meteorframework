@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import sat.Constant;
 import sat.Formula;
 import sat.PropositionalSystem;
 
@@ -30,8 +29,8 @@ public class FormulaGenerator {
 		_database= database;
 		_system= database.getSystem();
 		
-		_startingFormulas.add(Constant.FALSE);
-		_startingFormulas.add(Constant.TRUE);
+		_startingFormulas.add(_system.getFalse());
+		_startingFormulas.add(_system.getTrue());
 		for (int i= 1; i <= RuleDatabase.VARIABLE_COUNT; i++)
 			_startingFormulas.add(_system.createVariable(i));
 	}

@@ -1,46 +1,52 @@
 package sat;
 
-import java.lang.ref.Reference;
-import java.lang.ref.ReferenceQueue;
-import java.lang.ref.SoftReference;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Stack;
-import java.util.TreeMap;
-
-import sat.InstanceRecognizer.Node;
 
 
 /**
  * A propositional system manages the creation and storage of propositional 
  * formulas.
- * This implementation builds an internal trie structure for representing all 
- * the given formulas that is able to store many formulas efficiently.      
- * This system represents propositional formulas using only...
- * 	...TRUE and KEY_FALSE.
- *  ...variables.
- *  ...a negation operator 
- *  ...an implication operator (aka the if-then operator, most often written as ->).
- *  
- * This system supports a textual form for representing formulas.
- * The normal form uses Polish notation and...
- * 	...the symbols 'T' and 'F' for KEY_TRUE and KEY_FALSE.
- *  ...the symbol '-' for the negation operator. 
- *  ...the symbol '*' for the implication operator. 
- *  ...the symbol '^' followed by a number for representing variables.
- *  
- *  Use the static PropositionalSystem.create* methods to create instances of formulas.
+ * 
+ * This implementation builds an internal 
+ * <a href="http://en.wikipedia.org/wiki/Trie">trie</a> structure for 
+ * representing all the given formulas.
+ * A trie is used because it is able to store many formulas efficiently and 
+ * provides a fast way to search formulas for substitution instances. 
+ * @see InstanceRecognizer
+ * 
+ * A Formula is really a leaf node in the trie.
+ * 
+ * The trie is also designed to be space efficient by allowing 
+ * Formula that are no longer used to be garbage collected and the 
+ * associated references in the trie to be removed when formulas are
+ * collected.  
+ * The nodes of the trie have strong references to their parents and soft 
+ * references to their children.
+ * If some other object does not hold a strong reference to a leaf formula
+ * then the Formula will eventually be garbage collected. 
+ * When a Formula is finalized it will remove itself from the trie, 
+ * thus making it possible for parent nodes to also be garbage collected.   
+ *       
+ *  Use the PropositionalSystem.create* methods to create formulas.
  *  
  * @author 	Ted Stockwell <emorning@yahoo.com>
  */
 public class PropositionalSystem {
 	
-	private final Formula _root= new Formula("", null);
-	
-	private final Formula _true= _root.addFormula(Symbol.True.getFormulaText());
-	private final Formula _false= new Formula(Symbol.False.getFormulaText(), _root);
+	final Formula _root= new Formula("", null);
+
+	final Formula _true= _root.addFormula(Symbol.True.getFormulaText());
+	final Formula _false= new Formula(Symbol.False.getFormulaText(), _root);
 	
 	public PropositionalSystem() {
+	}
+	
+	public Formula getTrue() {
+		return _true;
+	}
+	
+	public Formula getFalse() {
+		return _false;
 	}
 	
 	/**
@@ -53,49 +59,14 @@ public class PropositionalSystem {
 	public Formula createNegation(Formula right) {
 		return _root.addFormula(Symbol.Negation.getFormulaText()+right.getFormulaText());
 	}
-	private Negation createNegation(Formula right, String text) {
-		Negation formula= null;
-		synchronized (__formulaCache) {
-			FormulaReference ref= __formulaCache.get(text);
-			if (ref == null || (formula= (Negation)ref.get()) == null) {
-				formula= new Negation(right, text);
-				addFormula(formula);
-			}
-		}
-		
-		return formula;
-	}
 
-	public Implication createImplication(Formula antecedent, Formula consequent) {
-		return createImplication(antecedent, consequent, Operator.Implication.getFormulaText()+antecedent.getFormulaText()+consequent.getFormulaText());
+	public Formula createImplication(Formula consequent, Formula antecedent) {
+		return _root.addFormula(Symbol.Implication.getFormulaText()+consequent.getFormulaText()+antecedent.getFormulaText());
 	}
-	private Implication createImplication(Formula antecedent, Formula consequent, String text) {
-		Implication formula= null;
-		synchronized (__formulaCache) {
-			FormulaReference ref= __formulaCache.get(text);
-			if (ref == null || (formula= (Implication)ref.get()) == null) {
-				formula= new Implication(antecedent, consequent, text);
-				addFormula(formula);
-			}
-		}
-		
-		return formula;
-	}
-	public Variable createVariable(int variable) {
+	public Formula createVariable(int variable) {
 		if (variable < 1)
 			throw new RuntimeException("Variable numbers must be greater than 0");
-		return createVariable("^"+Integer.toString(variable));
-	}
-	private Variable createVariable(String text) {
-		Variable formula= null;
-		synchronized (__formulaCache) {
-			FormulaReference ref= __formulaCache.get(text);
-			if (ref == null || (formula= (Variable)ref.get()) == null) {
-				formula= new Variable(text);
-				addFormula(formula);
-			}
-		}
-		return formula;
+		return _root.addFormula(Symbol.Variable.getFormulaText()+variable);
 	}
 	
 	/**
@@ -125,80 +96,29 @@ public class PropositionalSystem {
 		}
 		throw new RuntimeException("Not a valid formula:"+formulaText);
 	}
-	
-
-	private Formula parse(String formula) {
-		Stack<Formula> stack= new Stack<Formula>();
-		for (int i = formula.length(); 0 < i--;) {
-			char c = formula.charAt(i);
-			if (Operator.isNegation(c)) {
-				Formula f= stack.pop();
-				String text= formula.substring(i, i + f.length()+1);
-				stack.push(createNegation(f, text));
-			}
-			else if (Operator.isImplication(c)) {
-				Formula antecendent= stack.pop();
-				Formula consequent= stack.pop();
-				String text= formula.substring(i, i + antecendent.length()+consequent.length()+1);
-				stack.push(createImplication(antecendent, consequent, text));
-			}
-			else if (c == 'T') {
-				stack.push(Constant.TRUE);
-			}
-			else if (c == 'F') {
-				stack.push(Constant.FALSE);
-			}
-			else if (Character.isDigit(c)) {
-				int end= i+1;
-				while (0 < i && Character.isDigit(formula.charAt(i-1))) 
-					i--;
-				if (i <= 0 || formula.charAt(i-1) != '^')  
-					throw new RuntimeException("Expected a '^' at position "+((0 < i) ? (i-1) : 0));
-				String text= formula.substring(--i, end);
-				stack.push(createVariable(text));
-			}
-			else 
-				throw new RuntimeException("Unknown symbol:"+c);
-		}
-		
-		if (stack.size() != 1) 
-			throw new RuntimeException("Invalid postcondition after evaluating formula wellformedness: count < 1");
-		
-		return stack.pop();
-	}
 
 	/**
 	 * Creates a new formula by making the given substitutions for the 
 	 * variables in the given formula.  
 	 */
-	public Formula createFormula(Formula templateFormula, HashMap<Variable, Formula> substitutions) {
+	public Formula createInstance(Formula templateFormula, HashMap<Formula, Formula> substitutions) {
 		
-		if (templateFormula instanceof Constant) 
-			return templateFormula;
-		
-		if (templateFormula instanceof Variable) {
-			Formula f= substitutions.get(templateFormula);
-			if (f != null)
-				return f;
-			return templateFormula;
+		String instanceText= "";
+		Formula formula= templateFormula;
+		while (formula != null) {
+			if (Symbol.isVariable(formula._symbol)) {
+				Formula substitute= substitutions.get(formula);
+				if (substitute != null) {
+					instanceText= substitute+instanceText;
+				}
+				else
+					instanceText= formula._symbol+instanceText;
+			}
+			else
+				instanceText= formula._symbol+instanceText;
+			formula= formula._parent;
 		}
-		
-		if (templateFormula instanceof Negation) {
-			Formula child= ((Negation)templateFormula).getChild();
-			Formula f= createFormula(child, substitutions);
-			if (f == child)
-				return templateFormula;
-			return createNegation(f);
-		}
-		
-		Implication implication= (Implication)templateFormula;
-		Formula ant= implication.getAntecedent();
-		Formula con= implication.getConsequent();
-		Formula a= createFormula(ant, substitutions);
-		Formula c= createFormula(con, substitutions);
-		if (a != ant || c != con)
-			return createImplication(a, c);
-		return templateFormula;
+		return _root.addFormula(instanceText);
 	}
 
 }
