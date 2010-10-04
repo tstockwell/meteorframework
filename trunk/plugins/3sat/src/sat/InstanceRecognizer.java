@@ -1,8 +1,8 @@
 package sat;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -24,23 +24,43 @@ import java.util.Map;
  * @author Ted Stockwell
  *
  */
-public class InstanceRecognizer {
+public class InstanceRecognizer extends PropositionalSystem {
 	
 	
-	private final Node _root= new Node("", null);
-	public InstanceRecognizer() { 
+	HashSet<Formula> _formulas= new HashSet<Formula>();
+	
+	
+	@Override
+	public Formula createFormula(String path) {
+		Formula formula= super.createFormula(path);
+		_formulas.add(formula);
+		return formula;
 	}
-	public InstanceRecognizer(Collection<Formula> formulas) {
-		for (Formula formula: formulas)
-			addFormula(formula);
+	@Override
+	public Formula createNegation(Formula right) {
+		Formula formula= super.createNegation(right);
+		_formulas.add(formula);
+		return formula;
 	}
-	public InstanceRecognizer(Formula formula) {
-		addFormula(formula);
+	@Override
+	public Formula createImplication(Formula consequent, Formula antecedent) {
+		Formula formula= super.createImplication(consequent, antecedent);
+		_formulas.add(formula);
+		return formula;
+	}
+	@Override
+	public Formula createVariable(int variable) {
+		Formula formula= super.createVariable(variable);
+		_formulas.add(formula);
+		return formula;
+	}
+	@Override
+	public Formula createInstance(Formula templateFormula, HashMap<Formula, Formula> substitutions) {
+		Formula formula= super.createInstance(templateFormula, substitutions);
+		_formulas.add(formula);
+		return formula;
 	}
 	
-	public void addFormula(Formula formula) {
-		_root.addFormula(formula.getFormulaText());
-	}
 	
 	
 	/**
@@ -73,117 +93,8 @@ public class InstanceRecognizer {
 			all.add(i.next());
 		return all;
 	}
-	
-	
-	
-	
-
-	/**
-	 * A node in the internal trie structure that is associated with a symbol 
-	 * in a formula
-	 */
-	static class Node {
-		String _symbol; // the symbol from the associated formula associated with this node
-		Node _parent;
-		/**
-		 * Stores nodes for symbols after the symbol represented by this node.
-		 * If this node is the last node in a formula then this container will be null. 
-		 * Uses KEY_* for implication, negation, and constants.
-		 * Uses variables numbers for everything else. 
-		 */
-		Map<String, Node> _children;
-		
-		Node(String symbol, Node parent) {
-			_symbol= symbol;
-			_parent= parent;
-		}
-		
-		String getSymbol() { return _symbol; }
-		
-		String getFormulaText() {
-			String text= _symbol;
-			Node parent= _parent;
-			while (parent != null) {
-				text= parent._symbol+text;
-				parent= parent._parent;
-			}
-			return text;
-		}
-		
-		public void addFormula(String formulaText) {
-			if (_children == null)
-				_children= new HashMap<String, Node>();
-			String symbol= formulaText.substring(0, 1);
-			if (symbol.equals("^")) {
-				int end= 1;
-				for (int i= 1; i < formulaText.length(); i++) {
-					if (Character.isDigit(formulaText.charAt(i))) {
-						end++;
-					}
-					else
-						break;
-				}
-				symbol= formulaText.substring(0, end);
-			}
-			
-			Node n= getChildNode(symbol);
-			if (symbol.length() < formulaText.length())
-				n.addFormula(formulaText.substring(symbol.length()));
-		}
-		
-		Node getChildNode(String symbol) {
-			Node n= _children.get(symbol);
-			if (n == null) {
-				n= new Node(symbol, this);
-				_children.put(symbol, n);
-			}
-			return n;
-		}
-
-		public Iterator<Match> findMatches(String formulaText, Map<String, String> substitions) {
-			String match= _symbol;
-			
-			// if this node is variable then get the substitution associated 
-			// with the variable.
-			// If there is no substitution then create one 
-			if (Symbol.isVariable(_symbol)) {
-				match= substitions.get(_symbol);
-				if (match == null) {
-					substitions= new HashMap<String, String>(substitions);
-					match= PropositionalSystem.nextFormula(formulaText);
-					substitions.put(_symbol, match);
-				}
-			}
-			
-			int match_length= match.length();
-			int formula_length= formulaText.length();
-			
-			// if the formula doesn't start with the symbol associated with 
-			// this node then the formula is not a match
-			if (!formulaText.startsWith(match))
-				return Match.EMPTY_MATCHES;
-			
-			// if this node represents a variable, say 25, then make sure the 
-			// formula doesn't start with a variable that matches but is longer, like 255.    
-			if (Symbol.isVariable(match) && match_length < formula_length && Character.isDigit(formulaText.charAt(match_length)))
-				return Match.EMPTY_MATCHES;
-			
-			
-			if (_children == null) {
-				
-				// this node is a leaf but there is still formula left, so not a match
-				if (match_length < formula_length)
-					return Match.EMPTY_MATCHES;
-				
-				return new SingleMatch(new Match(getFormulaText(), substitions));
-			}
-			
-			// this node is not a leaf but were out of formula, so not a match
-			if (formula_length <= match_length)
-				return Match.EMPTY_MATCHES;
-			
-			return new CompositeMatch(_children.values().iterator(), formulaText.substring(match_length), substitions);
-		}
+	public void addFormula(Formula formula) {
+		createFormula(formula.getFormulaText());
 	}
 	
 }

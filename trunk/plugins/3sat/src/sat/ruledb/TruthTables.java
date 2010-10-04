@@ -8,7 +8,6 @@ import java.util.TreeMap;
 
 import sat.Formula;
 import sat.PropositionalSystem;
-import sat.Variable;
 
 
 /**
@@ -28,7 +27,7 @@ public class TruthTables {
 		__zeropad= new String(pad);
 	}
 	
-	private final Map<Variable, Boolean>[] __valuations= new Map[MAX_TRUTH_VALUES];
+	private final Map<Formula, Boolean>[] __valuations= new Map[MAX_TRUTH_VALUES];
 	private void init_valuations() {
 		for (int i= 0; i < MAX_TRUTH_VALUES; i++) {
 			String v= Integer.toString(i, 2);
@@ -36,7 +35,7 @@ public class TruthTables {
 			if (0 < l) 
 				v= __zeropad.substring(0, l) + v;
 			
-			Map<Variable, Boolean> valuation= new HashMap<Variable, Boolean>();
+			Map<Formula, Boolean> valuation= new HashMap<Formula, Boolean>();
 			for (int j= 1; j <= RuleDatabase.VARIABLE_COUNT; j++) {
 				valuation.put(
 						_system.createVariable(j), 
@@ -89,7 +88,7 @@ public class TruthTables {
 	
 	
 	public static interface Builder {
-		public boolean evaluate(Map<Variable, Boolean> valuation);
+		public boolean evaluate(Map<Formula, Boolean> valuation);
 	}
 	
 	public TruthTable create(Builder builder) {
@@ -113,7 +112,7 @@ public class TruthTables {
 			if (truthTable == null) {
 				__formulas.put(path, new FormulaReference(formula));
 				truthTable= create(new TruthTables.Builder() {
-					public boolean evaluate(Map<Variable, Boolean> valuation) {
+					public boolean evaluate(Map<Formula, Boolean> valuation) {
 						return formula.evaluate(valuation);
 					}
 				});

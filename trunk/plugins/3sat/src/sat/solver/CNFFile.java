@@ -60,15 +60,18 @@ public class CNFFile {
 			Formula clause= system.createFormula(tokens[0]);
 			for (int v= 1; v < tokens.length-1; v++) 
 				clause= system.createImplication(
-						system.createNegation(clause), 
-						system.createFormula(tokens[v]));
+						system.createFormula(tokens[v]), // consequent 
+						system.createNegation(clause));  // antecedent
 				
 			// add clause to formula
 			if (formula== null) {
 				formula= clause;
 			}
 			else
-				formula= system.createNegation(system.createImplication(formula, system.createNegation(clause)));
+				formula= system.createNegation(
+						system.createImplication(
+								system.createNegation(clause),  // consequent 
+								formula));						// antecedent
 			
 			formula= solver.reduce(formula);
 		}

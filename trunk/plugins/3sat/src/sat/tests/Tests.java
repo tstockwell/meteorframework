@@ -7,13 +7,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import junit.framework.TestCase;
-import sat.Constant;
 import sat.Formula;
-import sat.Implication;
 import sat.InstanceRecognizer;
 import sat.Match;
+import sat.PrettyFormula;
 import sat.PropositionalSystem;
-import sat.Variable;
 import sat.ruledb.RuleDatabase;
 import sat.ruledb.TruthTable;
 import sat.ruledb.TruthTables;
@@ -21,6 +19,16 @@ import sat.solver.CNFFile;
 import sat.solver.Solver;
 
 public class Tests extends TestCase {
+	
+	public void testPrettyPrinter() {
+		assertEquals("*^2^1", PrettyFormula.getFormulaText("(^1->^2)"));
+		assertEquals("*-^2^1", PrettyFormula.getFormulaText("(^1->~^2)"));
+		assertEquals("*-^2^1", PrettyFormula.getFormulaText("(^1 -> ~^2)"));
+		assertEquals("*T^1", PrettyFormula.getFormulaText("(^1 -> T)"));
+		assertEquals("**-^2^1^1", PrettyFormula.getFormulaText("(^1 -> (^1 -> ~^2))"));
+		
+		assertEquals("(^1->(^1->~^2))", PrettyFormula.getPrettyText("**-^2^1^1"));
+	}
 
 	public void testFormulaConstruction() {
 		PropositionalSystem system = new PropositionalSystem();
@@ -51,13 +59,13 @@ public class Tests extends TestCase {
 
 	public void testEvaluation() {
 		PropositionalSystem system = new PropositionalSystem();
-		Variable one = system.createVariable(1);
-		Variable two = system.createVariable(2);
-		Implication formula1 = system.createImplication(one, two);
+		Formula one = system.createVariable(1);
+		Formula two = system.createVariable(2);
+		Formula formula1 = system.createImplication(two, one);
 		Formula formula2 = system.createNegation(formula1);
 		for (int a = 0; a <= 1; a++) {
 			for (int b = 0; b <= 1; b++) {
-				Map<Variable, Boolean> valuation = new HashMap<Variable, Boolean>();
+				Map<Formula, Boolean> valuation = new HashMap<Formula, Boolean>();
 				valuation.put(one, (a == 1 ? Boolean.TRUE : Boolean.FALSE));
 				valuation.put(two, (b == 1 ? Boolean.TRUE : Boolean.FALSE));
 				boolean value1 = formula1.evaluate(valuation);
@@ -96,12 +104,12 @@ public class Tests extends TestCase {
 		String text = "***^1^2^3^4";
 		Formula formula1 = system.createFormula(text);
 
-		HashMap<Variable, Formula> substitutions = new HashMap<Variable, Formula>();
+		HashMap<Formula, Formula> substitutions = new HashMap<Formula, Formula>();
 		substitutions.put(system.createVariable(1), system.createVariable(5));
 		substitutions.put(system.createVariable(2), system.createVariable(6));
 		substitutions.put(system.createVariable(3), system.createVariable(7));
 		substitutions.put(system.createVariable(4), system.createVariable(8));
-		Formula instance = system.createFormula(formula1, substitutions);
+		Formula instance = system.createInstance(formula1, substitutions);
 
 		assertEquals("***^5^6^7^8", instance.getFormulaText());
 
@@ -157,14 +165,14 @@ public class Tests extends TestCase {
 		assertNotNull("Missing input file:"+homeFolder+"/cnf-example-1.txt", inputStream);
 		CNFFile file= CNFFile.readAndReduce(system, inputStream, solver);
 		Formula formula= file.getFormula();
-		assertEquals(truthTables.getTruthTable(formula), truthTables.getTruthTable(Constant.FALSE));
-		assertEquals(Constant.FALSE, formula);
+		assertEquals(truthTables.getTruthTable(formula), truthTables.getTruthTable(system.getFalse()));
+		assertEquals(system.getFalse(), formula);
 		inputStream.close();
 
 		inputStream= classLoader.getResourceAsStream(homeFolder+"/SAT_dat.k45.txt");
 		assertNotNull("Missing input file:"+homeFolder+"/SAT_dat.k45.txt", inputStream);
 		file= CNFFile.readAndReduce(system, inputStream, solver);
-		assertEquals(Constant.FALSE, file.getFormula());
+		assertEquals(system.getFalse(), file.getFormula());
 		inputStream.close();
 	}
 }

@@ -10,14 +10,11 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 
-import sat.Constant;
 import sat.Formula;
-import sat.Implication;
 import sat.InstanceRecognizer;
 import sat.Match;
-import sat.Negation;
 import sat.PropositionalSystem;
-import sat.Variable;
+import sat.Symbol;
 import sat.ruledb.RuleDatabase;
 import sat.ruledb.TruthTables;
 import sat.utils.ArgUtils;
@@ -48,7 +45,7 @@ public class Solver {
 		// produce output according to rules here:
 		// 	http://www.satcompetition.org/2004/format-solvers2004.html
 		int status;
-		if (Constant.FALSE.equals(reducedForm)) {
+		if (system.getFalse().equals(reducedForm)) {
 			System.out.println("s UNSATISFIABLE");
 			status= 20;
 		}
@@ -70,16 +67,19 @@ public class Solver {
 	 */
 	
 	/*
-	 * For efficiency we cache formulas and truth tables.
+	 * For efficiency we cache formula reductions.
 	 */
-	final Map<String, FormulaReference> _reductionCache= new TreeMap<String, FormulaReference>(); 
-	final Map<String, FormulaReference> _formulaCache= new TreeMap<String, FormulaReference>(); 
+	final Map<Integer, Formula> _reductionCache= new HashMap<Integer, Formula>(); 
 	final private ReferenceQueue<Formula> _referenceQueue= new ReferenceQueue<Formula>();
 	private class FormulaReference extends SoftReference<Formula> {
-		String _string;
+		int _hash;
 		public FormulaReference(Formula referent) {
 			super(referent, _referenceQueue);
-			_string= referent.getFormulaText();
+			_hash= referent.hashCode();
+		}
+		@Override
+		public int hashCode() {
+			return _hash;
 		}
 	}
 	
@@ -99,72 +99,46 @@ public class Solver {
 	
 
 	private static void printSatisfyingValuation(Formula reducedForm) {
-		// TODO Auto-generated method stub
+		throw new RuntimeException("Unfinished");
 		
 	}
 
 	public Formula reduce(Formula formula) {
+		
 		while (true) {
 			Formula cached= checkCache(formula);
 			if (cached != null)
 				return cached;
 			
+			
 			//
 			// reduce subformulas before reducing this formula
 			//
-			if (formula instanceof Negation) { 
-				Formula negated= ((Negation)formula).getChild();
+			String formulaText= formula.getFormulaText();
+			if (formula.isNegation()) { 
+				Formula negated= formula.getAntecedent();
 				Formula n= reduce(negated);
 				if (negated != n)
 					formula= _system.createNegation(n);
 			}
-			else if (formula instanceof Implication) {
-				Implication implication= (Implication)formula;
-				Formula antecent= implication.getAntecedent();
-				Formula consequent= implication.getConsequent();
+			else if (formula.isImplication()) {
+				Formula antecent= formula.getAntecedent();
+				Formula consequent= formula.getConsequent();
 				Formula a= reduce(antecent);
-				Formula c= reduce(consequent);
-				if (a != antecent || c != consequent)
-					formula= _system.createImplication(a, c);
+				if (a != antecent) {
+					formula= _system.createImplication(consequent, a);
+				}
+				else {
+					Formula c= reduce(consequent);
+					if (c != consequent)
+						formula= _system.createImplication(c, antecent);
+				}
 			}
-			
 			
 			Formula reduced= applyRules(formula);
 			if (reduced == formula)
 				return formula; // formula not reduced, no more to do
 			formula= reduced; continue; // formula reduced, go around again
-		}
-	}
-	
-	private synchronized Formula checkCache(Formula formula) {
-		try {
-			String key= formula.getFormulaText();
-			FormulaReference ref= _reductionCache.get(key);
-			if (ref != null) {
-				Formula f= ref.get();
-				if (f != null)
-					return f;
-				_reductionCache.remove(key);
-			}
-			return null;
-		}
-		finally {
-			cleanCache();
-		}
-	}
-	
-	private synchronized void addToCache(Formula formula, Formula reduction) {
-		String key= formula.getFormulaText();
-		_formulaCache.put(key, new FormulaReference(formula));
-		_reductionCache.put(key, new FormulaReference(reduction));
-		cleanCache();
-	}
-	private synchronized void cleanCache() {
-		// clean up expired references
-		FormulaReference ref;
-		while ((ref= (FormulaReference)_referenceQueue.poll()) != null) {
-			_formulaCache.remove(ref._string);
-			_reductionCache.remove(ref._string);
 		}
 	}
 
@@ -184,17 +158,39 @@ public class Solver {
 		if (match != null) {
 			Formula rule= _system.createFormula(match.formula);
 			Formula canonicalForm= _ruleDatabase.findCanonicalFormula(rule);
-			HashMap<Variable, Formula> substitutions= new HashMap<Variable, Formula>(match.substitutions.size());
+			HashMap<Formula, Formula> substitutions= new HashMap<Formula, Formula>(match.substitutions.size());
 			for (String v: match.substitutions.keySet()) {
-				Variable variable= (Variable)_system.createFormula(v);
+				Formula variable= _system.createFormula(v);
 				Formula substitution= _system.createFormula(match.substitutions.get(v));
 				substitutions.put(variable, substitution);
 			}
-			reducedFormula= _system.createFormula(canonicalForm, substitutions);
+			reducedFormula= _system.createInstance(canonicalForm, substitutions);
 		}
 		
 		addToCache(formula, reducedFormula);
 		
 		return reducedFormula;
+	}
+	
+	private synchronized Formula checkCache(Formula formula) {
+		try {
+			return _reductionCache.get(formula.hashCode());
+		}
+		finally {
+			cleanCache();
+		}
+	}
+	
+	private synchronized void addToCache(Formula formula, Formula reduction) {
+		new FormulaReference(formula);
+		_reductionCache.put(formula.hashCode(), reduction);
+		cleanCache();
+	}
+	private synchronized void cleanCache() {
+		// clean up expired references
+		FormulaReference ref;
+		while ((ref= (FormulaReference)_referenceQueue.poll()) != null) {
+			_reductionCache.remove(ref.hashCode());
+		}
 	}
 }
