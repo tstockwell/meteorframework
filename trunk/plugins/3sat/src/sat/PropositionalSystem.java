@@ -67,8 +67,7 @@ public class PropositionalSystem {
 
 	public Formula createVariable(int variable) {
 		if (variable < 1)
-			throw new RuntimeException(
-					"Variable numbers must be greater than 0");
+			throw new RuntimeException("Variable numbers must be greater than 0");
 		return _root.addFormula(Symbol.Variable.getFormulaText() + variable);
 	}
 
@@ -86,10 +85,8 @@ public class PropositionalSystem {
 		Formula formula = null;
 		if (parent._consequent == null || (formula = parent._consequent.get()) == null) {
 			String formulaText = parent.getFormulaText();
-			String antecedentText = PropositionalSystem.nextFormula(formulaText
-					.substring(1));
-			formula = _root.addFormula(formulaText.substring(antecedentText
-					.length() + 1));
+			String antecedentText = PropositionalSystem.nextFormula(formulaText.substring(1));
+			formula = _root.addFormula(formulaText.substring(antecedentText.length() + 1));
 			parent._consequent = new SoftReference<Formula>(formula);
 		}
 		return formula;

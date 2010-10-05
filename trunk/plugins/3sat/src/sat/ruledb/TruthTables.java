@@ -47,7 +47,10 @@ public class TruthTables {
 	
 	/*
 	 * All truth tables have an associated human-readable string.
-	 * Here we construct the human-readable strings for the tables   
+	 * Here we construct the human-readable strings for the tables
+	 * String are read from left to right, the leftmost character is the 
+	 * value when all variables are true, the rightmost variable is 
+	 * the value of the formula when all variables are false.    
 	 */
 	private final String[] _truthTableStrings= new String[MAX_TRUTH_TABLES];
 	private void init_truth_tables() {
@@ -92,8 +95,8 @@ public class TruthTables {
 	
 	public TruthTable create(Builder builder) {
 		char[] truthValues= new char[MAX_TRUTH_VALUES];
-		for (int i= 0; i < MAX_TRUTH_VALUES; i++) 
-			truthValues[i]= builder.evaluate(__valuations[i]) ? '1' : '0';
+		for (int i= MAX_TRUTH_VALUES; 0 < i--;) 
+			truthValues[MAX_TRUTH_VALUES-i-1]= builder.evaluate(__valuations[i]) ? '1' : '0';
 		return __tables.get(new String(truthValues));
 	}
 	public TruthTable create(String booleanString) {
