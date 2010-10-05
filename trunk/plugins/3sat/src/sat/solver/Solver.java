@@ -155,11 +155,11 @@ public class Solver {
 		if (match != null) {
 			Formula rule= _system.createFormula(match.formula);
 			Formula canonicalForm= _ruleDatabase.findCanonicalFormula(rule);
-			HashMap<Formula, Formula> substitutions= new HashMap<Formula, Formula>(match.substitutions.size());
+			HashMap<String, Formula> substitutions= new HashMap<String, Formula>(match.substitutions.size());
 			for (String v: match.substitutions.keySet()) {
 				Formula variable= _system.createFormula(v);
 				Formula substitution= _system.createFormula(match.substitutions.get(v));
-				substitutions.put(variable, substitution);
+				substitutions.put(variable.getSymbol(), substitution);
 			}
 			reducedFormula= _system.createInstance(canonicalForm, substitutions);
 		}
