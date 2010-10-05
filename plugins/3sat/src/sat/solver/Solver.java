@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.TreeMap;
 
 import sat.Formula;
 import sat.InstanceRecognizer;
@@ -67,17 +68,13 @@ public class Solver {
 	/*
 	 * For efficiency we cache formula reductions.
 	 */
-	final Map<Integer, Formula> _reductionCache= new HashMap<Integer, Formula>(); 
+	final Map<String, Formula> _reductionCache= new TreeMap<String, Formula>(); 
 	final private ReferenceQueue<Formula> _referenceQueue= new ReferenceQueue<Formula>();
 	private class FormulaReference extends SoftReference<Formula> {
-		int _hash;
+		String _text;
 		public FormulaReference(Formula referent) {
 			super(referent, _referenceQueue);
-			_hash= referent.hashCode();
-		}
-		@Override
-		public int hashCode() {
-			return _hash;
+			_text= referent.getFormulaText();
 		}
 	}
 	
@@ -166,7 +163,7 @@ public class Solver {
 	
 	private synchronized Formula checkCache(Formula formula) {
 		try {
-			return _reductionCache.get(formula.hashCode());
+			return _reductionCache.get(formula.getFormulaText());
 		}
 		finally {
 			cleanCache();
@@ -175,14 +172,14 @@ public class Solver {
 	
 	private synchronized void addToCache(Formula formula, Formula reduction) {
 		new FormulaReference(formula);
-		_reductionCache.put(formula.hashCode(), reduction);
+		_reductionCache.put(formula.getFormulaText(), reduction);
 		cleanCache();
 	}
 	private synchronized void cleanCache() {
 		// clean up expired references
 		FormulaReference ref;
 		while ((ref= (FormulaReference)_referenceQueue.poll()) != null) {
-			_reductionCache.remove(ref.hashCode());
+			_reductionCache.remove(ref._text);
 		}
 	}
 }
