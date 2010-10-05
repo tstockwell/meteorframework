@@ -41,7 +41,7 @@ public class CNFFile {
 		// read all clauses and append into one big formula
 		Formula formula= null;
 		for (int count= 0; count < cnfFile._clauseCount; count++) { 
-			System.out.println("processing clause "+count);
+			System.out.println("processing clause "+count+" of "+cnfFile._clauseCount);
 			if ((inputLine= reader.readLine()) == null) 
 					throw new RuntimeException("Premature end of file");
 			
