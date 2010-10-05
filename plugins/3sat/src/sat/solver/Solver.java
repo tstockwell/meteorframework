@@ -122,14 +122,9 @@ public class Solver {
 				Formula antecent= _system.getAntecedent(formula);
 				Formula consequent= _system.getConsequent(formula);
 				Formula a= reduce(antecent);
-				if (a != antecent) {
-					formula= _system.createImplication(a, consequent);
-				}
-				else {
-					Formula c= reduce(consequent);
-					if (c != consequent)
-						formula= _system.createImplication(antecent, c);
-				}
+				Formula c= reduce(consequent);
+				if (a != antecent || c != consequent) 
+					formula= _system.createImplication(a, c);
 			}
 			
 			Formula reduced= applyRules(formula);

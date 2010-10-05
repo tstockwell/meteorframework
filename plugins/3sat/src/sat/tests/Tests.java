@@ -77,25 +77,45 @@ public class Tests extends TestCase {
 	}
 
 	public void testTruthTables() {
+		/**
+		 * Truth table string are read from left to right.
+		 * The leftmost character is the value of the formula when all variables are true.
+		 * The rightmost variable is the value of the formula when all variables are false.    
+		 * The smallest variable numbers cycle through thier values faster than the larger variables.
+		 * For instance, the truth table for ^1 is 10101010, ^2 is 11001100, etc...   
+		 */
+		
 		PropositionalSystem system = new PropositionalSystem();
-		Formula formula = system.createFormula("-^1");
 		TruthTables tables = new TruthTables(system);
-		TruthTable truthTable = tables.getTruthTable(formula);
-		assertTrue(truthTable.toString().startsWith("1010"));
+		assertTrue(tables.getTruthTable(system.createFormula("^1")).toString().startsWith("1010"));
+		assertTrue(tables.getTruthTable(system.createFormula("^2")).toString().startsWith("1100"));
+		assertTrue(tables.getTruthTable(system.createFormula("-^1")).toString().startsWith("0101"));
 
-		formula = system.createFormula("*^1^2");
-		truthTable = tables.getTruthTable(formula);
-		assertTrue(truthTable.toString().startsWith("1011"));
+		Formula formula = system.createFormula("*^1^2");
+		TruthTable truthTable = tables.getTruthTable(formula);
+		assertTrue(truthTable.toString().startsWith("1101"));
 
 		formula = system.createFormula("-**^1-^2-^3");
 		truthTable = tables.getTruthTable(formula);
-		assertTrue(truthTable.toString().startsWith("00001110"));
+		assertTrue(truthTable.toString().startsWith("01110000"));
+		
+		// a or b
+		assertTrue(PrettyFormula.getTruthTable(tables, "(~^1->^2)").toString().startsWith("1110"));
+		
+		// a and b
+		assertTrue(PrettyFormula.getTruthTable(tables, "~(^1->~^2)").toString().startsWith("1000"));
 
 		// **^1^2-*^1^3 ==> -**^2-^3-^1
-
-		formula = system.createFormula("**^3^2-*^3^1");
-		truthTable = tables.getTruthTable(formula);
-		assertTrue(truthTable.toString().startsWith("00001110"));
+		
+		assertEquals(
+				PrettyFormula.getTruthTable(tables, "~(~(^3->~(^2->~~^1))->(^3->~(^2->~^1)))"),
+				PrettyFormula.getTruthTable(tables, "~(^3->^2)"));
+		assertEquals(
+				PrettyFormula.getTruthTable(tables, "~(~(^3->~(~^2->~^1))->~(^3->^2))"),
+				PrettyFormula.getTruthTable(tables, "~(^3->~^2)"));
+		assertEquals(
+				PrettyFormula.getTruthTable(tables, "~(~(^3->~(~^2->~~^1))->~(^3->~^2))"),
+				PrettyFormula.getTruthTable(tables, "~(^3->(^1->^2))"));
 	}
 
 	public void testSubstitutions() {

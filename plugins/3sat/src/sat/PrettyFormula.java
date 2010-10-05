@@ -2,6 +2,9 @@ package sat;
 
 import java.util.Stack;
 
+import sat.ruledb.TruthTable;
+import sat.ruledb.TruthTables;
+
 /**
  * A utility for converting 'pretty' formula text into this system's 
  * normal form, and vice versa.
@@ -70,5 +73,8 @@ public class PrettyFormula {
 		return stack.pop();
 	}
 
+	public static TruthTable getTruthTable(TruthTables tables, String prettyFormula) {
+		return tables.getTruthTable(tables.getSystem().createFormula(getFormulaText(prettyFormula)));
+	}
 
 }
