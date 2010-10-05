@@ -55,7 +55,7 @@ public class InstanceRecognizer extends PropositionalSystem {
 		return formula;
 	}
 	@Override
-	public Formula createInstance(Formula templateFormula, HashMap<Formula, Formula> substitutions) {
+	public Formula createInstance(Formula templateFormula, HashMap<String, Formula> substitutions) {
 		Formula formula= super.createInstance(templateFormula, substitutions);
 		_formulas.add(formula);
 		return formula;

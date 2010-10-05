@@ -60,7 +60,7 @@ public class PropositionalSystem {
 				+ right.getFormulaText());
 	}
 
-	public Formula createImplication(Formula consequent, Formula antecedent) {
+	public Formula createImplication(Formula antecedent, Formula consequent) {
 		return _root.addFormula(Symbol.Implication.getFormulaText()
 				+ antecedent.getFormulaText() + consequent.getFormulaText());
 	}
@@ -75,8 +75,7 @@ public class PropositionalSystem {
 	public Formula getAntecedent(Formula parent) {
 		Formula formula = null;
 		if (parent._antecedent == null || (formula = parent._antecedent.get()) == null) {
-			String formulaText = PropositionalSystem.nextFormula(parent
-					.getFormulaText().substring(1));
+			String formulaText = PropositionalSystem.nextFormula(parent.getFormulaText().substring(1));
 			formula = _root.addFormula(formulaText);
 			parent._antecedent = new SoftReference<Formula>(formula);
 		}
@@ -127,8 +126,7 @@ public class PropositionalSystem {
 			}
 				break;
 			default:
-				throw new RuntimeException("Invalid character '" + c
-						+ "' at position " + i + ":" + formulaText);
+				throw new RuntimeException("Invalid character '" + c + "' at position " + i + ":" + formulaText);
 			}
 			if (0 < count)
 				return formulaText.substring(0, i + 1);
@@ -140,16 +138,15 @@ public class PropositionalSystem {
 	 * Creates a new formula by making the given substitutions for the variables
 	 * in the given formula.
 	 */
-	public Formula createInstance(Formula templateFormula,
-			HashMap<Formula, Formula> substitutions) {
+	public Formula createInstance(Formula templateFormula, HashMap<String, Formula> substitutions) {
 
 		String instanceText = "";
 		Formula formula = templateFormula;
 		while (formula != null) {
 			if (Symbol.isVariable(formula._symbol)) {
-				Formula substitute = substitutions.get(formula);
+				Formula substitute = substitutions.get(formula._symbol);
 				if (substitute != null) {
-					instanceText = substitute + instanceText;
+					instanceText = substitute.getFormulaText() + instanceText;
 				} else
 					instanceText = formula._symbol + instanceText;
 			} else

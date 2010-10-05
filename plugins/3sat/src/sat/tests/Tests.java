@@ -103,11 +103,11 @@ public class Tests extends TestCase {
 		String text = "***^1^2^3^4";
 		Formula formula1 = system.createFormula(text);
 
-		HashMap<Formula, Formula> substitutions = new HashMap<Formula, Formula>();
-		substitutions.put(system.createVariable(1), system.createVariable(5));
-		substitutions.put(system.createVariable(2), system.createVariable(6));
-		substitutions.put(system.createVariable(3), system.createVariable(7));
-		substitutions.put(system.createVariable(4), system.createVariable(8));
+		HashMap<String, Formula> substitutions = new HashMap<String, Formula>();
+		substitutions.put(system.createVariable(1).getSymbol(), system.createVariable(5));
+		substitutions.put(system.createVariable(2).getSymbol(), system.createVariable(6));
+		substitutions.put(system.createVariable(3).getSymbol(), system.createVariable(7));
+		substitutions.put(system.createVariable(4).getSymbol(), system.createVariable(8));
 		Formula instance = system.createInstance(formula1, substitutions);
 
 		assertEquals("***^5^6^7^8", instance.getFormulaText());

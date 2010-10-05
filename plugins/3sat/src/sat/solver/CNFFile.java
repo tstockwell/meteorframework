@@ -45,7 +45,7 @@ public class CNFFile {
 					throw new RuntimeException("Premature end of file");
 			
 			// get all variables in the clause
-			String[] tokens= inputLine.replaceAll("-", "-").split(" ");
+			String[] tokens= inputLine.split(" ");
 			if (tokens.length <= 1) // an empty clause
 				continue;
 			
