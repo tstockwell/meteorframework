@@ -1,0 +1,220 @@
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd"  [ ]>
+
+<chapter id="intro">
+  <title>Introduction to the Meteor Framework</title>
+  
+  <para>The chapter is a high-level introduction to Meteor's major architectural elements.
+  To reiterate, the Meteor framework has four main design goals which were adopted 
+  in order to meet its business goal of making it possible to profitably develop 
+  system software for small businesses:
+  <itemizedlist>
+  	<listitem><para>Dynamic, modular system assembly.</para></listitem>
+  	<listitem><para>Model-driven system functionality.</para></listitem>
+  	<listitem><para>Unanticipated customation, or customization without hooks.</para></listitem>
+  	<listitem><para>Provide the most common system functionality out-of-the-box.</para></listitem>
+  </itemizedlist>
+  This chapter very briefy tries to explain Meteor's architectural elements related to 
+  each design goal
+  </para>
+  
+  <formalpara>
+  	<title>Java</title>
+  	<para>
+  	Meteor uses Java as the underlying runtime platform. 
+  	The Java community provides a wealth of open source libraries that Meteor reuses. 
+  	In the future it is highly probable that Meteor will support the development 
+  	of Meteor modules in other languages that run on the Java Virtual Machine 
+  	but for now all Meteor modules are developed with Java.      
+  	</para>
+  </formalpara>
+  
+  
+  <section>
+  	<title>Dynamic, modular system assembly: OSGi Bundles</title>
+  	<para>
+  	Meteor's first design goal is to make it possible to assemble a software 
+  	system from modules.  Instead of defining its own concept of what a module is 
+  	Meteor instead has adopted the <ulink url="http://www.osgi.org">OSGi Service Framework</ulink> 
+  	as the standard for defining what a module is, how modules are deployed, 
+  	installed, started, etc. Therefore, all Meteor functionality is package into OSGi 'bundles'. 
+  	All Meteor-based systems run on top of an OSGi 'engine' that manages all bundles.
+  	</para>
+  	<para>
+  	A central focus of the OSGi framework is the concept of 'services'.  Meteor is 
+  	designed to integrate well with existing OSGi services by making it possible to 
+  	automatically 'inject' standard OSGi services into Meteor-managed resources and 
+  	to automatically export Meteor-managed services as OSGi services.  
+  	</para>
+  	<para>
+  	The OSGi framework also defines many standard services, like a Logging service, a Remoting service, etc. 
+  	Meteor takes advantage of available OSGi services whenever possible.
+  	</para>
+  	<para>
+  	Meteor uses the open source <ulink url="http://felix.apache.org/site/index.html">Felix OSGi engine</ulink> as its OSGi engine, however Meteor 
+  	should work with other OSGi implementatio such as <ulink url="http://www.eclipse.org/equinox/">Equinox</ulink> and <ulink url="http://concierge.sourceforge.net/">Concierge</ulink>. 
+  	</para>
+  </section>
+  
+  <section>
+  	<title>Model-driven engineering: RDF (Resource Description Format) metadata repository</title>
+	  <section>
+	  	<title>Why RDF?</title>
+	  	<para>
+	  	Meteor's second design goal is to provide a global metadata repository to enable model-driven engineering.
+	  	Model-driven engineering makes it possible for a module to 
+	  	provide an aspect of functionality for the entire system.  For instance, 
+	  	when the repository contains a description of all the steps that should 
+	  	occur in a particular workflow then a single module can provide workflow 
+	  	management for the entire system based on the data in the repository.
+	  	</para>
+	  	<para>
+	  	Meteor has adopted the <ulink url="http://en.wikipedia.org/wiki/Resource_Description_Framework">Resource Description Format</ulink> (RDF) 
+	  	for representing metadata. 
+	  	RDF is a general method for conceptual description or modeling of information. 
+	  	Meteor defines a Java API for accessing and manipulating RDF data. 
+	  	Meteor also includes support for the <ulink url="http://en.wikipedia.org/wiki/Turtle_(syntax)">Turtle RDF serialization format</ulink>. 
+	  	</para>
+	  	<para>
+	  	Meteor uses RDF mainly because RDF makes it easy to do one thing that's not easy to 
+	  	do in other modeling methods: RDF makes it easy for one module to state 
+	  	facts about data in another module. 
+	  	For instance, suppose one module contain metadata that defines contact information for a person.  
+	  	Then suppose that another module wants to add a twitter id to that contact information. 
+	  	This is exactly the kind of thing that is easy to do with RDF but is quite difficult 
+	  	to do with other methods.  This feature of RDF is exactly what is needed in order to 
+	  	make it possible for modules to customize each other.
+	  	</para>
+	  </section>
+	  
+	  <section>
+	  	<title>What data is available in the repository?</title>
+	  	<para>
+	  	</para> 
+	  </section>
+	  
+	  <section>
+	  	<title>How is the metadata repository populated with data?</title>
+	  	<para>
+		  	<itemizedlist>
+		  		<listitem>
+		  			<para>
+				  	Meteor automatically generates a lot of metadata from annotated Java classes 
+				  	that are included in bundles.  Refer to the section on creating 
+				  	decorators and interceptors.  
+		  			</para>
+		  		</listitem>
+		  		<listitem>
+		  			<para>
+				  	Another common way to contribute metadata is to included a file named 'meteor.turtle' 
+				  	in the root directory of a bundle.
+				  	This file may contain Turle-formatted metadata. 
+		  			</para>
+		  		</listitem>
+		  		<listitem>
+		  			<para>
+					Yet another way to populate the repository is to obtain a reference to the 
+					Meteor system repository OSGi service and explicitly insert or change 
+					metadata in the repository. 
+		  			</para>
+		  		</listitem>
+		  	</itemizedlist>
+	  	</para>
+	  </section>
+  </section>
+   
+  <section>
+  	<title>Unanticipated Customization: Metadata-driven Generic functions</title>
+  	<para>
+  	Some existing application development frameworks make it easier to customize 
+  	software by adding what are called hooks, or extension points. 
+  	Take for example an order management module that calculates sales commissions 
+  	on orders and suppose that this module wants to allow other modules to be 
+  	able to customize how commissions are calculated. 
+  	In many other frameworks in order to make it possible for other modules to 
+  	customize the calculation of sales commissions the order management module 
+  	would be required to define an 'extension-point', or hook, that other modules 
+  	could use to register additional calculation methods. 
+  	The problems with this type of customization are:
+  	<itemizedlist>
+  		<listitem>
+  			<para>
+  			It requires significant extra effort on the part of the developer to 
+  			create the hooks used for customization and extension
+  			</para>
+  		</listitem>
+  		<listitem>
+  			<para>
+  			It limits reuse since hooks have to be created <emphasis>before</emphasis> 
+  			a module can be customized. 
+  			However, developers never anticipate all the ways in which other 
+  			developers may want to customize a module and even if they do they 
+  			often don't make the effort to create hooks until and unless they 
+  			know someone else is going to use them.
+  			</para>
+  		</listitem>
+  	</itemizedlist>
+  	For these reasons it is better to support an extension and customization 
+  	scheme that does not require hooks, a scheme that enables modules to directly 
+  	'plug into' objects from other modules.
+  	</para>
+  	<section>
+	  	<title>Generic functions</title>
+	  	<para>
+	  	In Meteor all available functionality is defined by Java 
+	  	interfaces and Meteor gives all modules the ability to customize the behavior 
+	  	of any method of any interface defined by any other module. 
+	  	In Meteor all interface methods are implemented using a technique called <firstterm>generic functions</firstterm>.  	 
+	  	A generic function is a Java interface method and an associated collection 
+	  	of Java class methods each of which implements the interface method. 
+	  	At runtime when the interface method is invoked a subset of the methods are 
+	  	selected for execution (depending on the current runtime context) and arranged 
+	  	in a stack for execution.  The first invoked method may 
+	  	choose to return a result and complete the invocation or it may choose to pass 
+	  	the invocation further down the stack to the next method. 
+	  	Generic functions are described in detail in later sections.
+	  	</para>
+  	</section>
+  	<section>
+	  	<title>Generic functions are the foundation for aspect-oriented engineering and dependency injection</title>
+	  	<para>
+	  	Meteor also provides several other high-level techniques of aspect-oriented 
+	  	system customization, such as interceptors and decorators, as well as 
+	  	dependency injection. 
+	  	These features are all described in detail later.  The important thing to 
+	  	know now is that all these other features are built on top of generic 
+	  	functions. 
+	  	Building these other features on top of generic functions 
+	  	makes their semantics easy to understand since their operation reduces 
+	  	to invocations of generic functions. 
+	  	Those developers that have used other AOP and IOC frameworks 
+	  	will be impressed at how trivial it is to do aspect-oriented customization 
+	  	and dependency injection with generic functions. 
+	  	This constracts with other AOP and dependency frameworks that require 
+	  	hundreds of pages to explain and that have a lot of murky coner cases. 
+	  	Using another AOP or IOC framework for Meteor was considered at one time 
+	  	but we eventually were convinced that Meteor's approach is superior to 
+	  	other available offerings. 
+	  	</para>
+  	</section>
+  </section>
+  
+  <section>
+  	<title>Out of the Box Functionality</title>
+	  <section>
+	  	<title>Role-based User Management and Authorization</title>
+	  	<para>
+	  	</para> 
+	  </section>
+	  <section>
+	  	<title>Persistent Storage</title>
+	  	<para>
+	  	</para> 
+	  </section>
+	  <section>
+	  	<title>WebBench User Interface</title>
+	  	<para>
+	  	</para> 
+	  </section>
+  </section>
+
+</chapter>

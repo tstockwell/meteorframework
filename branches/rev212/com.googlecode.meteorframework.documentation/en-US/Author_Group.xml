@@ -1,0 +1,12 @@
+<!DOCTYPE authorgroup PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+]>
+<authorgroup>
+	<author>
+		<firstname>Ted</firstname>
+		<surname>Stockwell</surname>
+		<affiliation>
+			<jobtitle>Meteor Lead Developer</jobtitle>
+			<orgname>OpenBookz</orgname>
+		</affiliation>
+	</author>
+</authorgroup>

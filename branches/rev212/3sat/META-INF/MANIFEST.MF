@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: 3sat Plug-in
+Bundle-SymbolicName: 3sat
+Bundle-Version: 1.0.0
+Require-Bundle: net.sf.plugins.library.derby.core,
+ org.junit;bundle-version="3.8.2"

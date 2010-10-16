@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Triplestore Plug-in
+Bundle-SymbolicName: com.googlecode.meteorframework.storage.triplestore
+Bundle-Version: 1.0.0
+Bundle-ActivationPolicy: lazy
+Bundle-ActivationPolicy: lazy
+Import-Package: com.googlecode.meteorframework.storage,
+ com.googlecode.meteorframework.storage.jdbc
+Export-Package: com.googlecode.meteorframework.storage.triplestore,
+ com.googlecode.meteorframework.storage.triplestore.impl

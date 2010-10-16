@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Java_parser_tools
+Bundle-SymbolicName: com.googlecode.meteorframework.parser
+Bundle-Version: 1.0.0
+Export-Package: com.googlecode.meteorframework.parser,
+ com.googlecode.meteorframework.parser.exception,
+ com.googlecode.meteorframework.parser.matcher,
+ com.googlecode.meteorframework.parser.matcher.common,
+ com.googlecode.meteorframework.parser.node,
+ com.googlecode.meteorframework.parser.util,
+ com.googlecode.meteorframework.parser.matcher.contrib
+Bundle-ClassPath: .

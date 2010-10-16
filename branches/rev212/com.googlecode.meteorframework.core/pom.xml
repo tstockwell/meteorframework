@@ -1,0 +1,27 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.googlecode.meteorframework</groupId>
+  <artifactId>com.googlecode.meteorframework.core</artifactId>
+  <packaging>osgi-bundle</packaging>
+  <version>0.0.1-SNAPSHOT</version>
+  
+
+  <repositories>
+    <!-- for bundle-ized peaberry dependencies -->
+    <repository>
+      <id>ops4j.snapshots</id>
+      <url>http://repository.ops4j.org/mvn-snapshots/</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+    </repository>
+    
+	 <repository>
+	            <id>guice-maven</id>
+	            <name>guice maven</name>
+	            <url>http://guice-maven.googlecode.com/svn/trunk</url>
+	 </repository>
+  </repositories> 
+ 
+  
+</project>
