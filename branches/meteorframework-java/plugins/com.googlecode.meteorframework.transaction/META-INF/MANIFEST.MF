@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Transaction Plug-in
+Bundle-SymbolicName: com.googlecode.meteorframework.transaction
+Bundle-Version: 1.0.0
+Export-Package: net.sf.meteor.transaction
+Import-Package: com.googlecode.meteorframework.core.annotation

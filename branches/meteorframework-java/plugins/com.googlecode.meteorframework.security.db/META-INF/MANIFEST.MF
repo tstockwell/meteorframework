@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Meteor-Decorates: net.sf.meteor.security
+Bundle-ManifestVersion: 2
+Bundle-Name: Storage Plug-in
+Bundle-SymbolicName: com.googlecode.meteorframework.security.db
+Bundle-Version: 1.0.0
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy
+Import-Package: com.googlecode.meteorframework.core,
+ com.googlecode.meteorframework.core.annotation,
+ com.googlecode.meteorframework.core.binding,
+ com.googlecode.meteorframework.core.query,
+ com.googlecode.meteorframework.security,
+ com.googlecode.meteorframework.storage,
+ org.apache.commons.codec.digest
