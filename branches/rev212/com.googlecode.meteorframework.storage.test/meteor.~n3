@@ -1,6 +1,0 @@
-@prefix meteor: <meteor:net.sf.meteor.util.> .
-@prefix test: <meteor:net.sf.meteor.storage.test.> .
-
-meteor:Configuration.instance test:StorageTestConfiguration.connectionURL "mem:somthing" . 
-
-

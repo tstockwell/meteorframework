@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-Bundle-ManifestVersion: 2
-Bundle-Name: Squiggle Plug-in
-Bundle-SymbolicName: com.googlecode.meteorframework.library.squiggle
-Bundle-Version: 2.0.0
-Export-Package: com.truemesh.squiggle,
- com.truemesh.squiggle.criteria,
- com.truemesh.squiggle.literal,
- com.truemesh.squiggle.output

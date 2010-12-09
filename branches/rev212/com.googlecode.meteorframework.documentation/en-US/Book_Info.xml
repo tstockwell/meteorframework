@@ -1,8 +1,0 @@
-<!DOCTYPE bookinfo PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd"  [ ]>
-
-<bookinfo>
-  <title>Meteor: The Manual</title>
-  <subtitle>Creating adaptable software</subtitle>
-
-  <xi:include href="Author_Group.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
-</bookinfo>

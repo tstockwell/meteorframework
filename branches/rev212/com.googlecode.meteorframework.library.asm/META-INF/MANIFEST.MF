@@ -1,8 +1,0 @@
-Manifest-Version: 1.0
-Bundle-ManifestVersion: 2
-Bundle-Name: Asm Plug-in
-Bundle-SymbolicName: com.googlecode.meteorframework.library.asm
-Bundle-Version: 2.2.3
-Export-Package: org.objectweb.asm,
- org.objectweb.asm.attrs,
- org.objectweb.asm.signature
