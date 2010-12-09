@@ -2,13 +2,13 @@
 
 = Basic Design Goals =
 
-* As familiar as possible to C#/Java programmers.
-	Case sensitive.
-* Meteor execution model is based on principles of Abstract State Machines.
-	Modeling with ASMs allows us to specify only what is needed and no more.
-	ASM model is concurrent except where specified in the model.
-* Meteor data model is based on semantic modeling principles (RDF/OWL).
-	Semantic modeling avoids ambiguity of using labels to identify properties like in most OO languages.    
+  * As familiar as possible to C#/Java programmers.
+	  * Case sensitive.
+  * Meteor execution model is based on principles of Abstract State Machines.
+	  * Modeling with ASMs allows us to specify only what is needed and no more.
+	  * ASM model is concurrent except where specified in the model.
+  * Meteor data model is based on semantic modeling principles (RDF/OWL).
+	  * Semantic modeling avoids ambiguity of using labels to identify properties like in most OO languages.    
 
 = Details =
 
