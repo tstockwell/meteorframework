@@ -17,12 +17,12 @@
 
 = Types =
 	
-	Meteorscript supports the following native types:
-	  Array
-	  Number
-	  Boolean
-	  Object
-	  DateTime
-	  String 
+Meteorscript supports the following native types:
+  * Array
+  * Number
+  * Boolean
+  * Object
+  * DateTime
+  * String 
  
    
