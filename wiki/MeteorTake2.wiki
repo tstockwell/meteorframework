@@ -1,0 +1,12 @@
+#summary ToDo for Meteor rewrite.
+
+  * Code generation instead of runtime execution.
+  
+Runtime execution incurs a significant runtime penalty.
+Instead code can be generated for any specific combination of modules and qualifiers.
+
+Since Meteor's entire runtime behavior is based on multimethods code generation simply means generating the code to stitch together methods that have multiple interceptors.
+
+Support for runtime decorators should probably be dropped.
+
+  * Capabilities
