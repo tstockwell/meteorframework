@@ -1,12 +1,31 @@
 #summary ToDo for Meteor rewrite.
 
-  * Code generation instead of runtime execution.
+= Code generation instead of runtime execution =
   
 Runtime execution incurs a significant runtime penalty.
 Instead code can be generated for any specific combination of modules and qualifiers.
 
 Since Meteor's entire runtime behavior is based on multimethods code generation simply means generating the code to stitch together methods that have multiple interceptors.
 
+Will need an API for hooking into the generation process.
+
 Support for runtime decorators should probably be dropped.
 
-  * Capabilities
+= Capabilities =
+
+A Capability is an implementation of some specific aspect of the runtime system.  Persistence, user interface construction, transaction management, and remoting, are examples of capabilities.
+Capabilities are system implementation aspects.  
+
+Modules should specify the capabilities that they require and any capabilities that they provide.
+
+When an API from a modules that requires a capability is used by some other module then the required capability must be present at runtime in order to execute the model.
+
+= Automatically generate Metadata providers for every package =
+Similar to EMF.
+Using APT.
+
+= Automatically Generate Constructors =
+
+Automatically create constructors using APT.
+@Required attributes are parameters to constructors.
+

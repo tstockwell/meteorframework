@@ -48,7 +48,7 @@ Lore is not exclusively focused on describing a software system, Lore is also fo
 This makes Lore especially unique among modeling and programming languages.
 
 === Open World Assumption ===
-RDF provides the basic facility for creating extendable models. RDF assumes what is called the 'Open World Assumption', that is, any RDF model can make statements about any resource defined in any other RDF model.  For instance, an RDF model can add a property to a class defined in another RDF model.  Lore inherits this 'Open World' capability from RDF.
+RDF provides the basic facility for creating extensible models. RDF assumes what is called the 'Open World Assumption', that is, any RDF model can make statements about any resource defined in any other RDF model.  For instance, an RDF model can add a property to a class defined in another RDF model.  Lore inherits this 'Open World' capability from RDF.
 
 
 === Contextual Programming ===
