@@ -1,15 +1,20 @@
 #summary ToDo for Meteor rewrite.
 
-= Code generation instead of runtime execution =
-  
-Runtime execution incurs a significant runtime penalty.
-Instead code can be generated for any specific combination of modules and qualifiers.
+= Groovy instead of Java =
 
-Since Meteor's entire runtime behavior is based on multimethods code generation simply means generating the code to stitch together methods that have multiple interceptors.
+One major problem with using Java for modeling is that you can only declare one type of object in Java source files - classes.
+However, Groovy allows for declaring data as well as code in source files - Groovy makes a better language to start with.
 
-Will need an API for hooking into the generation process.
+== 'native' multimethods ==
+Groovy has built-in support for multimethods.
+This could make Meteor's runtime implementation much simpler.
 
-Support for runtime decorators should probably be dropped.
+== constructor support ==
+Use Groovy Metaclass to implement runtime behavior instead of Java proxy approach - the Groovy approach supports constructors. 
+
+== Property and method literals ==
+Also, using Groovy's AST builder it is possible to provide better support for method and property literals.
+Eliminates need for generated APT code. 
 
 = Capabilities =
 
@@ -20,12 +25,4 @@ Modules should specify the capabilities that they require and any capabilities t
 
 When an API from a modules that requires a capability is used by some other module then the required capability must be present at runtime in order to execute the model.
 
-= Automatically generate Metadata providers for every package =
-Similar to EMF.
-Using APT.
-
-= Automatically Generate Constructors =
-
-Automatically create constructors using APT.
-@Required attributes are parameters to constructors.
 
